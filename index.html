@@ -1436,10 +1436,16 @@ function renderCombat(){
     // colored dot: which verse this word belongs to
     ctx.fillStyle = vcol; ctx.fillRect(x+3, y+3, 5, 5);
     let label = tok.word; if (i < 9) label = (i+1) + label;
-    // truncate so the label never overflows the bubble
     setFont(Math.round(6 * S)); ctx.textAlign = 'left';
     while (label.length > 1 && ctx.measureText(label).width > bw - 13) label = label.slice(0, -1);
-    text(label, x+11, y+7, used ? C.bg : C.white, 6, 'left');
+    const isNextWord = (game.verseHighlight >= 0 && tok.word.toLowerCase() === getExpectedWord() && !used);
+    if (isNextWord) {
+      ctx.save(); ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 10;
+      text(label, x+11, y+6, C.gold, 7, 'left');
+      ctx.restore();
+    } else {
+      text(label, x+11, y+7, used ? C.bg : C.white, 6, 'left');
+    }
     clickables.push({ x, y, w: bw, h: bh, onClick: () => selectWord(i) });
   }
 
