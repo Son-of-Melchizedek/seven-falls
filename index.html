@@ -19,9 +19,8 @@
   }
   body { display:block; }
   #game {
-    position:fixed; top:0; left:0;
-    width:100vw; height:100vh;
-    object-fit:contain;
+    position:fixed; top:50%; left:50%;
+    transform:translate(-50%,-50%);
     image-rendering:pixelated;
     image-rendering:crisp-edges;
     background:#0a0a1a;
@@ -48,6 +47,25 @@
 <canvas id="game" width="384" height="288"></canvas>
 <div id="crt"></div>
 <div id="flicker"></div>
+
+
+<script>
+// Scale canvas to fit viewport while maintaining correct click coords
+(function(){
+  const canvas = document.getElementById('game');
+  function resize() {
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const aspect = 384/288;
+    let w, h;
+    if (vw/vh > aspect) { h = vh; w = h * aspect; }
+    else { w = vw; h = w / aspect; }
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+})();
+</script>
 
 <script src='src/verses.js'></script>
 <script src='src/demons.js'></script>
