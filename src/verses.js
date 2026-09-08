@@ -177,36 +177,80 @@ function getVersesForFloor(floor) {
   return VERSES.filter(v => v.difficulty <= maxDiff);
 }
 
-// Get a random subset of words for the combat pool (includes decoys)
-function getCombatPool(verse, floor) {
-  const correctWords = [...verse.words];
-  const decoyPool = VERSES
-    .filter(v => v.id !== verse.id)
-    .flatMap(v => v.words);
-  
-  // Remove duplicates from decoy pool
-  const uniqueDecoys = [...new Set(decoyPool)];
-  
-  // Number of decoys: scales with floor, min 3
-  const numDecoys = Math.min(
-    uniqueDecoys.length,
-    Math.max(3, 5 + floor)
-  );
-  
-  // Shuffle and pick decoys
-  const shuffled = uniqueDecoys.sort(() => Math.random() - 0.5);
-  const decoys = shuffled.slice(0, numDecoys);
-  
-  // Combine and shuffle all words
-  const all = [...correctWords, ...decoys];
-  return all.sort(() => Math.random() - 0.5);
+// Build the combat word pool from a QUEUE of verses (array, not a single verse).
+//   verses    : ordered array; verses[0] is the ACTIVE target, the rest sit
+//               queued below it. The UI presents them as one pool.
+//   floor     : current floor depth (for decoy scaling).
+//   usedWords : Set of words already used correctly — excluded so a finished
+//               verse's words leave the pool and the next verse's words replace
+//               them, keeping the visible pool at ~15-20 words.
+// Returns a flat array of word strings (length clamped to [15,20] when possible).
+function getCombatPool(verses, floor, usedWords) {
+  usedWords = usedWords || new Set();
+  if (!verses || verses.length === 0) return [];
+
+  // ── Correct words: every not-yet-used word from the queued verses ──
+  const correct = [];
+  for (const v of verses) {
+    for (const w of v.words) {
+      if (!usedWords.has(w) && !correct.includes(w)) correct.push(w);
+    }
+  }
+
+  // ── Decoys: words from verses NOT in this combat's queue ──
+  const queuedIds = verses.map(v => v.id);
+  const other = VERSES.filter(v => !queuedIds.includes(v.id));
+  const uniqueDecoys = [...new Set(other.flatMap(v => v.words))];
+  const shuffledDecoys = uniqueDecoys.sort(() => Math.random() - 0.5);
+
+  // ── Keep ~15-20 visible words ──
+  const TARGET_MIN = 15, TARGET_MAX = 20;
+  const need = Math.max(0, TARGET_MIN - correct.length);
+  let decoys = shuffledDecoys.slice(0, Math.min(need, shuffledDecoys.length));
+  let combined = [...correct, ...decoys].sort(() => Math.random() - 0.5);
+  // If still under target (very short verses), pad with more decoys up to TARGET_MAX
+  if (combined.length < TARGET_MIN) {
+    const extra = shuffledDecoys.slice(decoys.length, TARGET_MAX - correct.length);
+    combined = [...combined, ...extra].sort(() => Math.random() - 0.5);
+  }
+  // Hard cap at TARGET_MAX
+  if (combined.length > TARGET_MAX) combined = combined.slice(0, TARGET_MAX);
+  return combined;
 }
 
-// Check if selected words form the correct verse
-function checkVerse(selected, verse) {
-  const target = verse.words;
-  if (selected.length !== target.length) return false;
-  return selected.every((w, i) => w === target[i]);
+// Returns an ordered queue of 3-4 verses for the current combat.
+//   knownVerseIds : verses the player has already discovered (preferred so the
+//                   combat stays solvable), mixed with fresh floor verses to learn.
+function getNextVerseQueue(knownVerseIds, floor) {
+  knownVerseIds = knownVerseIds || [];
+  const floorVerses = getVersesForFloor(floor);
+  const known = floorVerses.filter(v => knownVerseIds.includes(v.id));
+  const unknown = floorVerses.filter(v => !knownVerseIds.includes(v.id));
+  const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
+
+  const queue = [];
+  // Lead with known verses (solvable), then fold in new ones to learn.
+  for (const v of shuffle(known)) { if (queue.length >= 2) break; queue.push(v); }
+  for (const v of shuffle(unknown)) { if (queue.length >= 3) break; queue.push(v); }
+  // Top up to at least 3 with anything available.
+  for (const v of shuffle(floorVerses)) {
+    if (queue.length >= 3) break;
+    if (!queue.includes(v)) queue.push(v);
+  }
+  return queue.slice(0, 4);
+}
+
+// Check if selected words form one of the supplied target verses.
+//   selected : array of word strings (the player's current chain)
+//   verses   : array of candidate verse objects (the current queue)
+// Returns the matched verse object, or null.
+function checkVerse(selected, verses) {
+  for (const vObj of verses) {
+    const target = vObj.words;
+    if (selected.length !== target.length) continue;
+    if (selected.every((w, i) => w === target[i])) return vObj;
+  }
+  return null;
 }
 
 // Get a random verse for combat

@@ -76,6 +76,7 @@
 <script src='src/combat-twists.js'></script>
 <script src='src/BIBLE_VERSES.js'></script>
 <script src='src/bible-ui.js'></script>
+<script src='src/music.js'></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -163,7 +164,16 @@ const game = {
   lastDeathText: '',
   rewardText: '',
   flash: 0,
+  goldFlash: 0,
+  hintsShown: {},
+  hintQueue: [],
+  activeHint: null,
+  timerEnabled: true,
+  particles: [],
+  comboAnim: 0,
 };
+// Timer preference persists across runs
+game.timerEnabled = localStorage.getItem('seven_falls_timer') !== 'false';
 
 // Combat object (built in startCombat)
 let combat = null;
@@ -175,6 +185,8 @@ let shopBought = {};
 
 // Clickable regions rebuilt every frame
 let clickables = [];
+// Last known pointer position (canvas coords) for hover effects
+let pointer = { x: -999, y: -999 };
 
 // ═══════════════════════════════════════════════════════════════
 // DRAW HELPERS
@@ -206,9 +218,97 @@ function button(x, y, w, h, label, onClick, color, txtColor){
   clickables.push({ x, y, w, h, onClick });
 }
 function bar(x, y, w, h, frac, color, bg){
-  rect(x, y, w, h, bg || C.stone);
+  const bgc = bg || C.stone;
+  rect(x, y, w, h, bgc);
   rect(x, y, Math.max(0, Math.min(1, frac)) * w, h, color);
+  // rounded corners (cut the corners with bg squares)
+  const c = 2;
+  rect(x, y, c, c, bgc);
+  rect(x + w - c, y, c, c, bgc);
+  rect(x, y + h - c, c, c, bgc);
+  rect(x + w - c, y + h - c, c, c, bgc);
   strokeRect(x, y, w, h, C.stone2);
+}
+
+// Point-in-rect test (for hover + hint hit testing)
+function pointIn(px, py, x, y, w, h){ return px >= x && px <= x + w && py >= y && py <= y + h; }
+
+// ── First-time hint system ────────────────────────────────
+function showHint(id, text, permanent){
+  if (game.hintsShown[id]) return;
+  game.hintsShown[id] = true;
+  if (permanent){
+    const p = JSON.parse(localStorage.getItem('seven_falls_hints_permanent') || '[]');
+    if (!p.includes(id)){ p.push(id); localStorage.setItem('seven_falls_hints_permanent', JSON.stringify(p)); }
+  }
+  game.hintQueue.push(text);
+  if (!game.activeHint) game.activeHint = { text: game.hintQueue.shift(), timer: 5 };
+}
+function dismissHint(){
+  const t = game.hintQueue.shift();
+  game.activeHint = t ? { text: t, timer: 5 } : null;
+}
+
+// ── Combat particle sparkles ──────────────────────────────
+function spawnSparkles(x, y, n){
+  const cols = [C.gold, C.holy, C.white];
+  for (let i = 0; i < n; i++){
+    game.particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 36,
+      vy: -Math.random() * 34 - 8,
+      life: 0.6 + Math.random() * 0.5, t: 0,
+      c: cols[i % 3],
+    });
+  }
+}
+function updateParticles(dt){
+  for (const p of game.particles){ p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 60 * dt; }
+  game.particles = game.particles.filter(p => p.t < p.life);
+}
+function drawParticles(){
+  for (const p of game.particles){
+    ctx.globalAlpha = Math.max(0, 1 - p.t / p.life);
+    rect(p.x - 1, p.y - 1, 2, 2, p.c);
+  }
+  ctx.globalAlpha = 1;
+}
+
+// ── Detailed demon sprite (drawn behind combat UI) ────────
+function drawDemonSprite(cx, cy, hurt){
+  ctx.save();
+  ctx.globalAlpha = hurt ? 0.34 : 0.22;
+  const c = hurt ? C.red : C.purple;
+  ctx.fillStyle = c;
+  // wings
+  ctx.beginPath(); ctx.moveTo(cx-10, cy-2); ctx.lineTo(cx-24, cy-12); ctx.lineTo(cx-10, cy+10); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx+10, cy-2); ctx.lineTo(cx+24, cy-12); ctx.lineTo(cx+10, cy+10); ctx.closePath(); ctx.fill();
+  // torso
+  ctx.fillRect(cx-11, cy-2, 22, 20);
+  // head
+  ctx.fillRect(cx-8, cy-15, 16, 13);
+  // horns
+  ctx.beginPath(); ctx.moveTo(cx-8, cy-15); ctx.lineTo(cx-13, cy-24); ctx.lineTo(cx-4, cy-15); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(cx+8, cy-15); ctx.lineTo(cx+13, cy-24); ctx.lineTo(cx+4, cy-15); ctx.closePath(); ctx.fill();
+  // eyes
+  ctx.globalAlpha = hurt ? 0.7 : 0.45;
+  ctx.fillStyle = C.gold;
+  ctx.fillRect(cx-5, cy-11, 3, 2);
+  ctx.fillRect(cx+2, cy-11, 3, 2);
+  // mouth
+  ctx.fillRect(cx-4, cy-5, 8, 2);
+  ctx.restore();
+}
+
+// ── Hint overlay (bottom of screen) ──────────────────────
+function renderHint(){
+  if (!game.activeHint) return;
+  const x = 8, y = H - 24, w = W - 16, h = 22;
+  rect(x, y, w, h, 'rgba(10,10,26,0.85)');
+  strokeRect(x, y, w, h, C.gold);
+  const lines = wrapText(game.activeHint.text, 44);
+  let ly = y + 3;
+  for (const l of lines.slice(0, 2)){ text(l, x + 4, ly, C.holy, 6, 'left'); ly += 9; }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -240,6 +340,8 @@ AdaptiveDifficulty.init();
 // ═══════════════════════════════════════════════════════════════
 // RUN LIFECYCLE
 // ═══════════════════════════════════════════════════════════════
+  // Init music on first run
+  if (!MusicEngine._inited) { MusicEngine.init(); }
 function startNewRun(){
   const seed = ((Date.now() ^ Math.floor(Math.random()*1e9)) >>> 0) || 1;
   RNG = new RandomGenerator(seed);
@@ -249,6 +351,12 @@ function startNewRun(){
   game.gold = 0; game.shield = 0;
   game.attackBuff = 0; game.defenseBuff = 0;
   game.nemesisDone = {};
+  // Reset per-run hints, but re-seed permanently-shown ones from localStorage
+  game.hintsShown = {};
+  const perm = JSON.parse(localStorage.getItem('seven_falls_hints_permanent') || '[]');
+  for (const id of perm) game.hintsShown[id] = true;
+  game.activeHint = null;
+  game.hintQueue = [];
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   KnowledgeSystem.startRun();
   CombatTwists.init();
@@ -262,7 +370,7 @@ function maybeShowScholarNote(after){
     KnowledgeSystem.addScholarNote(note);
     game.pendingNote = note;
     game.afterNote = after;
-    game.state = 'SCHOLAR';
+    game.state = 'SCHOLAR'; MusicEngine.playTrack('scholar');
   } else {
     game.state = after;
   }
@@ -272,7 +380,7 @@ function advanceFloor(){
   if (game.floor >= 10){
     AdaptiveDifficulty.recordWin(10, false);
     KnowledgeSystem.endRun(10, true);
-    game.state = 'VICTORY';
+    game.state = 'VICTORY'; MusicEngine.playTrack('victory');
     return;
   }
   game.floor++;
@@ -313,7 +421,8 @@ function startCombat(node){
     demon,
     isBoss, isElite, isNemesis,
     key: demonTypeKey(demon),
-    verse: null, pool: [], selected: [],
+    verses: [], pool: [], selected: [],
+    usedWords: new Set(),
     verseTypesUsed: [],   // verse types used this combat (combo tracking)
     correctStreak: 0,     // consecutive correct verses (ultimate trigger)
     adds: [],             // reinforcement enemies
@@ -330,26 +439,38 @@ function startCombat(node){
   CombatTwists.swarmMode = false;
   KnowledgeSystem.observeDemon(combat.key);
   loadVerse();
-  game.state = 'COMBAT';
+  game.state = 'COMBAT'; MusicEngine.playTrack('combat');
 }
 
 function loadVerse(){
-  const verse = getRandomVerse(game.floor);
-  const pool = getCombatPool(verse, game.floor);
-  combat.verse = verse;
-  combat.pool = pool;
+  // Offer TWO verses at once; the player may form either by tapping its words.
+  if (!combat.verses.length){
+    combat.verses = getCombatVersePair(game.floor);
+    combat.usedWords = new Set();
+  }
+  // If every offered verse is fully solved, draw a fresh pair.
+  const allDone = combat.verses.every(v => v.words.every(w => combat.usedWords.has(w)));
+  if (allDone){
+    combat.verses = getCombatVersePair(game.floor);
+    combat.usedWords = new Set();
+  }
+  combat.pool = getCombatPool(combat.verses, game.floor, combat.usedWords);
   combat.selected = [];
   combat.maxTimer = Math.max(8, 16 - game.floor);
   if (combat.isBoss) combat.maxTimer = Math.max(10, combat.maxTimer + 2);
   combat.timer = combat.maxTimer;
+  if (!game.hintsShown['combat']) showHint('combat', 'Tap words to form Bible verses. Match the reference above!', true);
 }
 
 function selectWord(idx){
   if (!combat) return;
-  if (combat.selected.length >= combat.verse.words.length) return;
+  if (combat.selected.includes(idx)){ // tap again to deselect
+    combat.selected = combat.selected.filter(s => s !== idx);
+    return;
+  }
   combat.selected.push(idx);
-  // auto-submit when full
-  if (combat.selected.length === combat.verse.words.length) submitVerse();
+  // auto-submit when the selection already forms a full verse
+  if (checkVerse(combat.selected.map(i => combat.pool[i]), combat.verses)) submitVerse();
 }
 
 function clearSelection(){ if (combat) combat.selected = []; }
@@ -357,9 +478,8 @@ function clearSelection(){ if (combat) combat.selected = []; }
 function submitVerse(){
   if (!combat) return;
   const chosen = combat.selected.map(i => combat.pool[i]);
-  if (chosen.length !== combat.verse.words.length){ return; }
-  const ok = checkVerse(chosen, combat.verse);
-  if (!ok){
+  const match = checkVerse(chosen, combat.verseQueue);
+  if (!match){
     // Scattered words — the verse slips away
     combat.message = 'SCATTERED! The words dissolve...';
     combat.msgTimer = 1.4;
@@ -372,7 +492,7 @@ function submitVerse(){
     loadVerse();
     return;
   }
-  resolveVerse(combat.verse);
+  resolveVerse(match);
 }
 
 function resolveVerse(verse){
@@ -392,6 +512,11 @@ function resolveVerse(verse){
   }
   dmg = Math.max(1, Math.floor(dmg * mult));
   combat.demon.hp -= dmg;
+
+  // Retire this verse's words so they leave the pool; sparkle on success.
+  if (!combat.usedWords) combat.usedWords = new Set();
+  for (const w of verse.words) combat.usedWords.add(w);
+  spawnSparkles(W/2, 60, 14);
 
   // Track verse type usage for combos + adaptive AI
   if (!combat.verseTypesUsed.includes(verse.type)) combat.verseTypesUsed.push(verse.type);
@@ -413,9 +538,13 @@ function resolveVerse(verse){
     if (res.stunTurns) combat.twistTriggered.push(combat.demon.name + ' STUNNED ' + res.stunTurns + ' turns!');
     if (res.debuffAttack) combat.demon._debuffAtk = res.debuffAttack;
     combat.comboResult = { name: combo.name, quote: combo.quote, extra };
+    // Super-effective gold flash + COMBO! animation
+    game.goldFlash = (mult > 1) ? 0.5 : 0;
+    game.comboAnim = 1.2;
     combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
                      '  >> ' + combo.name.toUpperCase() + '!' + extra;
     combat.msgTimer = 2.2;
+    if (!game.hintsShown['combo']) showHint('combo', 'Words from different verses can combine! Check the hint below!');
   } else {
     let effMsg = '';
     if (cat === 'DEFENSE'){
@@ -432,13 +561,13 @@ function resolveVerse(verse){
       effMsg = 'NEXT ATTACK +50%';
     }
     combat.comboResult = null;
+    if (mult > 1) game.goldFlash = 0.5;
     combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
                      (effMsg ? '  ' + effMsg : '');
     combat.msgTimer = 1.6;
   }
   combat.turn++;
   combat.turnCount++;
-
   // ── Combat Twists: check each turn ──
   const triggered = CombatTwists.checkTwists(combat, game);
   for (const t of triggered){
@@ -532,25 +661,25 @@ function winCombat(){
   KnowledgeSystem.slayDemon(combat.key);
   game.gold += combat.demon.gold || 0;
   if (combat.isNemesis) NemesisSystem.onKill();
-  // discover the verse we just used for flavor
-  KnowledgeSystem.discoverVerse(combat.verse.id);
+  // discover the verses we offered for flavor
+  for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   AdaptiveDifficulty.recordWin(game.floor, game.hp === game.maxHp);
-  game.state = 'COMBAT_WIN';
+  game.state = 'COMBAT_WIN'; MusicEngine.playTrack('victory');
   game.combatNext = combat.isBoss ? 'FLOOR' : 'MAP';
 }
 
 function die(){
   game.lastDeathText = 'For a just man falleth seven times, and riseth up again: ' +
     'but the wicked shall fall into mischief. — Proverbs 24:16';
-  const vs = combat ? combat.verse : null;
+  const vs = combat ? (combat.verses[0] || null) : null;
   if (vs) game.lastDeathInsight = KnowledgeSystem.getDeathInsight(combat.key, vs.type);
   else game.lastDeathInsight = 'You fell. But even the fall is written.';
   KnowledgeSystem.recordDeathInsight(game.lastDeathInsight);
   KnowledgeSystem.endRun(game.floor, false);
   AdaptiveDifficulty.recordLoss(game.floor);
   NemesisSystem.onDeath();
-  game.state = 'DEATH';
+  game.state = 'DEATH'; MusicEngine.playTrack('death');
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -570,17 +699,17 @@ function enterNode(node){
         nemesisEncounters: game.nemesisEncounters,
         knownVerses: KnowledgeSystem.getAvailableVerses(),
       });
-      game.state = 'EVENT'; break;
+      game.state = 'EVENT'; MusicEngine.playTrack('event'); break;
     case NODE_TYPE.SHOP:
       shopItems = generateShopItems(game.floor);
       shopBought = {};
-      game.state = 'SHOP'; break;
+      game.state = 'SHOP'; MusicEngine.playTrack('shop'); break;
     case NODE_TYPE.REST:
-      game.state = 'REST'; break;
+      game.state = 'REST'; MusicEngine.playTrack('rest'); break;
     case NODE_TYPE.TREASURE:
       rollTreasure(); break;
     default:
-      game.state = 'MAP'; break;
+      game.state = 'MAP'; MusicEngine.playTrack('map'); break;
   }
 }
 
@@ -664,7 +793,8 @@ const NODE_COLOR = {
 };
 function nodePos(node, rows){
   const top = 18, bot = 174;
-  const y = rows <= 1 ? (top+bot)/2 : top + (bot - top) * node.row / (rows - 1);
+  // Row 0 (START) renders at the BOTTOM, boss (max row) at the TOP (Slay the Spire style)
+  const y = rows <= 1 ? (top+bot)/2 : bot - (bot - top) * node.row / (rows - 1);
   const x = 22 + node.col * 53;
   return { x, y };
 }
@@ -694,7 +824,7 @@ function render(){
   }
 }
 
-function renderTitle(){
+function renderTitle(){ MusicEngine.playTrack('title');
   // Cross + logo
   const cx = W/2;
   text('SEVEN', cx, 30, C.gold, 20, 'center');
@@ -785,6 +915,10 @@ function renderMap(){
   text('HP ' + game.hp + '/' + game.maxHp, W-8, 4, C.green, 6, 'right');
   text('G ' + game.gold, W-8, 14, C.gold, 6, 'right');
 
+  // Direction cues: boss at TOP, entrance at BOTTOM (Slay the Spire style)
+  text('↑ BOSS', W/2, 4, C.red, 6, 'center');
+  text('↓ ENTRANCE', W/2, H-6, C.holy, 6, 'center');
+
   const pos = id => { const n = m.nodes.find(x => x.id === id); return nodePos(n, rows); };
 
   // connections
@@ -857,6 +991,13 @@ function renderCombat(){
   const d = combat.demon;
   const tkey = demonTypeKey(d);
 
+  // ── faint grid background ──
+  ctx.strokeStyle = 'rgba(120,120,200,0.10)'; ctx.lineWidth = 1;
+  for (let gx = 0; gx <= W; gx += 16){ ctx.beginPath(); ctx.moveTo(gx, 54); ctx.lineTo(gx, H); ctx.stroke(); }
+  for (let gy = 70; gy <= H; gy += 16){ ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke(); }
+  // ── demon sprite (drawn behind UI) ──
+  drawDemonSprite(W/2, 40, false);
+
   // Demon header
   text(d.name, 6, 3, C.red, 8, 'left');
   text(TIER_NAMES[d.tier] || 'Demon', 6, 13, TIER_COLORS[d.tier] || C.white, 6, 'left');
@@ -898,47 +1039,94 @@ function renderCombat(){
     text('+ ' + combat.adds.length + ' ADD', 6, 47, C.purple, 6, 'left');
   }
 
-  // ── Combo hint (potential combos from verse types used this combat) ──
+  // ── Verse references above the pool (color-coded per type) ──
+  let ry = 52;
+  const selTypes = selectedTypes();
+  const active = activeVerseIndex();
+  combat.verses.forEach((vc, vi) => {
+    const col = verseTypeColor(vc.type);
+    const isActive = (vi === active) || selTypes.includes(vc.type);
+    text((isActive ? '▶ ' : '  ') + vc.reference, 6, ry, col, 6, 'left');
+    // colored dot before the reference
+    const dot = verseTypeColor(vc.type);
+    ctx.fillStyle = dot;
+    ctx.fillRect(W-12, ry+1, 5, 5);
+    ry += 8;
+  });
+
+  // ── Combo hint across the whole combat (cumulative types used) ──
   const chint = VerseComboSystem.getComboHint(combat.verseTypesUsed);
   if (chint){
-    text('COMBO? ' + chint.name, W-6, 47, C.gold, 6, 'right');
+    text('COMBO? ' + chint.name, W-6, ry-8, C.gold, 6, 'right');
   }
-  // Verse card
-  const v = combat.verse;
-  const cat = verseCardType(v);
-  text(verseTypeColor(v.type), 0, 0, C.white); // no-op keep order
-  text('VERSE [' + cat + ']', 6, 52, verseCatColor(cat), 6, 'left');
-  text(v.reference, W-6, 52, verseTypeColor(v.type), 6, 'right');
-  text('words: ' + v.words.length, 6, 60, C.dim, 6, 'left');
 
-  // Selected words
-  const selWords = combat.selected.map(i => combat.pool[i]);
+  // ── Combo hint from the CURRENT selection (live, before submit) ──
+  const selSet = [...new Set(selTypes)];
+  const liveHint = (selSet.length >= 2) ? VerseComboSystem.getComboHint(selSet) : null;
+  if (liveHint){
+    const yy = 68;
+    text('⚡ COMBO: ' + liveHint.name, 6, yy, C.gold, 6, 'left');
+    const desc = wrapText(liveHint.name + ' — chain ' + selSet.join('+') + ' verses!', 40);
+    let dy = yy + 8; for (const l of desc.slice(0,1)) text('   ' + l, 6, dy, C.holy, 5, 'left');
+  }
+
+  // Verse card label (category of active target)
+  const v0 = combat.verses[active >= 0 ? active : 0];
+  const cat = verseCardType(v0);
+  text('VERSE [' + cat + ']', 6, ry, verseCatColor(cat), 6, 'left');
+  text('tap a verse above', W-6, ry, C.dim, 6, 'right');
+
+  // Selected words strip
+  const selWords = combat.selected.map(i => combat.pool[i].word);
   const selStr = selWords.join(' ');
-  const sx = 6, sy = 68, sw = W-12;
+  const sx = 6, sy = (liveHint ? 84 : 76), sw = W-12;
   rect(sx, sy, sw, 14, C.stoneDark);
   strokeRect(sx, sy, sw, 14, C.holy);
   const sl = wrapText(selStr || '...', 44);
   let syy = sy + 3; for (const l of sl.slice(0,1)){ text(l, sx+3, syy, selStr ? C.holy : C.dim, 6, 'left'); }
 
-  // Word bubbles grid
-  const startY = 86;
-  const cols = 6, bw = 39, bh = 12, gx = 2, gy = 2;
+  // Word bubbles grid (48x16, white-on-dark, hover glow, colored border by verse)
+  const startY = sy + 18;
+  const cols = 5, bw = 48, bh = 16, gx = 2, gy = 2;
   for (let i = 0; i < combat.pool.length; i++){
     const col = i % cols, row = Math.floor(i / cols);
     const x = 4 + col * (bw + gx);
     const y = startY + row * (bh + gy);
-    if (y > 150) break;
+    if (y + bh > 152) break;
     const used = combat.selected.includes(i);
-    rect(x, y, bw, bh, used ? C.stone : C.stoneDark);
-    strokeRect(x, y, bw, bh, used ? C.holy : C.stone2);
-    let label = combat.pool[i];
+    const tok = combat.pool[i];
+    const vcol = tok.v >= 0 ? verseTypeColor(combat.verses[tok.v].type) : C.dim;
+    const hovered = pointIn(pointer.x, pointer.y, x, y, bw, bh);
+    // hover glow / pulse
+    if (hovered){
+      ctx.save();
+      ctx.shadowColor = vcol; ctx.shadowBlur = 8;
+      rect(x, y, bw, bh, used ? C.stone : '#11122a');
+      ctx.restore();
+      strokeRect(x, y, bw, bh, vcol);
+    } else {
+      rect(x, y, bw, bh, used ? C.stone : C.stoneDark);
+      strokeRect(x, y, bw, bh, used ? C.holy : vcol);
+    }
+    // colored dot = which verse this word belongs to
+    ctx.fillStyle = vcol;
+    ctx.fillRect(x+2, y+2, 4, 4);
+    let label = tok.word;
     if (i < 9) label = (i+1) + ' ' + label;
-    text(label, x+2, y+3, used ? C.holy : C.white, 6, 'left');
+    text(label, x+8, y+5, used ? C.holy : C.white, 6, 'left');
     clickables.push({ x, y, w: bw, h: bh, onClick: () => selectWord(i) });
   }
 
-  // Timer bar
-  bar(4, 154, W-8, 4, combat.timer / combat.maxTimer, C.gold);
+  // Timer bar (or suggested-pace indicator when disabled)
+  if (game.timerEnabled){
+    bar(4, 154, W-8, 4, combat.timer / combat.maxTimer, C.gold);
+  } else {
+    // suggested pace: green fast, yellow ok, red slow, never auto-submits
+    const frac = combat.timer / combat.maxTimer;
+    const pc = frac > 0.5 ? C.green : frac > 0.2 ? C.gold : C.red;
+    text('pace:', 4, 154, C.dim, 5, 'left');
+    bar(28, 154, W-32, 4, frac, pc);
+  }
 
   // Buttons
   button(4, 162, 60, 14, 'SUBMIT', () => submitVerse(), C.gold);
@@ -950,20 +1138,34 @@ function renderCombat(){
   if (game.shield > 0) text('SH ' + game.shield, 70, H-2, C.cyan, 6, 'left');
   if (combat.buffNext > 0) text('BUF', 120, H-2, C.gold, 6, 'left');
 
-  // Message
+  // Message + combo quote
   if (combat.msgTimer > 0){
     const ml = wrapText(combat.message, 44);
-    let my = 120; for (const l of ml.slice(0,2)){ text(l, W/2, my, C.holy, 6, 'center'); my += 10; }
-    // Combo quote
+    let my = 116; for (const l of ml.slice(0,2)){ text(l, W/2, my, C.holy, 6, 'center'); my += 10; }
     if (combat.comboResult){
       const ql = wrapText(combat.comboResult.quote, 44);
       for (const l of ql.slice(0,1)){ text(l, W/2, my, C.gold, 5, 'center'); my += 8; }
     }
-    // Twist messages (scrolled)
     for (const tm of combat.twistTriggered.slice(-1)){ text(tm, W/2, my, C.red, 5, 'center'); my += 8; }
     combat.twistTriggered = [];
   }
 
+  // COMBO! text animation
+  if (game.comboAnim > 0){
+    const a = Math.min(1, game.comboAnim / 1.2);
+    ctx.save();
+    ctx.globalAlpha = a;
+    const sc = 1 + (1 - a) * 0.6;
+    ctx.font = Math.floor(16 * sc) + 'px "Press Start 2P", monospace';
+    ctx.fillStyle = C.gold;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.fillText('COMBO!', W/2, 96 - (1 - a) * 12);
+    ctx.restore();
+  }
+
+  // sparkle particles + gold flash
+  drawParticles();
+  if (game.goldFlash > 0){ rect(0,0,W,H,'rgba(255,215,0,'+(game.goldFlash*0.35)+')'); }
   // flash on wrong
   if (game.flash > 0){ rect(0,0,W,H,'rgba(204,51,51,'+(game.flash)+')'); }
   
@@ -972,6 +1174,9 @@ function renderCombat(){
     const discIds = KnowledgeSystem.store.discoveredVerses || [];
     renderBible(ctx, W, H, discIds, game.biblePage, game.bibleScroll);
   }
+
+  // Global hint overlay (drawn above every screen)
+  renderHint();
 }
 
 function renderCombatWin(){
@@ -992,6 +1197,8 @@ function renderCombatWin(){
     }
   }, C.gold);
 }
+
+function render(){
 
 // Apply a resolved EventEngine effect object (already from EventEngine.generate)
 function applyEventEffectResult(effect, cost){
@@ -1189,20 +1396,34 @@ function loop(now){
         CombatTwists.swarmMode = false;
       }
     }
-    combat.timer -= dt;
-    if (combat.msgTimer > 0) combat.msgTimer -= dt;
-    if (game.flash > 0) game.flash = Math.max(0, game.flash - dt);
-    if (combat.timer <= 0){
-      combat.message = 'TIME! The demon strikes!';
-      combat.msgTimer = 1.2;
-      combat.correctStreak = 0;
-      combat.comboResult = null;
-      combat.twistTriggered = [];
-      combat.selected = [];
-      demonAttack(true);
-      if (game.hp <= 0){ die(); }
-      else loadVerse();
+    if (game.timerEnabled){
+      combat.timer -= dt;
+      if (combat.timer <= 0){
+        combat.message = 'TIME! The demon strikes!';
+        combat.msgTimer = 1.2;
+        combat.correctStreak = 0;
+        combat.comboResult = null;
+        combat.twistTriggered = [];
+        combat.selected = [];
+        demonAttack(true);
+        if (game.hp <= 0){ die(); }
+        else loadVerse();
+      }
+    } else {
+      // timer disabled: count up as a 'suggested pace' readout, never auto-submits
+      combat.timer += dt;
     }
+    if (combat.msgTimer > 0) combat.msgTimer -= dt;
+  }
+  // visual decays (run even outside combat so sparkles finish)
+  if (game.flash > 0) game.flash = Math.max(0, game.flash - dt);
+  if (game.goldFlash > 0) game.goldFlash = Math.max(0, game.goldFlash - dt * 1.2);
+  if (game.comboAnim > 0) game.comboAnim = Math.max(0, game.comboAnim - dt);
+  updateParticles(dt);
+  // hint auto-dismiss
+  if (game.activeHint){
+    game.activeHint.timer -= dt;
+    if (game.activeHint.timer <= 0) dismissHint();
   }
 
   render();
@@ -1218,9 +1439,12 @@ function toCanvas(e){
   const y = (e.clientY - r.top) / r.height * H;
   return { x, y };
 }
+canvas.addEventListener('pointermove', e => { pointer = toCanvas(e); });
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
   const p = toCanvas(e);
+  // Click on the hint overlay dismisses it
+  if (game.activeHint && pointIn(p.x, p.y, 8, H-24, W-16, 22)){ dismissHint(); return; }
   // Bible UI intercepts clicks when open
   if (game.bibleOpen) {
     const discIds = KnowledgeSystem.store.discoveredVerses || [];
@@ -1249,7 +1473,7 @@ window.addEventListener('keydown', e => {
       if (idx < combat.pool.length) selectWord(idx);
     } else if (e.key === 'Enter'){
       submitVerse();
-    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
+    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; if (game.bibleOpen && !game.hintsShown['bible']) showHint('bible', 'Press B to open your Bible and check discovered verses.', true); } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
       e.preventDefault();
       combat.selected.pop();
     } else if (e.key === ' '){
