@@ -353,24 +353,28 @@ function useItem(idx){
 function calcEscapeChance(){
   if (!combat) return 10;
   const d = combat.demon;
-  let pct = 50;
-  pct += 10 * game.floor;
+  let pct = 40;
   if (game.shield > 0) pct += 5;
-  if (combat.isElite || combat.isBoss || combat.isNemesis) pct -= 20;
-  if (d.tier >= DEMON_TIER.FALLEN_ANGEL) pct -= 30;
-  return Math.max(10, Math.min(90, pct));
+  if (combat.isElite || combat.isBoss || combat.isNemesis) pct -= 15;
+  if (d.tier >= DEMON_TIER.FALLEN_ANGEL) pct -= 25;
+  if (d.tier >= DEMON_TIER.POWER) pct -= 10;
+  return Math.max(10, Math.min(85, pct));
 }
 
 // ── Attempt to flee ──
 function tryFlee(){
   if (!combat || game.state !== 'COMBAT') return;
-  if (combat.isLust && !combat.lustBroken) return; // sealed by lust
+  if (combat.isLust && !combat.lustBroken) {
+    combat.message = 'The seduction holds you! Attack to break free!';
+    combat.msgTimer = 2.0;
+    return;
+  }
   const pct = calcEscapeChance();
   if (RNG.random() * 100 < pct){
     game.state = 'MAP';
   } else {
-    combat.message = 'Escape failed! The demon strikes!';
-    combat.msgTimer = 1.6;
+    combat.message = 'Escape failed! (' + pct + '% chance) The demon strikes!';
+    combat.msgTimer = 2.0;
     demonAttack(true);
     if (game.hp <= 0){ die(); return; }
     loadVerse();
@@ -1344,10 +1348,10 @@ function renderCombat(){
   // RUN button (bottom-right) — hidden vs lust demons until broken
   if (!(combat.isLust && !combat.lustBroken)){
     const pct = calcEscapeChance();
-    button(W-46, 170, 42, 10, 'RUN ' + pct + '%', () => tryFlee(), C.red);
+    button(W-56, 169, 52, 12, 'RUN ' + pct + '%', () => tryFlee(), C.red);
   }
   // Bible button
-  button(W-46, 182, 42, 10, 'BIBLE', () => { game.bibleOpen = !game.bibleOpen; }, C.purple);
+  button(W-56, 182, 52, 12, 'BIBLE', () => { game.bibleOpen = !game.bibleOpen; }, C.purple);
 
   // sparkle particles + flashes
   drawParticles();
