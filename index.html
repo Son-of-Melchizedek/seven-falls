@@ -144,6 +144,8 @@ const game = {
   bibleScroll: 0,
   bibleDetail: null,
   bibleSearch: '',
+  verseHighlight: -1,  // which word in the current verse to highlight (-1 = none)
+  verseHighlightTimer: 0,
   floor: 1,
   hp: 50, maxHp: 50,
   gold: 0,
@@ -677,7 +679,9 @@ function loadVerse(){
   combat.maxTimer = Math.max(8, 16 - game.floor);
   if (combat.isBoss) combat.maxTimer = Math.max(10, combat.maxTimer + 2);
   combat.timer = combat.maxTimer;
-  if (!game.hintsShown['combat']) showHint('combat', 'Tap words to form Bible verses. Match the reference above!', true);
+  if (!game.hintsShown['combat']) showHint('combat', 'Tap words to form Bible verses. The glowing word is next!', true);
+  game.verseHighlight = 0;
+  game.verseHighlightTimer = 0;
 }
 
 function selectWord(idx){
@@ -1285,6 +1289,18 @@ function renderExplore(){
   button(W/2-50, 162, 100, 14, 'RETREAT', () => { game.pendingNode = null; game.state = 'MAP'; }, C.dim);
 }
 
+
+// Get the next expected word for highlighting
+function getExpectedWord() {
+  if (!combat || !combat.verses || game.verseHighlight < 0) return '';
+  let idx = game.verseHighlight;
+  for (const v of combat.verses) {
+    if (v.words && idx < v.words.length) return v.words[idx].toLowerCase();
+    if (v.words) idx -= v.words.length;
+  }
+  return '';
+}
+
 function renderCombat(){
   const d = combat.demon;
   const tkey = demonTypeKey(d);
@@ -1708,6 +1724,18 @@ function loop(now){
       combat.timer += dt;
     }
     if (combat.msgTimer > 0) combat.msgTimer -= dt;
+  // Verse word highlight timer
+  if (game.verseHighlight >= 0) {
+    game.verseHighlightTimer += dt;
+    if (game.verseHighlightTimer > 3) { // highlight each word for 3 seconds
+      game.verseHighlightTimer = 0;
+      game.verseHighlight++;
+      const vs = combat.verses || [];
+      let maxIdx = 0;
+      for (const v of vs) if (v.words) maxIdx += v.words.length;
+      if (game.verseHighlight >= maxIdx) game.verseHighlight = -1; // done
+    }
+  }
   }
   // visual decays (run even outside combat so sparkles finish)
   if (game.flash > 0) game.flash = Math.max(0, game.flash - dt);
@@ -1739,15 +1767,22 @@ canvas.addEventListener('pointerdown', e => {
   const p = toCanvas(e);
   // Click on the hint overlay dismisses it
   if (game.activeHint && pointIn(p.x, p.y, 6, H-32, W-12, 30)){ dismissHint(); return; }
-  // Bible UI intercepts clicks when open
+  // Bible UI intercepts clicks when open (but only within its bounds)
   if (game.bibleOpen) {
-    const discIds = KnowledgeSystem.store.discoveredVerses || [];
-    const result = handleBibleClick(p.x, p.y, discIds, game.biblePage, game.bibleScroll);
-    if (result) {
-      if (result.action === 'back') game.bibleOpen = false;
-      else if (result.page) game.biblePage = result.page;
-      if (result.scrollY !== undefined) game.bibleScroll = result.scrollY;
+    // Bible panel bounds (matches renderBible drawing area)
+    const bx = 10, by = 10, bw = W-20, bh = H-20;
+    if (p.x >= bx && p.x <= bx+bw && p.y >= by && p.y <= by+bh) {
+      const discIds = KnowledgeSystem.store.discoveredVerses || [];
+      const result = handleBibleClick(p.x, p.y, discIds, game.biblePage, game.bibleScroll);
+      if (result) {
+        if (result.action === 'back') game.bibleOpen = false;
+        else if (result.page) game.biblePage = result.page;
+        if (result.scrollY !== undefined) game.bibleScroll = result.scrollY;
+      }
+      return; // consumed by bible
     }
+    // Click OUTSIDE bible = close it
+    game.bibleOpen = false;
     return;
   }
   for (let i = clickables.length - 1; i >= 0; i--){
@@ -1767,7 +1802,7 @@ window.addEventListener('keydown', e => {
       if (idx < combat.pool.length) selectWord(idx);
     } else if (e.key === 'Enter'){
       submitVerse();
-    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; if (game.bibleOpen && !game.hintsShown['bible']) showHint('bible', 'Press B to open your Bible and check discovered verses.', true); } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
+    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; if (game.bibleOpen && !game.hintsShown['bible']) showHint('bible', 'Press B to open your Bible. Click outside to close.', true); } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
       e.preventDefault();
       combat.selected.pop();
     } else if (e.key === ' '){
