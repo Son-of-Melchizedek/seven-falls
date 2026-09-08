@@ -1525,7 +1525,7 @@ function applyEventEffectResult(effect, cost){
   if (effect.revealMap || effect.revealMapNode){
     msg += '  The map reveals hidden paths.';
   }
-  if (effect.invincible){
+  if (effect.invincible && combat){
     combat.invincibleTurns = (combat.invincibleTurns || 0) + effect.invincible;
   }
   if (effect.startCombat){
