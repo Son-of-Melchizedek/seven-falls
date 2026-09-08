@@ -6,65 +6,32 @@
 <title>SEVEN FALLS</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { 
-  width: 100%; height: 100%; overflow: hidden;
-  background: #0a0a0a; 
-  font-family: 'Press Start 2P', monospace;
-  touch-action: none;
-}
-canvas { 
-  display: block; image-rendering: pixelated; 
-  image-rendering: crisp-edges;
-}
-#game { 
-  width: 100vw; height: 100vh; 
-  display: flex; align-items: center; justify-content: center;
-}
-
-/* Scanline overlay */
-#scanlines {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none; z-index: 100;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.08) 2px,
-    rgba(0,0,0,0.08) 4px
-  );
-}
-
-/* CRT vignette */
-#crt-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  pointer-events: none; z-index: 99;
-  background: radial-gradient(ellipse at center, 
-    transparent 60%, rgba(0,0,0,0.4) 100%
-  );
-}
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a0a; font-family: 'Press Start 2P', monospace; touch-action: none; }
+canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+#game { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+#scanlines { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 100; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px); }
+#crt-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none; z-index: 99; background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%); }
 </style>
 </head>
 <body>
-<div id="game">
-  <canvas id="canvas"></canvas>
-</div>
+<div id="game"><canvas id="canvas"></canvas></div>
 <div id="scanlines"></div>
 <div id="crt-overlay"></div>
 
 <script src="src/verses.js"></script>
 <script src="src/demons.js"></script>
+<script src="src/knowledge.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════════
-// SEVEN FALLS — Main Game Engine
-// Uses GameBlocks RandomUtils (seeded PRNG) for deterministic runs
+// SEVEN FALLS — Knowledge-Driven Roguelike
+// Knowledge IS the progression. Dying is how you learn.
 // ═══════════════════════════════════════════════════════════════
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// ── GameBlocks RandomUtils (seeded PRNG) ────────────────────
+// ── GameBlocks Seeded PRNG ──────────────────────────────────
 class RandomGenerator {
   constructor(seed = 42) { this.seed(seed); }
   seed(seed = 42) { this.state = seed >>> 0; return this; }
@@ -78,652 +45,291 @@ class RandomGenerator {
   randint(min, max) { return Math.floor(this.uniform(min, max + 1)); }
   choice(items) { return items[Math.floor(this.random() * items.length)]; }
   shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(this.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+    const a = [...arr]; for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(this.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]];
+    } return a;
   }
 }
-// Global PRNG — seeded per run for deterministic dungeon generation
 const RNG = new RandomGenerator(Date.now());
 
 // ── CONSTANTS ───────────────────────────────────────────────
 const SCALE = 3;
 const W = 256, H = 192;
-canvas.width = W * SCALE;
-canvas.height = H * SCALE;
-canvas.style.width = (W * SCALE) + 'px';
-canvas.style.height = (H * SCALE) + 'px';
+canvas.width = W * SCALE; canvas.height = H * SCALE;
+canvas.style.width = (W * SCALE) + 'px'; canvas.style.height = (H * SCALE) + 'px';
 ctx.imageSmoothingEnabled = false;
 
-// ── COLORS ──────────────────────────────────────────────────
 const C = {
-  bg: '#0a0a1a',
-  bgLight: '#12122a',
-  stone: '#2a2a3a',
-  stoneLight: '#3a3a4a',
-  stoneDark: '#1a1a2a',
-  gold: '#ffd700',
-  goldDark: '#b8960f',
-  blood: '#8b0000',
-  bloodBright: '#cc0000',
-  holy: '#e8e0ff',
-  holyDim: '#a090cc',
-  white: '#f0f0f0',
-  black: '#000000',
-  green: '#00aa44',
-  greenDark: '#006622',
-  red: '#cc3333',
-  redDark: '#882222',
-  blue: '#3344aa',
-  blueDark: '#222266',
-  purple: '#7733aa',
-  purpleDark: '#442266',
-  cyan: '#33aaaa',
-  textMain: '#e8e0ff',
-  textDim: '#8877aa',
-  textGold: '#ffd700',
-  textRed: '#ff4444',
-  textGreen: '#44ff88',
-  uiBg: '#0e0e1e',
-  uiBorder: '#3a3a5a',
-  uiHighlight: '#5555aa',
+  bg:'#0a0a1a',bgLight:'#12122a',stone:'#2a2a3a',stoneLight:'#3a3a4a',stoneDark:'#1a1a2a',
+  gold:'#ffd700',goldDark:'#b8960f',blood:'#8b0000',bloodBright:'#cc0000',
+  holy:'#e8e0ff',holyDim:'#a090cc',white:'#f0f0f0',black:'#000000',
+  green:'#00aa44',greenDark:'#006622',red:'#cc3333',redDark:'#882222',
+  blue:'#3344aa',blueDark:'#222266',purple:'#7733aa',purpleDark:'#442266',
+  cyan:'#33aaaa',textMain:'#e8e0ff',textDim:'#8877aa',textGold:'#ffd700',
+  textRed:'#ff4444',textGreen:'#44ff88',uiBg:'#0e0e1e',uiBorder:'#3a3a5a',uiHighlight:'#5555aa',
 };
 
 // ── INPUT ───────────────────────────────────────────────────
-const keys = {};
-let mouseX = 0, mouseY = 0;
-let mouseClicked = false;
-let clickedX = 0, clickedY = 0;
+const keys = {}; let mouseX = 0, mouseY = 0, mouseClicked = false, clickedX = 0, clickedY = 0;
+document.addEventListener('keydown', e => { keys[e.code] = true; keys[e.key] = true; });
+document.addEventListener('keyup', e => { keys[e.code] = false; keys[e.key] = false; });
+canvas.addEventListener('click', e => { const r = canvas.getBoundingClientRect(); mouseX = (e.clientX-r.left)/SCALE; mouseY = (e.clientY-r.top)/SCALE; mouseClicked = true; clickedX = mouseX; clickedY = mouseY; });
+canvas.addEventListener('mousemove', e => { const r = canvas.getBoundingClientRect(); mouseX = (e.clientX-r.left)/SCALE; mouseY = (e.clientY-r.top)/SCALE; });
+canvas.addEventListener('touchstart', e => { e.preventDefault(); const t = e.touches[0], r = canvas.getBoundingClientRect(); mouseX = (t.clientX-r.left)/SCALE; mouseY = (t.clientY-r.top)/SCALE; mouseClicked = true; clickedX = mouseX; clickedY = mouseY; });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); const t = e.touches[0], r = canvas.getBoundingClientRect(); mouseX = (t.clientX-r.left)/SCALE; mouseY = (t.clientY-r.top)/SCALE; });
 
-document.addEventListener('keydown', e => {
-  keys[e.code] = true;
-  keys[e.key] = true;
-});
-document.addEventListener('keyup', e => {
-  keys[e.code] = false;
-  keys[e.key] = false;
-});
-canvas.addEventListener('click', e => {
-  const rect = canvas.getBoundingClientRect();
-  mouseX = (e.clientX - rect.left) / SCALE;
-  mouseY = (e.clientY - rect.top) / SCALE;
-  mouseClicked = true;
-  clickedX = mouseX;
-  clickedY = mouseY;
-});
-canvas.addEventListener('mousemove', e => {
-  const rect = canvas.getBoundingClientRect();
-  mouseX = (e.clientX - rect.left) / SCALE;
-  mouseY = (e.clientY - rect.top) /SCALE;
-});
-
-// Touch support
-canvas.addEventListener('touchstart', e => {
-  e.preventDefault();
-  const touch = e.touches[0];
-  const rect = canvas.getBoundingClientRect();
-  mouseX = (touch.clientX - rect.left) / SCALE;
-  mouseY = (touch.clientY - rect.top) / SCALE;
-  mouseClicked = true;
-  clickedX = mouseX;
-  clickedY = mouseY;
-});
-canvas.addEventListener('touchmove', e => {
-  e.preventDefault();
-  const touch = e.touches[0];
-  const rect = canvas.getBoundingClientRect();
-  mouseX = (touch.clientX - rect.left) / SCALE;
-  mouseY = (touch.clientY - rect.top) / SCALE;
-});
-
-// ── DRAWING HELPERS ─────────────────────────────────────────
-function clear() {
-  ctx.fillStyle = C.bg;
-  ctx.fillRect(0, 0, W, H);
+// ── DRAWING ─────────────────────────────────────────────────
+function clear() { ctx.fillStyle = C.bg; ctx.fillRect(0,0,W,H); }
+function drawText(text,x,y,color=C.textMain,size=1,align='left') {
+  ctx.font = `${8*size}px 'Press Start 2P'`; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = 'top'; ctx.fillText(text,x,y);
 }
-
-function drawText(text, x, y, color = C.textMain, size = 1, align = 'left') {
-  ctx.font = `${8 * size}px 'Press Start 2P'`;
-  ctx.fillStyle = color;
-  ctx.textAlign = align;
-  ctx.textBaseline = 'top';
-  ctx.fillText(text, x, y);
+function drawTextShadow(text,x,y,color=C.textMain,shadow=C.black,size=1,align='left') {
+  ctx.font = `${8*size}px 'Press Start 2P'`; ctx.textAlign = align; ctx.textBaseline = 'top';
+  ctx.fillStyle = shadow; ctx.fillText(text,x+1,y+1); ctx.fillStyle = color; ctx.fillText(text,x,y);
 }
+function drawRect(x,y,w,h,color) { ctx.fillStyle = color; ctx.fillRect(Math.floor(x),Math.floor(y),Math.floor(w),Math.floor(h)); }
+function drawBorder(x,y,w,h,color=C.uiBorder,t=1) { ctx.strokeStyle=color; ctx.lineWidth=t; ctx.strokeRect(Math.floor(x)+.5,Math.floor(y)+.5,Math.floor(w)-1,Math.floor(h)-1); }
+function drawBox(x,y,w,h,bg=C.uiBg,bc=C.uiBorder) { drawRect(x,y,w,h,bg); drawBorder(x,y,w,h,bc); }
+function drawHPBar(x,y,w,h,cur,max,barColor=C.red,bg='#1a0000') { drawRect(x,y,w,h,bg); drawRect(x,y,Math.floor(w*Math.max(0,cur/max)),h,barColor); drawBorder(x,y,w,h,C.uiBorder); }
 
-function drawTextShadow(text, x, y, color = C.textMain, shadow = C.black, size = 1, align = 'left') {
-  ctx.font = `${8 * size}px 'Press Start 2P'`;
-  ctx.textAlign = align;
-  ctx.textBaseline = 'top';
-  ctx.fillStyle = shadow;
-  ctx.fillText(text, x + 1, y + 1);
-  ctx.fillStyle = color;
-  ctx.fillText(text, x, y);
-}
-
-function drawRect(x, y, w, h, color) {
-  ctx.fillStyle = color;
-  ctx.fillRect(Math.floor(x), Math.floor(y), Math.floor(w), Math.floor(h));
-}
-
-function drawBorder(x, y, w, h, color = C.uiBorder, thickness = 1) {
-  ctx.strokeStyle = color;
-  ctx.lineWidth = thickness;
-  ctx.strokeRect(Math.floor(x) + 0.5, Math.floor(y) + 0.5, Math.floor(w) - 1, Math.floor(h) - 1);
-}
-
-function drawBox(x, y, w, h, bgColor = C.uiBg, borderColor = C.uiBorder) {
-  drawRect(x, y, w, h, bgColor);
-  drawBorder(x, y, w, h, borderColor);
-}
-
-function drawHPBar(x, y, w, h, current, max, barColor = C.red, bgColor = '#1a0000') {
-  drawRect(x, y, w, h, bgColor);
-  const pct = Math.max(0, current / max);
-  drawRect(x, y, Math.floor(w * pct), h, barColor);
-  drawBorder(x, y, w, h, C.uiBorder);
-}
-
-// ── GAME STATE ──────────────────────────────────────────────
-const STATE = {
-  TITLE: 'title',
-  EXPLORE: 'explore',
-  COMBAT: 'combat',
-  COMBAT_WIN: 'combat_win',
-  DEATH: 'death',
-  FLOOR_TRANSITION: 'floor_transition',
-  VICTORY: 'victory',
-};
+// ── GAME STATES ─────────────────────────────────────────────
+const ST = { TITLE:'title', INTRO:'intro', EXPLORE:'explore', COMBAT:'combat', COMBAT_WIN:'combat_win',
+  DEATH:'death', FLOOR_TRANS:'floor_trans', VICTORY:'victory', BESTIARY:'bestiary', SCROLL:'scroll', SCHOLAR:'scholar' };
 
 const game = {
-  state: STATE.TITLE,
-  floor: 1,
-  maxFloor: 10,
-  
-  // Player stats
-  player: {
-    hp: 50, maxHp: 50,
-    attack: 10,
-    defense: 2,
-    gold: 0,
-    xp: 0,
-    level: 1,
-    knownVerses: ['ps23_1', '1jn4_8', 'eph6_10'], // Start with 3 easy verses
-    inventory: [],
-    shieldActive: false,
-    buffTurns: 0,
-    armorBonus: 0,
-  },
-  
-  // Dungeon
-  dungeon: {
-    rooms: [],
-    currentRoom: 0,
-    roomsPerFloor: 8,
-    playerPos: { x: 1, y: 1 },
-    exitPos: { x: 6, y: 4 },
-    explored: new Set(),
-  },
-  
-  // Combat
-  combat: {
-    demon: null,
-    verse: null,
-    pool: [],
-    selected: [],
-    timer: 45,
-    timerMax: 45,
-    timerActive: false,
-    messages: [],
-    messageTimer: 0,
-    playerTurn: true,
-    turnCount: 0,
-    demonStruck: false,
-    playerStruck: false,
-    strikeTimer: 0,
-    shakeTimer: 0,
-    shakeIntensity: 0,
-  },
-  
-  // Death
-  death: {
-    deathCount: 0,
-    quoteRevealed: 0,
-    quoteText: 'A just man falleth seven times, but the Lord upholdeth him with his righteous right hand',
-    timer: 0,
-  },
-  
-  // Floor transition
-  transition: {
-    timer: 0,
-    text: '',
-  },
-  
-  // Animation
-  anim: {
-    frame: 0,
-    titlePulse: 0,
-    sparkle: 0,
-  },
-  
-  // Keys consumed this frame
+  state: ST.TITLE, floor: 1, maxFloor: 10,
+  player: { hp:30, maxHp:30, attack:5, defense:0, gold:0, xp:0, level:1,
+    versesInCombat: [], shieldActive:false, buffTurns:0, armorBonus:0 },
+  dungeon: { rooms:[], currentRoom:0, roomsPerFloor:8, playerPos:{x:1,y:1} },
+  combat: { demon:null, verse:null, pool:[], selected:[], timer:45, timerMax:45, timerActive:false,
+    messages:[], playerTurn:true, turnCount:0, demonStruck:false, playerStruck:false,
+    strikeTimer:0, shakeTimer:0, shakeIntensity:0, lastVerseType:null, correctCount:0 },
+  death: { deathCount:0, quoteRevealed:0, quoteText:'A just man falleth seven times, but the Lord upholdeth him with his righteous right hand', timer:0, insight:'' },
+  transition: { timer:0, text:'' },
+  intro: { step:0, timer:0 },
+  scroll: { verseId:null, timer:0 },
+  scholar: { note:null, timer:0 },
+  anim: { frame:0, titlePulse:0, sparkle:0, floorGlow:0 },
   _consumedClick: false,
 };
 
-function consumeClick() {
-  if (game._consumedClick) return false;
-  if (mouseClicked) {
-    game._consumedClick = true;
-    return true;
+function consumeClick() { if (game._consumedClick) return false; if (mouseClicked) { game._consumedClick = true; return true; } return false; }
+function resetFrame() { mouseClicked = false; game._consumedClick = false; }
+
+// ── GAME FLOW ───────────────────────────────────────────────
+function startNewGame() {
+  game.floor = 1;
+  game.player.hp = 30; game.player.maxHp = 30; game.player.attack = 5;
+  game.player.defense = 0; game.player.gold = 0; game.player.xp = 0; game.player.level = 1;
+  game.player.shieldActive = false; game.player.buffTurns = 0; game.player.armorBonus = 0;
+  game.combat.messages = []; game.death.deathCount = 0;
+  
+  // Knowledge system — start a new run
+  KnowledgeSystem.startRun();
+  
+  // First time? Show intro
+  if (KnowledgeSystem.store.totalRuns <= 1) {
+    game.state = ST.INTRO;
+    game.intro.step = 0; game.intro.timer = 0;
+  } else {
+    game.state = ST.EXPLORE;
+    generateDungeon();
   }
-  return false;
 }
 
-function resetFrame() {
-  mouseClicked = false;
-  game._consumedClick = false;
+function startRun() {
+  KnowledgeSystem.startRun();
+  generateDungeon();
+  game.state = ST.EXPLORE;
+}
+
+// ── INTRO SEQUENCE (first run only) ─────────────────────────
+function updateIntro(dt) {
+  game.intro.timer += dt;
+  if (consumeClick() || keys['Enter'] || keys[' ']) {
+    keys['Enter'] = false; keys[' '] = false;
+    game.intro.step++;
+    game.intro.timer = 0;
+    if (game.intro.step >= 4) {
+      generateDungeon();
+      game.state = ST.EXPLORE;
+    }
+  }
+}
+
+function drawIntro() {
+  clear();
+  const steps = [
+    { text: 'You stand at the mouth of the abyss.', sub: 'Demons guard every floor below.' },
+    { text: 'You carry no sword.', sub: 'Your weapon is the Word.' },
+    { text: 'Chain Bible verses from scattered words.', sub: 'Each verse is a blow against the darkness.' },
+    { text: 'You will fall.', sub: 'But every fall teaches you something.' },
+  ];
+  const s = steps[Math.min(game.intro.step, steps.length-1)];
+  
+  const fade = Math.min(1, game.intro.timer * 2);
+  ctx.globalAlpha = fade;
+  drawTextShadow(s.text, W/2, H/2-20, C.holy, C.black, 0.7, 'center');
+  drawTextShadow(s.sub, W/2, H/2+5, C.textDim, C.black, 0.5, 'center');
+  if (game.intro.timer > 1.5) {
+    drawText('CLICK TO CONTINUE', W/2, H/2+35, C.textDim, 0.4, 'center');
+  }
+  ctx.globalAlpha = 1;
 }
 
 // ── DUNGEON GENERATOR ───────────────────────────────────────
-function generateDungeon(floor) {
+const MAP_W = 32, MAP_H = 24;
+
+function generateDungeon() {
   const rooms = [];
-  const numRooms = game.dungeon.roomsPerFloor + floor;
+  const numRooms = game.dungeon.roomsPerFloor + game.floor;
   
   for (let i = 0; i < numRooms; i++) {
-    const room = {
-      type: 'empty',
-      cleared: false,
-      enemies: [],
-      items: [],
-    };
-    
-    // Room types weighted by floor
+    const room = { type:'empty', cleared:false, demon:null, noteFound:false };
     const roll = RNG.random();
     if (i === 0) room.type = 'start';
     else if (i === numRooms - 1) room.type = 'exit';
-    else if (roll < 0.4) room.type = 'enemy';
-    else if (roll < 0.55) room.type = 'treasure';
-    else if (roll < 0.65) room.type = 'shrine';
+    else if (roll < 0.45) room.type = 'enemy';
+    else if (roll < 0.58) room.type = 'treasure';
+    else if (roll < 0.68) room.type = 'shrine';
+    else if (roll < 0.78) room.type = 'scholar';
     else room.type = 'empty';
     
+    // Pre-assign demon to enemy rooms
+    if (room.type === 'enemy') {
+      room.demon = getDemonForFloor(game.floor);
+    }
+    
     rooms.push(room);
+  }
+  // Ensure at least 2 enemy rooms per floor
+  let enemyCount = rooms.filter(r => r.type === 'enemy').length;
+  while (enemyCount < 2) {
+    const idx = RNG.randint(1, numRooms - 2);
+    if (rooms[idx].type === 'empty') {
+      rooms[idx].type = 'enemy';
+      rooms[idx].demon = getDemonForFloor(game.floor);
+      enemyCount++;
+    }
   }
   
   game.dungeon.rooms = rooms;
   game.dungeon.currentRoom = 0;
-  game.dungeon.explored = new Set();
-  game.dungeon.playerPos = { x: 1, y: 1 };
-  
-  return rooms;
+  game.dungeon.playerPos = { x:1, y:1 };
 }
 
-// ── FLOOR MAP RENDERING ─────────────────────────────────────
-const TILE_SIZE = 8;
-const MAP_W = 32, MAP_H = 24;
-
-function drawDungeonFloor() {
-  // Dark stone background
-  for (let y = 0; y < MAP_H; y++) {
-    for (let x = 0; x < MAP_W; x++) {
-      const isEdge = x === 0 || y === 0 || x === MAP_W - 1 || y === MAP_H - 1;
-      const color = isEdge ? C.stoneDark : (RNG.random() > 0.9 ? C.stoneLight : C.stone);
-      drawRect(x * (W / MAP_W), y * (H / MAP_H), W / MAP_W + 1, H / MAP_H + 1, color);
-    }
+function nextRoom() {
+  game.dungeon.currentRoom++;
+  if (game.dungeon.currentRoom >= game.dungeon.rooms.length) {
+    if (game.floor >= game.maxFloor) { game.state = ST.VICTORY; KnowledgeSystem.endRun(game.floor, true); }
+    else { game.state = ST.FLOOR_TRANS; game.transition.timer = 3; game.transition.text = `Floor ${game.floor} Purged`; }
+    return;
   }
-  
-  // Random stone patterns
-  for (let i = 0; i < 20; i++) {
-    const x = Math.floor(RNG.random() * MAP_W);
-    const y = Math.floor(RNG.random() * MAP_H);
-    drawRect(x * (W / MAP_W), y * (H / MAP_H), 3, 3, C.stoneDark);
-  }
-}
-
-// ── ROOM MAP (minimap in dungeon) ──────────────────────────
-function drawRoomMap(x, y) {
-  const mapW = 70;
-  const mapH = 50;
-  const mx = W - mapW - 8;
-  const my = 8;
-  
-  drawBox(mx, my, mapW, mapH, 'rgba(10,10,26,0.9)', C.uiBorder);
-  
-  const rooms = game.dungeon.rooms;
-  const current = game.dungeon.currentRoom;
-  
-  // Draw room connections
-  for (let i = 0; i < rooms.length - 1; i++) {
-    const rx = mx + 5 + (i % 4) * 16;
-    const ry = my + 8 + Math.floor(i / 4) * 14;
-    const nx = mx + 5 + ((i + 1) % 4) * 16;
-    const ny = my + 8 + Math.floor((i + 1) / 4) * 14;
-    
-    if (i < current) {
-      drawRect(rx + 3, ry + 3, nx - rx + 3, 1, C.holyDim);
-    }
-  }
-  
-  // Draw rooms
-  for (let i = 0; i < rooms.length; i++) {
-    const rx = mx + 5 + (i % 4) * 16;
-    const ry = my + 8 + Math.floor(i / 4) * 14;
-    const room = rooms[i];
-    
-    let color = C.stoneDark;
-    if (i === current) color = C.gold;
-    else if (room.type === 'enemy') color = C.red;
-    else if (room.type === 'treasure') color = C.goldDark;
-    else if (room.type === 'shrine') color = C.purple;
-    else if (room.type === 'exit') color = C.green;
-    else if (room.cleared) color = C.holyDim;
-    
-    drawRect(rx, ry, 6, 6, color);
-    drawBorder(rx, ry, 6, 6, C.uiBorder);
-  }
-  
-  // Floor label
-  drawText(`F${game.floor}`, mx + mapW / 2, my + mapH + 3, C.textGold, 0.7, 'center');
-}
-
-// ── PLAYER CHARACTER (pixel art) ────────────────────────────
-function drawPlayer(x, y, scale = 1) {
-  const s = 8 * scale;
-  // Body (armor)
-  drawRect(x + s, y + s * 2, s * 2, s * 2, '#4466aa');
-  drawRect(x + s, y + s * 2, s, s * 2, '#3355aa');
-  // Head
-  drawRect(x + s, y, s * 2, s * 2, '#ddb896');
-  // Eyes
-  drawRect(x + s * 1.2, y + s * 0.5, s * 0.3, s * 0.3, C.black);
-  drawRect(x + s * 1.8, y + s * 0.5, s * 0.3, s * 0.3, C.black);
-  // Sword (right hand)
-  drawRect(x + s * 3, y + s, s * 0.5, s * 3, '#cccccc');
-  drawRect(x + s * 2.8, y + s * 0.5, s, s * 0.5, C.gold);
-  // Legs
-  drawRect(x + s, y + s * 4, s, s, '#333355');
-  drawRect(x + s * 2, y + s * 4, s, s, '#333355');
-}
-
-// ── ENEMY CHARACTER (pixel art) ─────────────────────────────
-function drawEnemy(x, y, type, scale = 1) {
-  const s = 8 * scale;
-  const colors = {
-    deception: { body: '#6644aa', eye: '#ff4444' },
-    lust: { body: '#aa4466', eye: '#ff88aa' },
-    wrath: { body: '#aa4422', eye: '#ffaa00' },
-    pride: { body: '#aaaa22', eye: '#ffffff' },
-    despair: { body: '#444466', eye: '#8888ff' },
-    false_prophet: { body: '#226644', eye: '#ff4444' },
-    whore: { body: '#8844aa', eye: '#ff88ff' },
-    leviathan: { body: '#222244', eye: '#ff2222' },
-  };
-  
-  const c = colors[type] || colors.deception;
-  
-  // Demon body (amorphous)
-  drawRect(x + s * 0.5, y + s, s * 3, s * 3, c.body);
-  drawRect(x, y + s * 1.5, s * 4, s * 2, c.body);
-  // Horns
-  drawRect(x, y, s, s * 1.5, c.body);
-  drawRect(x + s * 3, y, s, s * 1.5, c.body);
-  // Eyes (glowing)
-  drawRect(x + s, y + s * 1.5, s * 0.8, s * 0.5, c.eye);
-  drawRect(x + s * 2.2, y + s * 1.5, s * 0.8, s * 0.5, c.eye);
-  // Glow
-  drawRect(x + s * 1.1, y + s * 1.6, s * 0.6, s * 0.3, '#ffffff');
-  drawRect(x + s * 2.3, y + s * 1.6, s * 0.6, s * 0.3, '#ffffff');
-  // Mouth
-  drawRect(x + s * 1.2, y + s * 2.5, s * 1.6, s * 0.5, '#000000');
-}
-
-// ── TITLE SCREEN ────────────────────────────────────────────
-function updateTitle(dt) {
-  game.anim.titlePulse += dt * 2;
-  game.anim.sparkle += dt * 3;
-  
-  if (consumeClick() || keys['Enter'] || keys[' '] || keys['Space']) {
-    startNewGame();
-  }
-}
-
-function drawTitle() {
-  clear();
-  
-  // Atmospheric background
-  for (let y = 0; y < H; y++) {
-    const pct = y / H;
-    const r = Math.floor(10 + pct * 15);
-    const g = Math.floor(10 + pct * 5);
-    const b = Math.floor(26 + pct * 20);
-    drawRect(0, y, W, 1, `rgb(${r},${g},${b})`);
-  }
-  
-  // Stars
-  for (let i = 0; i < 30; i++) {
-    const sx = (i * 37 + Math.sin(game.anim.sparkle + i) * 2) % W;
-    const sy = (i * 23) % (H * 0.6);
-    const brightness = 0.3 + 0.7 * Math.abs(Math.sin(game.anim.sparkle * 0.5 + i * 0.7));
-    drawRect(sx, sy, 1, 1, `rgba(255,255,255,${brightness})`);
-  }
-  
-  // Cross silhouette at top
-  const crossX = W / 2;
-  const crossY = 35;
-  drawRect(crossX - 1.5, crossY - 15, 3, 25, C.goldDark);
-  drawRect(crossX - 6, crossY - 10, 12, 3, C.goldDark);
-  
-  // Title
-  const pulse = 0.8 + 0.2 * Math.sin(game.anim.titlePulse);
-  drawTextShadow('SEVEN', W / 2, 70, C.textGold, '#443300', 2, 'center');
-  drawTextShadow('FALLS', W / 2, 90, C.textGold, '#443300', 2, 'center');
-  
-  // Subtitle
-  drawTextShadow('A Roguelike of Faith', W / 2, 115, C.holyDim, C.black, 0.6, 'center');
-  
-  // Blinking prompt
-  if (Math.floor(game.anim.titlePulse * 2) % 2 === 0) {
-    drawText('CLICK OR PRESS ENTER', W / 2, 145, C.textMain, 0.5, 'center');
-  }
-  
-  // Version
-  drawText('v0.1', W - 5, H - 10, C.textDim, 0.4, 'right');
-  
-  // Floor count
-  drawText(`${game.maxFloor} FLOORS`, W / 2, 155, C.textDim, 0.4, 'center');
+  game.dungeon.playerPos = { x:1, y:1 };
 }
 
 // ── EXPLORE MODE ────────────────────────────────────────────
 function updateExplore(dt) {
   const p = game.dungeon.playerPos;
   const speed = 80 * dt;
+  if (keys['ArrowLeft']||keys['a']||keys['A']) p.x = Math.max(1, p.x - speed*0.06);
+  if (keys['ArrowRight']||keys['d']||keys['D']) p.x = Math.min(MAP_W-2, p.x + speed*0.06);
+  if (keys['ArrowUp']||keys['w']||keys['W']) p.y = Math.max(1, p.y - speed*0.06);
+  if (keys['ArrowDown']||keys['s']||keys['S']) p.y = Math.min(MAP_H-2, p.y + speed*0.06);
   
-  // Movement
-  if (keys['ArrowLeft'] || keys['a'] || keys['A']) p.x = Math.max(1, p.x - speed * 0.06);
-  if (keys['ArrowRight'] || keys['d'] || keys['D']) p.x = Math.min(MAP_W - 2, p.x + speed * 0.06);
-  if (keys['ArrowUp'] || keys['w'] || keys['W']) p.y = Math.max(1, p.y - speed * 0.06);
-  if (keys['ArrowDown'] || keys['s'] || keys['S']) p.y = Math.min(MAP_H - 2, p.y + speed * 0.06);
-  
-  // Check room interactions
   const room = game.dungeon.rooms[game.dungeon.currentRoom];
+  const cx = MAP_W/2, cy = MAP_H/2;
   
-  // Near enemy?
+  // Near enemy → combat
   if (room.type === 'enemy' && !room.cleared) {
-    const dx = Math.abs(p.x - MAP_W / 2);
-    const dy = Math.abs(p.y - MAP_H / 2);
-    if (dx < 3 && dy < 3) {
-      startCombat();
+    if (Math.abs(p.x-cx) < 3 && Math.abs(p.y-cy) < 3) {
+      startCombat(room.demon);
       return;
     }
   }
   
-  // Near exit?
+  // Near exit → next room
   if (room.type === 'exit' || (room.type === 'start' && game.dungeon.currentRoom === 0)) {
-    const exitX = MAP_W - 3;
-    const exitY = MAP_H - 3;
-    const dx = Math.abs(p.x - exitX);
-    const dy = Math.abs(p.y - exitY);
-    if (dx < 2 && dy < 2) {
-      nextRoom();
-      return;
-    }
+    if (Math.abs(p.x-(MAP_W-3)) < 2 && Math.abs(p.y-(MAP_H-3)) < 2) { nextRoom(); return; }
   }
   
-  // Near treasure?
+  // Near treasure
   if (room.type === 'treasure' && !room.cleared) {
-    const dx = Math.abs(p.x - MAP_W / 2);
-    const dy = Math.abs(p.y - MAP_H / 2);
-    if (dx < 2 && dy < 2) {
+    if (Math.abs(p.x-cx) < 2 && Math.abs(p.y-cy) < 2) {
       room.cleared = true;
-      const gold = 10 + Math.floor(RNG.random() * 15);
+      const gold = 8 + Math.floor(RNG.random() * 12);
       game.player.gold += gold;
-      addMessage(`Found ${gold} gold!`, C.textGold);
-      // Chance to learn a new verse
-      if (RNG.random() < 0.3) {
-        learnNewVerse();
-      }
-    }
-  }
-  
-  // Near shrine?
-  if (room.type === 'shrine' && !room.cleared) {
-    const dx = Math.abs(p.x - MAP_W / 2);
-    const dy = Math.abs(p.y - MAP_H / 2);
-    if (dx < 2 && dy < 2) {
-      room.cleared = true;
-      // Heal and maybe learn verse
-      const heal = Math.floor(game.player.maxHp * 0.3);
-      game.player.hp = Math.min(game.player.maxHp, game.player.hp + heal);
-      addMessage(`Healed ${heal} HP at the shrine`, C.textGreen);
+      addMsg(`Found ${gold} gold`, C.textGold);
+      // Chance to find a scroll fragment
       if (RNG.random() < 0.5) {
-        learnNewVerse();
+        const undiscovered = VERSES.filter(v => !KnowledgeSystem.isVerseDiscovered(v.id) && v.difficulty <= 2);
+        if (undiscovered.length > 0) {
+          const verse = RNG.choice(undiscovered);
+          const result = KnowledgeSystem.addScrollFragment(verse.id);
+          if (result.discovered) {
+            addMsg(`Scroll complete! Learned: "${verse.text}"`, C.textGold);
+          } else {
+            addMsg(`Found scroll fragment (${result.fragments}/${verse.difficulty})`, C.textDim);
+          }
+        }
+      }
+    }
+  }
+  
+  // Near shrine
+  if (room.type === 'shrine' && !room.cleared) {
+    if (Math.abs(p.x-cx) < 2 && Math.abs(p.y-cy) < 2) {
+      room.cleared = true;
+      const heal = Math.floor(game.player.maxHp * 0.35);
+      game.player.hp = Math.min(game.player.maxHp, game.player.hp + heal);
+      addMsg(`Healed ${heal} HP`, C.textGreen);
+      // Shrine teaches a verse
+      if (RNG.random() < 0.6) {
+        const undiscovered = VERSES.filter(v => !KnowledgeSystem.isVerseDiscovered(v.id));
+        if (undiscovered.length > 0) {
+          const verse = RNG.choice(undiscovered);
+          KnowledgeSystem.discoverVerse(verse.id);
+          addMsg(`The shrine teaches: "${verse.text}"`, C.textGold);
+        }
+      }
+    }
+  }
+  
+  // Near scholar
+  if (room.type === 'scholar' && !room.noteFound) {
+    if (Math.abs(p.x-cx) < 2 && Math.abs(p.y-cy) < 2) {
+      room.noteFound = true;
+      const note = getScholarNoteForFloor(game.floor);
+      if (note) {
+        KnowledgeSystem.addScholarNote(note);
+        game.state = ST.SCHOLAR;
+        game.scholar.note = note;
+        game.scholar.timer = 0;
       }
     }
   }
 }
 
-function learnNewVerse() {
-  const known = game.player.knownVerses;
-  const available = VERSES.filter(v => !known.includes(v.id) && v.difficulty <= 2);
-  if (available.length > 0) {
-    const newVerse = available[Math.floor(RNG.random() * available.length)];
-    game.player.knownVerses.push(newVerse.id);
-    addMessage(`Learned: "${newVerse.text}"`, C.textGold);
-  }
-}
-
-function addMessage(text, color = C.textMain) {
-  game.combat.messages.push({ text, color, timer: 3 });
-}
-
-function nextRoom() {
-  game.dungeon.currentRoom++;
-  
-  if (game.dungeon.currentRoom >= game.dungeon.rooms.length) {
-    // Floor complete!
-    if (game.floor >= game.maxFloor) {
-      game.state = STATE.VICTORY;
-    } else {
-      game.state = STATE.FLOOR_TRANSITION;
-      game.transition.timer = 3;
-      game.transition.text = `Floor ${game.floor} Complete`;
-    }
-    return;
-  }
-  
-  // Reset player position for new room
-  game.dungeon.playerPos = { x: 1, y: 1 };
-  
-  const room = game.dungeon.rooms[game.dungeon.currentRoom];
-  if (room.type === 'shrine') {
-    addMessage('You enter a sacred shrine...', C.holy);
-  } else if (room.type === 'treasure') {
-    addMessage('A treasure glitters in the darkness...', C.textGold);
-  }
-}
-
-function drawExplore() {
-  clear();
-  drawDungeonFloor();
-  
-  const room = game.dungeon.rooms[game.dungeon.currentRoom];
-  
-  // Draw room features
-  const centerX = (W / MAP_W) * (MAP_W / 2);
-  const centerY = (H / MAP_H) * (MAP_H / 2);
-  
-  if (room.type === 'enemy' && !room.cleared) {
-    // Danger aura
-    const pulse = 0.3 + 0.2 * Math.sin(game.anim.frame * 0.1);
-    drawRect(centerX - 20, centerY - 20, 40, 40, `rgba(139,0,0,${pulse})`);
-    drawTextShadow('!', centerX + 4, centerY - 8, C.textRed, C.black, 1.5, 'center');
-  }
-  
-  if (room.type === 'exit') {
-    // Exit door
-    drawRect(W - 35, H - 35, 24, 24, '#2a1a0a');
-    drawRect(W - 33, H - 33, 20, 20, '#1a0a00');
-    drawTextShadow('EXIT', W - 23, H - 22, C.green, C.black, 0.5, 'center');
-  }
-  
-  if (room.type === 'treasure' && !room.cleared) {
-    // Treasure chest
-    drawRect(centerX - 8, centerY - 6, 16, 12, C.goldDark);
-    drawRect(centerX - 6, centerY - 4, 12, 8, C.gold);
-    drawRect(centerX - 1, centerY - 2, 2, 2, C.goldDark);
-  }
-  
-  if (room.type === 'shrine' && !room.cleared) {
-    // Shrine
-    drawRect(centerX - 4, centerY - 12, 8, 16, C.holy);
-    drawRect(centerX - 2, centerY - 14, 4, 3, C.gold);
-    drawRect(centerX - 6, centerY + 4, 12, 3, C.holyDim);
-  }
-  
-  // Draw player
-  const px = game.dungeon.playerPos.x * (W / MAP_W);
-  const py = game.dungeon.playerPos.y * (H / MAP_H);
-  drawPlayer(px - 8, py - 16, 1);
-  
-  // Room info
-  drawBox(4, H - 30, 80, 26);
-  drawText(`FLOOR ${game.floor}`, 8, H - 26, C.textGold, 0.5);
-  drawText(`ROOM ${game.dungeon.currentRoom + 1}/${game.dungeon.rooms.length}`, 8, H - 18, C.textDim, 0.4);
-  drawText(`GOLD: ${game.player.gold}`, 8, H - 10, C.textGold, 0.4);
-  
-  // Player stats
-  drawBox(W / 2 - 50, H - 30, 100, 26);
-  drawHPBar(W / 2 - 46, H - 26, 92, 6, game.player.hp, game.player.maxHp, C.green);
-  drawText(`HP ${game.player.hp}/${game.player.maxHp}`, W / 2, H - 18, C.textMain, 0.4, 'center');
-  drawText(`LVL ${game.player.level}`, W / 2, H - 10, C.textDim, 0.4, 'center');
-  
-  // Messages
-  drawMessages();
-  
-  // Controls hint
-  drawText('WASD/ARROWS: MOVE', W / 2, 4, C.textDim, 0.35, 'center');
-}
-
-function drawMessages() {
-  const msgs = game.combat.messages.filter(m => m.timer > 0);
-  for (let i = 0; i < msgs.length; i++) {
-    const m = msgs[i];
-    const alpha = Math.min(1, m.timer);
-    ctx.globalAlpha = alpha;
-    drawTextShadow(m.text, W / 2, 20 + i * 12, m.color, C.black, 0.5, 'center');
-    ctx.globalAlpha = 1;
-  }
-}
-
-// ── COMBAT SYSTEM ───────────────────────────────────────────
-function startCombat() {
-  game.state = STATE.COMBAT;
-  const demon = getDemonForFloor(game.floor);
+// ── COMBAT ──────────────────────────────────────────────────
+function startCombat(demon) {
+  game.state = ST.COMBAT;
   game.combat.demon = { ...demon };
   
-  // Select verse for this combat
-  const verse = getRandomVerse(game.floor);
+  // Record observation
+  KnowledgeSystem.observeDemon(demon.type);
+  
+  // Pick a verse the player KNOWS for this combat
+  const known = KnowledgeSystem.getAvailableVerses();
+  if (known.length === 0) {
+    // No verses known — show a desperate message
+    addMsg('You know no verses! Find scrolls or shrines to learn.', C.textRed);
+    // Give them one free basic verse so the game isn't literally unplayable
+    KnowledgeSystem.discoverVerse('ps23_1');
+    known.push('ps23_1');
+  }
+  
+  // Pick a verse the player knows, weighted by what might work
+  const verse = pickBestVerse(known, demon.type);
   game.combat.verse = verse;
   game.combat.pool = getCombatPool(verse, game.floor);
   game.combat.selected = [];
@@ -734,569 +340,259 @@ function startCombat() {
   game.combat.turnCount = 0;
   game.combat.demonStruck = false;
   game.combat.playerStruck = false;
-  game.combat.strikeTimer = 0;
+  game.combat.lastVerseType = null;
+  game.combat.correctCount = 0;
   
-  addMessage(`A ${demon.name} appears!`, C.textRed);
+  addMsg(`${demon.name} blocks your path!`, C.textRed);
+}
+
+function pickBestVerse(knownVerseIds, demonType) {
+  // If we know the weakness, try to pick a verse of that type
+  const bestiary = KnowledgeSystem.getBestiaryEntry(demonType);
+  if (bestiary && bestiary.weakTo) {
+    const strong = VERSES.filter(v => knownVerseIds.includes(v.id) && v.type === bestiary.weakTo);
+    if (strong.length > 0) return RNG.choice(strong);
+  }
   
-  // Show weakness hint after a delay
-  setTimeout(() => {
-    const best = WEAKNESS_MAP[demon.type];
-    if (best) {
-      const types = { praise: 'Praise', wisdom: 'Wisdom', warfare: 'Warfare', fire: 'Fire', mercy: 'Mercy' };
-      addMessage(`Weak to: ${types[best.best]}`, C.textDim);
-    }
-  }, 2000);
+  // Otherwise, pick a random known verse
+  const available = VERSES.filter(v => knownVerseIds.includes(v.id));
+  if (available.length > 0) return RNG.choice(available);
+  
+  // Fallback (shouldn't happen)
+  return VERSES[0];
 }
 
 function updateCombat(dt) {
   const c = game.combat;
   
-  // Timer
   if (c.timerActive && c.timer > 0) {
     c.timer -= dt;
-    if (c.timer <= 0) {
-      c.timer = 0;
-      // Time's up — demon attacks
-      demonAttack();
-    }
+    if (c.timer <= 0) { c.timer = 0; demonAttack(); }
   }
+  if (c.strikeTimer > 0) c.strikeTimer -= dt;
+  if (c.shakeTimer > 0) c.shakeTimer -= dt;
   
-  // Strike animation
-  if (c.strikeTimer > 0) {
-    c.strikeTimer -= dt;
-  }
-  
-  // Shake
-  if (c.shakeTimer > 0) {
-    c.shakeTimer -= dt;
-  }
-  
-  // Messages decay
   game.combat.messages.forEach(m => m.timer -= dt);
   game.combat.messages = game.combat.messages.filter(m => m.timer > 0);
   
   if (!c.playerTurn) return;
   
-  // Handle word selection via click
-  if (consumeClick()) {
-    handleWordClick(clickedX, clickedY);
-  }
+  if (consumeClick()) handleWordClick(clickedX, clickedY);
   
-  // Keyboard shortcuts for word selection (1-9, 0 for 10)
   for (let i = 0; i < Math.min(c.pool.length, 10); i++) {
-    const key = i === 9 ? '0' : String(i + 1);
-    if (keys[key]) {
-      keys[key] = false;
-      selectWordByIndex(i);
-    }
+    const key = i === 9 ? '0' : String(i+1);
+    if (keys[key]) { keys[key] = false; toggleWord(i); }
   }
-  
-  // Submit verse (Enter or Space)
-  if (keys['Enter'] || keys['Space']) {
-    keys['Enter'] = false;
-    keys['Space'] = false;
-    submitVerse();
-  }
-  
-  // Clear selection (Backspace)
-  if (keys['Backspace']) {
-    keys['Backspace'] = false;
-    c.selected = [];
-  }
+  if (keys['Enter']||keys['Space']) { keys['Enter']=false; keys['Space']=false; submitVerse(); }
+  if (keys['Backspace']) { keys['Backspace']=false; c.selected = []; }
 }
 
 function handleWordClick(mx, my) {
   const c = game.combat;
+  const bubbleW=38, bubbleH=14, gap=3, cols=Math.min(5,c.pool.length);
+  const totalW = cols*(bubbleW+gap)-gap, startX=(W-totalW)/2, startY=110;
   
-  // Calculate word bubble positions
-  const pool = c.pool;
-  const cols = Math.min(5, pool.length);
-  const bubbleW = 38;
-  const bubbleH = 14;
-  const gap = 3;
-  const totalW = cols * (bubbleW + gap) - gap;
-  const startX = (W - totalW) / 2;
-  const startY = 110;
-  
-  for (let i = 0; i < pool.length; i++) {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const bx = startX + col * (bubbleW + gap);
-    const by = startY + row * (bubbleH + gap);
-    
-    if (mx >= bx && mx <= bx + bubbleW && my >= by && my <= by + bubbleH) {
-      // Toggle word selection
-      const word = pool[i];
-      const idx = c.selected.indexOf(word);
-      if (idx >= 0) {
-        c.selected.splice(idx, 1);
-      } else {
-        c.selected.push(word);
-      }
-      return;
-    }
+  for (let i = 0; i < c.pool.length; i++) {
+    const col=i%cols, row=Math.floor(i/cols);
+    const bx=startX+col*(bubbleW+gap), by=startY+row*(bubbleH+gap);
+    if (mx>=bx && mx<=bx+bubbleW && my>=by && my<=by+bubbleH) { toggleWord(i); return; }
   }
-  
-  // Check submit button
-  const submitX = W / 2 - 30;
-  const submitY = 170;
-  if (mx >= submitX && mx <= submitX + 60 && my >= submitY && my <= submitY + 14) {
-    submitVerse();
-  }
+  // Submit button
+  const sx=W/2-30, sy=170;
+  if (mx>=sx && mx<=sx+60 && my>=sy && my<=sy+14) submitVerse();
 }
 
-function selectWordByIndex(i) {
-  const c = game.combat;
-  if (i >= c.pool.length) return;
-  const word = c.pool[i];
+function toggleWord(i) {
+  const c = game.combat, word = c.pool[i];
   const idx = c.selected.indexOf(word);
-  if (idx >= 0) {
-    c.selected.splice(idx, 1);
-  } else {
-    c.selected.push(word);
-  }
+  if (idx >= 0) c.selected.splice(idx, 1); else c.selected.push(word);
 }
 
 function submitVerse() {
   const c = game.combat;
   if (c.selected.length === 0) return;
-  
-  c.timerActive = false;
-  c.playerTurn = false;
+  c.timerActive = false; c.playerTurn = false;
   
   const correct = checkVerse(c.selected, c.verse);
+  c.lastVerseType = c.verse.type;
   
   if (correct) {
-    // Calculate damage
+    c.correctCount++;
     let damage = c.verse.damage;
-    const multiplier = getDamageMultiplier(c.demon.type, c.verse.type);
-    damage = Math.floor(damage * multiplier);
-    
-    // Apply player buffs
-    if (c.playerTurn === false && game.player.buffTurns > 0) {
-      damage = Math.floor(damage * 1.5);
-    }
-    
-    // Apply demon armor
+    const mult = getDamageMultiplier(c.demon.type, c.verse.type);
+    damage = Math.floor(damage * mult);
+    if (game.player.buffTurns > 0) damage = Math.floor(damage * 1.5);
     damage = Math.max(1, damage - game.player.defense);
     
     c.demon.hp -= damage;
-    c.demonStruck = true;
-    c.strikeTimer = 0.5;
-    c.shakeTimer = 0.3;
-    c.shakeIntensity = 4;
+    c.demonStruck = true; c.strikeTimer = 0.5; c.shakeTimer = 0.3; c.shakeIntensity = 4;
+    
+    const typeNames = {praise:'Praise',wisdom:'Wisdom',warfare:'Warfare',fire:'Fire',mercy:'Mercy'};
+    if (mult >= 2) addMsg(`${damage} ${typeNames[c.verse.type]}! SUPER EFFECTIVE!`, C.textGold);
+    else if (mult > 1) addMsg(`${damage} ${typeNames[c.verse.type]}! Effective!`, C.textGreen);
+    else addMsg(`${damage} ${typeNames[c.verse.type]} damage`, C.textMain);
     
     // Effects
-    if (c.verse.effect === 'heal_5') {
-      game.player.hp = Math.min(game.player.maxHp, game.player.hp + 5);
-      addMessage('+5 HP', C.textGreen);
-    } else if (c.verse.effect === 'heal_10') {
-      game.player.hp = Math.min(game.player.maxHp, game.player.hp + 10);
-      addMessage('+10 HP', C.textGreen);
-    } else if (c.verse.effect === 'heal_15') {
-      game.player.hp = Math.min(game.player.maxHp, game.player.hp + 15);
-      addMessage('+15 HP', C.textGreen);
-    } else if (c.verse.effect === 'shield') {
-      game.player.shieldActive = true;
-      addMessage('Shield active!', C.cyan);
-    } else if (c.verse.effect === 'buff') {
-      game.player.buffTurns = 3;
-      addMessage('Attack buffed!', C.textGold);
-    } else if (c.verse.effect === 'armor') {
-      game.player.armorBonus = 3;
-      addMessage('+3 Armor!', C.blue);
-    } else if (c.verse.effect === 'stun') {
-      addMessage('Demon stunned!', C.purple);
-      // Skip demon's next attack
-      setTimeout(() => { demonAttack(true); }, 1500);
-      setTimeout(() => { playerTurnStart(); }, 3000);
-      return;
-    } else if (c.verse.effect === 'judgment') {
-      const bonusDmg = Math.floor(c.demon.hp * 0.15);
-      c.demon.hp -= bonusDmg;
-      addMessage(`Judgment deals ${bonusDmg} bonus!`, C.textGold);
-    } else if (c.verse.effect === 'revive') {
-      if (game.player.hp < game.player.maxHp * 0.3) {
-        game.player.hp = Math.floor(game.player.maxHp * 0.5);
-        addMessage('Risen again!', C.textGreen);
-      }
-    }
+    applyVerseEffect(c.verse);
     
-    const typeNames = { praise: 'Praise', wisdom: 'Wisdom', warfare: 'Warfare', fire: 'Fire', mercy: 'Mercy' };
-    addMessage(`${damage} ${typeNames[c.verse.type]} damage!`, multiplier > 1 ? C.textGold : C.textMain);
-    
-    // Check demon death
-    if (c.demon.hp <= 0) {
-      c.demon.hp = 0;
-      setTimeout(() => combatWin(), 1000);
-      return;
-    }
+    if (c.demon.hp <= 0) { c.demon.hp = 0; setTimeout(()=>combatWin(), 1000); return; }
   } else {
-    // Wrong verse
-    addMessage('The words scatter...', C.textDim);
-    c.shakeTimer = 0.2;
-    c.shakeIntensity = 2;
+    addMsg('The words scatter into the air...', C.textDim);
+    c.shakeTimer = 0.2; c.shakeIntensity = 2;
   }
   
-  // Demon attacks after delay
-  setTimeout(() => demonAttack(), 1500);
+  setTimeout(()=>demonAttack(), 1500);
 }
 
-function demonAttack(stunned = false) {
+function applyVerseEffect(verse) {
+  const effects = {
+    heal_5: ()=>{ game.player.hp=Math.min(game.player.maxHp,game.player.hp+5); addMsg('+5 HP',C.textGreen); },
+    heal_10: ()=>{ game.player.hp=Math.min(game.player.maxHp,game.player.hp+10); addMsg('+10 HP',C.textGreen); },
+    heal_15: ()=>{ game.player.hp=Math.min(game.player.maxHp,game.player.hp+15); addMsg('+15 HP',C.textGreen); },
+    shield: ()=>{ game.player.shieldActive=true; addMsg('Shield active!',C.cyan); },
+    buff: ()=>{ game.player.buffTurns=3; addMsg('Attack buffed!',C.textGold); },
+    armor: ()=>{ game.player.armorBonus=3; addMsg('+3 Armor!',C.blue); },
+    stun: ()=>{ addMsg('Demon stunned!',C.purple); },
+    judgment: ()=>{ const b=Math.floor(game.combat.demon.hp*0.15); game.combat.demon.hp-=b; addMsg(`Judgment! +${b}!`,C.textGold); },
+    revive: ()=>{ if(game.player.hp<game.player.maxHp*0.3){game.player.hp=Math.floor(game.player.maxHp*0.5);addMsg('Risen again!',C.textGreen);} },
+    debuff: ()=>{ addMsg('Demon weakened!',C.purple); },
+    reveal_weakness: ()=>{ addMsg(`Weakness: ${game.combat.demon.type}`,C.textDim); },
+    smite: ()=>{},
+  };
+  if (effects[verse.effect]) effects[verse.effect]();
+}
+
+function demonAttack(stunned=false) {
   const c = game.combat;
+  if (stunned) { addMsg('Demon is stunned!',C.purple); playerTurnStart(); return; }
   
-  if (stunned) {
-    addMessage('Demon is stunned!', C.purple);
-    playerTurnStart();
-    return;
-  }
+  c.playerStruck = true; c.strikeTimer = 0.5; c.shakeTimer = 0.3; c.shakeIntensity = 3;
   
-  c.playerStruck = true;
-  c.strikeTimer = 0.5;
-  c.shakeTimer = 0.3;
-  c.shakeIntensity = 3;
+  let dmg = Math.floor(5 + game.floor*2 + RNG.random()*8);
+  if (game.player.shieldActive) { dmg = Math.floor(dmg*0.5); game.player.shieldActive=false; addMsg('Shield absorbed!',C.cyan); }
+  dmg = Math.max(1, dmg - game.player.defense - game.player.armorBonus);
   
-  // Calculate demon damage
-  let demonDmg = Math.floor(5 + game.floor * 2 + RNG.random() * 8);
+  game.player.hp -= dmg;
+  addMsg(`${c.demon.name} strikes! -${dmg} HP`, C.textRed);
   
-  // Shield reduces
-  if (game.player.shieldActive) {
-    demonDmg = Math.floor(demonDmg * 0.5);
-    game.player.shieldActive = false;
-    addMessage('Shield absorbed damage!', C.cyan);
-  }
-  
-  // Armor reduces
-  demonDmg = Math.max(1, demonDmg - game.player.defense - game.player.armorBonus);
-  
-  game.player.hp -= demonDmg;
-  addMessage(`${c.demon.name} strikes for ${demonDmg}!`, C.textRed);
-  
-  // Decay buffs
   if (game.player.buffTurns > 0) game.player.buffTurns--;
-  if (game.player.armorBonus > 0) game.player.armorBonus = Math.max(0, game.player.armorBonus - 1);
+  if (game.player.armorBonus > 0) game.player.armorBonus = Math.max(0, game.player.armorBonus-1);
   
-  // Check player death
-  if (game.player.hp <= 0) {
-    game.player.hp = 0;
-    setTimeout(() => startDeath(), 1000);
-    return;
-  }
-  
-  // Next verse round
-  setTimeout(() => playerTurnStart(), 1500);
+  if (game.player.hp <= 0) { game.player.hp = 0; setTimeout(()=>startDeath(), 1000); return; }
+  setTimeout(()=>playerTurnStart(), 1500);
 }
 
 function playerTurnStart() {
   const c = game.combat;
-  c.turnCount++;
-  c.playerTurn = true;
-  c.demonStruck = false;
-  c.playerStruck = false;
+  c.turnCount++; c.playerTurn = true; c.demonStruck = false; c.playerStruck = false;
   
-  // New verse for this turn
-  const verse = getRandomVerse(game.floor);
+  const known = KnowledgeSystem.getAvailableVerses();
+  if (known.length === 0) { KnowledgeSystem.discoverVerse('ps23_1'); known.push('ps23_1'); }
+  const verse = pickBestVerse(known, c.demon.type);
   c.verse = verse;
   c.pool = getCombatPool(verse, game.floor);
   c.selected = [];
-  c.timer = Math.max(20, 40 - game.floor * 2);
-  c.timerMax = c.timer;
-  c.timerActive = true;
+  c.timer = Math.max(20, 40 - game.floor*2);
+  c.timerMax = c.timer; c.timerActive = true;
 }
 
 function combatWin() {
-  game.state = STATE.COMBAT_WIN;
+  game.state = ST.COMBAT_WIN;
   const d = game.combat.demon;
+  game.player.gold += d.gold; game.player.xp += d.xp;
   
-  game.player.gold += d.gold;
-  game.player.xp += d.xp;
-  
-  // Level up check
   const xpNeeded = game.player.level * 30;
   if (game.player.xp >= xpNeeded) {
-    game.player.level++;
-    game.player.xp -= xpNeeded;
-    game.player.maxHp += 10;
-    game.player.hp = game.player.maxHp;
-    game.player.attack += 2;
-    game.player.defense += 1;
-    addMessage(`LEVEL UP! Now level ${game.player.level}!`, C.textGold);
+    game.player.level++; game.player.xp -= xpNeeded;
+    game.player.maxHp += 8; game.player.hp = game.player.maxHp;
+    game.player.attack += 2; game.player.defense += 1;
+    addMsg(`LEVEL UP! Level ${game.player.level}`, C.textGold);
   }
   
-  // Mark room cleared
   game.dungeon.rooms[game.dungeon.currentRoom].cleared = true;
+  KnowledgeSystem.slayDemon(d.type);
   
-  // Learn verse permanently
-  if (!game.player.knownVerses.includes(game.combat.verse.id)) {
-    game.player.knownVerses.push(game.combat.verse.id);
-    addMessage(`Memorized: "${game.combat.verse.text}"`, C.textGold);
+  // First kill of this type → teach something
+  const entry = KnowledgeSystem.getBestiaryEntry(d.type);
+  if (entry && entry.killed === 1) {
+    const weak = WEAKNESS_MAP[d.type];
+    if (weak) {
+      const names = {praise:'Praise',wisdom:'Wisdom',warfare:'Warfare',fire:'Fire',mercy:'Mercy'};
+      addMsg(`DEMONOLOGY: ${d.name} is weak to ${names[weak.best]} verses!`, C.textGold);
+    }
   }
 }
 
-function updateCombatWin(dt) {
-  game.combat.messages.forEach(m => m.timer -= dt);
-  game.combat.messages = game.combat.messages.filter(m => m.timer > 0);
-  
-  if (consumeClick() || keys['Enter'] || keys[' '] || keys['Space']) {
-    keys['Enter'] = false;
-    keys[' '] = false;
-    game.state = STATE.EXPLORE;
-  }
-}
-
-function drawCombat() {
-  clear();
-  
-  // Screen shake
-  let shakeX = 0, shakeY = 0;
-  if (game.combat.shakeTimer > 0) {
-    shakeX = (Math.random() - 0.5) * game.combat.shakeIntensity * 2;
-    shakeY = (Math.random() - 0.5) * game.combat.shakeIntensity * 2;
-  }
-  
-  ctx.save();
-  ctx.translate(shakeX, shakeY);
-  
-  // Background — dark dungeon with flickering light
-  drawDungeonFloor();
-  
-  // Atmospheric glow
-  const glow = 0.1 + 0.05 * Math.sin(game.anim.frame * 0.15);
-  drawRect(0, 0, W, H, `rgba(139,0,0,${glow})`);
-  
-  const c = game.combat;
-  const d = c.demon;
-  
-  // ── DEMON ─────────────────────────────────────────────
-  const demonX = W / 2 - 20;
-  const demonY = 20;
-  
-  // Demon hurt flash
-  if (c.demonStruck && c.strikeTimer > 0) {
-    ctx.globalAlpha = 0.5 + Math.sin(c.strikeTimer * 20) * 0.5;
-  }
-  
-  drawEnemy(demonX, demonY, d.type, 2);
-  ctx.globalAlpha = 1;
-  
-  // Demon info
-  drawBox(W / 2 - 60, 8, 120, 18);
-  drawTextShadow(d.name.toUpperCase(), W / 2, 10, C.textRed, C.black, 0.5, 'center');
-  drawHPBar(W / 2 - 56, 18, 112, 5, d.hp, d.maxHp, C.red);
-  
-  // ── PLAYER ────────────────────────────────────────────
-  // Player hurt flash
-  if (c.playerStruck && c.strikeTimer > 0) {
-    ctx.globalAlpha = 0.5 + Math.sin(c.strikeTimer * 20) * 0.5;
-  }
-  drawPlayer(10, H - 50, 2);
-  ctx.globalAlpha = 1;
-  
-  // Player stats
-  drawBox(4, H - 60, 70, 18);
-  drawHPBar(6, H - 56, 66, 4, game.player.hp, game.player.maxHp, C.green);
-  drawText(`HP ${game.player.hp}/${game.player.maxHp}`, 8, H - 50, C.textMain, 0.35);
-  
-  // Shield/Buff indicators
-  if (game.player.shieldActive) {
-    drawText('SHIELD', 80, H - 56, C.cyan, 0.35);
-  }
-  if (game.player.buffTurns > 0) {
-    drawText(`BUFF ${game.player.buffTurns}`, 80, H - 48, C.textGold, 0.35);
-  }
-  
-  // ── VERSE PROMPT ──────────────────────────────────────
-  const verseY = 50;
-  drawBox(W / 2 - 80, verseY, 160, 18);
-  
-  // Verse type indicator
-  const typeColors = {
-    praise: C.gold, wisdom: C.purple, warfare: C.blue,
-    fire: C.red, mercy: C.green,
-  };
-  const typeNames = {
-    praise: 'PRAISE', wisdom: 'WISDOM', warfare: 'WARFARE',
-    fire: 'FIRE', mercy: 'MERCY',
-  };
-  
-  drawText(typeNames[c.verse.type], W / 2, verseY + 2, typeColors[c.verse.type], 0.4, 'center');
-  drawText(`${c.verse.words.length} words`, W / 2, verseY + 10, C.textDim, 0.35, 'center');
-  
-  // ── SELECTED WORDS ────────────────────────────────────
-  const selY = 72;
-  drawBox(W / 2 - 90, selY, 180, 16);
-  
-  const selectedText = c.selected.length > 0 
-    ? c.selected.join(' ')
-    : 'Tap words to form a verse...';
-  const textColor = c.selected.length > 0 ? C.textMain : C.textDim;
-  drawText(selectedText, W / 2, selY + 4, textColor, 0.4, 'center');
-  
-  // ── WORD BUBBLES ──────────────────────────────────────
-  const pool = c.pool;
-  const cols = Math.min(5, pool.length);
-  const bubbleW = 38;
-  const bubbleH = 14;
-  const gap = 3;
-  const totalW = cols * (bubbleW + gap) - gap;
-  const startX = (W - totalW) / 2;
-  const startY = 94;
-  
-  for (let i = 0; i < pool.length; i++) {
-    const col = i % cols;
-    const row = Math.floor(i / cols);
-    const bx = startX + col * (bubbleW + gap);
-    const by = startY + row * (bubbleH + gap);
-    
-    const isSelected = c.selected.includes(pool[i]);
-    const isHovered = mouseX >= bx && mouseX <= bx + bubbleW && 
-                      mouseY >= by && mouseY <= by + bubbleH;
-    
-    const bgColor = isSelected ? C.uiHighlight : (isHovered ? C.stoneLight : C.uiBg);
-    const borderColor = isSelected ? C.gold : (isHovered ? C.holyDim : C.uiBorder);
-    
-    drawBox(bx, by, bubbleW, bubbleH, bgColor, borderColor);
-    
-    // Key hint (top-left of bubble)
-    const keyNum = i < 9 ? String(i + 1) : '0';
-    drawText(keyNum, bx + 2, by + 1, C.textDim, 0.3);
-    
-    // Word
-    drawText(pool[i], bx + bubbleW / 2, by + 4, isSelected ? C.gold : C.textMain, 0.4, 'center');
-  }
-  
-  // ── SUBMIT BUTTON ─────────────────────────────────────
-  const submitX = W / 2 - 30;
-  const submitY = 170;
-  const canSubmit = c.selected.length > 0;
-  const submitHover = mouseX >= submitX && mouseX <= submitX + 60 &&
-                      mouseY >= submitY && mouseY <= submitY + 14;
-  
-  drawBox(submitX, submitY, 60, 14, 
-    canSubmit ? (submitHover ? C.uiHighlight : C.uiBg) : C.stoneDark, 
-    canSubmit ? C.gold : C.stone);
-  drawText('SUBMIT', submitX + 30, submitY + 3, 
-    canSubmit ? C.textGold : C.textDim, 0.4, 'center');
-  
-  // ── TIMER ─────────────────────────────────────────────
-  const timerW = 100;
-  const timerX = W / 2 - timerW / 2;
-  const timerY = H - 20;
-  
-  drawBox(timerX - 2, timerY - 2, timerW + 4, 12);
-  const timerPct = c.timer / c.timerMax;
-  const timerColor = timerPct > 0.5 ? C.green : (timerPct > 0.25 ? C.gold : C.red);
-  drawRect(timerX, timerY, Math.floor(timerW * timerPct), 8, timerColor);
-  drawText(`${Math.ceil(c.timer)}s`, W / 2, timerY, C.white, 0.4, 'center');
-  
-  // ── REFERENCE (if player knows verse) ─────────────────
-  const known = game.player.knownVerses.includes(c.verse.id);
-  if (known) {
-    drawText(`Reference: ${c.verse.reference}`, W / 2, H - 30, C.textDim, 0.35, 'center');
-  }
-  
-  // ── MESSAGES ──────────────────────────────────────────
-  drawMessages();
-  
-  ctx.restore();
-}
-
-function drawCombatWin() {
-  drawCombat(); // Draw combat as background
-  
-  // Overlay
-  drawRect(0, 0, W, H, 'rgba(0,0,0,0.6)');
-  
-  const d = game.combat.demon;
-  
-  drawTextShadow('DEFEATED', W / 2, 60, C.textGold, C.black, 1.5, 'center');
-  drawTextShadow(d.name, W / 2, 80, C.textRed, C.black, 0.7, 'center');
-  
-  drawText(`+${d.xp} XP`, W / 2, 100, C.textGold, 0.5, 'center');
-  drawText(`+${d.gold} Gold`, W / 2, 112, C.textGold, 0.5, 'center');
-  
-  if (Math.floor(game.anim.frame * 0.05) % 2 === 0) {
-    drawText('CLICK TO CONTINUE', W / 2, 140, C.textMain, 0.45, 'center');
-  }
-}
-
-// ── DEATH SCREEN ────────────────────────────────────────────
+// ── DEATH ───────────────────────────────────────────────────
 function startDeath() {
-  game.state = STATE.DEATH;
+  game.state = ST.DEATH;
   game.death.deathCount++;
   game.death.quoteRevealed = 0;
   game.death.timer = 0;
+  
+  // Generate insight based on what happened
+  const d = game.combat.demon;
+  const v = game.combat.lastVerseType;
+  game.death.insight = KnowledgeSystem.getDeathInsight(d.type, v);
+  KnowledgeSystem.recordDeathInsight(game.death.insight);
+  KnowledgeSystem.endRun(game.floor, false);
 }
 
 function updateDeath(dt) {
   game.death.timer += dt;
-  // Reveal quote letter by letter
   if (game.death.quoteRevealed < game.death.quoteText.length) {
-    game.death.quoteRevealed += dt * 25; // 25 chars per second
+    game.death.quoteRevealed += dt * 25;
   }
-  
-  // After quote is revealed, allow restart
-  if (game.death.quoteRevealed >= game.death.quoteText.length) {
-    if (consumeClick() || keys['Enter'] || keys[' '] || keys['Space']) {
-      keys['Enter'] = false;
-      keys[' '] = false;
-      startNewGame();
+  if (game.death.quoteRevealed >= game.death.quoteText.length && game.death.timer > 4) {
+    if (consumeClick() || keys['Enter'] || keys[' ']) {
+      keys['Enter']=false; keys[' ']=false;
+      game.state = ST.EXPLORE;
+      generateDungeon();
+      // Restore HP for new run (slightly less each time to increase difficulty)
+      const maxHp = Math.max(20, 30 - game.death.deathCount * 2);
+      game.player.hp = maxHp; game.player.maxHp = maxHp;
+      game.player.shieldActive = false; game.player.buffTurns = 0; game.player.armorBonus = 0;
+      addMsg('You rise again...', C.holy);
     }
   }
 }
 
 function drawDeath() {
   clear();
-  
-  // Slow fade to black
   const fade = Math.min(1, game.death.timer * 0.5);
   drawRect(0, 0, W, H, `rgba(10,10,10,${fade})`);
-  
   if (game.death.timer < 1) return;
   
-  // Proverbs 24:16
-  const visibleChars = Math.floor(game.death.quoteRevealed);
-  const visibleText = game.death.quoteText.slice(0, visibleChars);
-  
-  // Split into lines for wrapping
-  const maxLineWidth = 200;
-  ctx.font = `${6}px 'Press Start 2P'`;
-  const words = visibleText.split(' ');
-  const lines = [];
-  let currentLine = '';
-  
-  for (const word of words) {
-    const testLine = currentLine ? currentLine + ' ' + word : word;
-    const metrics = ctx.measureText(testLine);
-    if (metrics.width > maxLineWidth) {
-      lines.push(currentLine);
-      currentLine = word;
-    } else {
-      currentLine = testLine;
-    }
+  // Proverbs 24:16 letter by letter
+  const vis = Math.floor(game.death.quoteRevealed);
+  const text = game.death.quoteText.slice(0, vis);
+  ctx.font = "6px 'Press Start 2P'";
+  const words = text.split(' ');
+  const lines = []; let cur = '';
+  for (const w of words) {
+    const test = cur ? cur+' '+w : w;
+    if (ctx.measureText(test).width > 200) { lines.push(cur); cur = w; } else cur = test;
   }
-  if (currentLine) lines.push(currentLine);
+  if (cur) lines.push(cur);
   
-  // Draw centered
-  const lineHeight = 12;
-  const startY = H / 2 - (lines.length * lineHeight) / 2;
+  const lh = 12, sy = H/2 - lines.length*lh/2;
+  for (let i = 0; i < lines.length; i++)
+    drawTextShadow(lines[i], W/2, sy+i*lh, C.holy, C.black, 0.5, 'center');
   
-  for (let i = 0; i < lines.length; i++) {
-    drawTextShadow(lines[i], W / 2, startY + i * lineHeight, C.holy, C.black, 0.5, 'center');
-  }
-  
-  // Reference
-  if (visibleChars >= game.death.quoteText.length) {
-    drawText('— Proverbs 24:16', W / 2, startY + lines.length * lineHeight + 10, C.textGold, 0.45, 'center');
+  if (vis >= game.death.quoteText.length) {
+    drawText('— Proverbs 24:16', W/2, sy+lines.length*lh+10, C.textGold, 0.45, 'center');
     
-    // Death count
-    drawText(`You have fallen ${game.death.deathCount} time${game.death.deathCount > 1 ? 's' : ''}`, 
-      W / 2, H - 35, C.textDim, 0.4, 'center');
-    
-    // Blink prompt
-    if (Math.floor(game.death.timer * 2) % 2 === 0) {
-      drawText('CLICK TO RISE AGAIN', W / 2, H - 20, C.textMain, 0.45, 'center');
+    // Insight
+    if (game.death.insight) {
+      drawTextShadow(game.death.insight, W/2, H/2+40, C.textDim, C.black, 0.4, 'center');
     }
+    
+    // Stats
+    const stats = KnowledgeSystem.getRunStats();
+    drawText(`Run #${stats.runs} | Best Floor: ${stats.bestFloor} | Verses: ${stats.versesKnown}/${VERSES.length}`, W/2, H-35, C.textDim, 0.35, 'center');
+    
+    if (Math.floor(game.death.timer*2)%2===0)
+      drawText('CLICK TO RISE AGAIN', W/2, H-20, C.textMain, 0.45, 'center');
   }
 }
 
@@ -1305,134 +601,391 @@ function updateTransition(dt) {
   game.transition.timer -= dt;
   if (game.transition.timer <= 0) {
     game.floor++;
-    generateDungeon(game.floor);
-    game.state = STATE.EXPLORE;
+    generateDungeon();
+    game.state = ST.EXPLORE;
   }
 }
 
 function drawTransition() {
   clear();
-  
   const t = game.transition.timer;
-  const alpha = t > 1.5 ? (3 - t * 2) : (t * 2);
-  
+  const alpha = t > 1.5 ? (3-t*2) : (t*2);
   ctx.globalAlpha = Math.min(1, Math.max(0, alpha));
-  
-  drawTextShadow(game.transition.text, W / 2, H / 2 - 10, C.textGold, C.black, 1.2, 'center');
-  drawTextShadow(`Entering Floor ${game.floor + 1}`, W / 2, H / 2 + 10, C.textDim, C.black, 0.5, 'center');
-  
+  drawTextShadow(game.transition.text, W/2, H/2-10, C.textGold, C.black, 1.2, 'center');
+  drawTextShadow(`Entering Floor ${game.floor+1}`, W/2, H/2+10, C.textDim, C.black, 0.5, 'center');
   ctx.globalAlpha = 1;
 }
 
-// ── VICTORY SCREEN ──────────────────────────────────────────
+// ── VICTORY ─────────────────────────────────────────────────
 function updateVictory(dt) {
-  game.anim.sparkle += dt * 2;
-  if (consumeClick() || keys['Enter'] || keys[' '] || keys['Space']) {
-    keys['Enter'] = false;
-    keys[' '] = false;
-    startNewGame();
-  }
+  game.anim.sparkle += dt*2;
+  if (consumeClick()||keys['Enter']||keys[' ']) { keys['Enter']=false; keys[' ']=false; game.state=ST.TITLE; }
 }
 
 function drawVictory() {
   clear();
+  for (let y=0;y<H;y++) { const p=y/H; drawRect(0,y,W,1,`rgb(${Math.floor(20+p*30)},${Math.floor(15+p*25)},${Math.floor(40+p*50)})`); }
+  for (let i=0;i<8;i++) {
+    const a=(i/8)*Math.PI*2+game.anim.sparkle*0.3;
+    ctx.beginPath(); ctx.moveTo(W/2,H/3); ctx.lineTo(W/2+Math.cos(a)*150,H/3+Math.sin(a)*150);
+    ctx.strokeStyle=`rgba(255,215,0,${0.1+0.05*Math.sin(game.anim.sparkle+i)})`; ctx.lineWidth=3; ctx.stroke();
+  }
+  drawTextShadow('VICTORY', W/2, 50, C.textGold, '#443300', 2, 'center');
+  drawTextShadow('The Dragon is Defeated!', W/2, 75, C.holy, C.black, 0.6, 'center');
+  const stats = KnowledgeSystem.getRunStats();
+  drawText(`Floor: ${game.floor}`, W/2, 100, C.textMain, 0.5, 'center');
+  drawText(`Level: ${game.player.level}`, W/2, 112, C.textMain, 0.5, 'center');
+  drawText(`Verses Known: ${stats.versesKnown}/${VERSES.length}`, W/2, 124, C.holy, 0.5, 'center');
+  drawText(`Demons Slain: ${stats.demonsSlain}`, W/2, 136, C.textRed, 0.5, 'center');
+  if (Math.floor(game.anim.sparkle)%2===0) drawText('CLICK TO CONTINUE', W/2, 160, C.textMain, 0.4, 'center');
+}
+
+// ── SCHOLAR NOTE SCREEN ─────────────────────────────────────
+function updateScholar(dt) { game.scholar.timer += dt; if (game.scholar.timer > 1 && (consumeClick()||keys['Enter']||keys[' '])) { keys['Enter']=false; keys[' ']=false; game.state=ST.EXPLORE; } }
+
+function drawScholar() {
+  clear();
+  drawRect(0,0,W,H,'rgba(5,5,15,0.95)');
+  const n = game.scholar.note;
+  if (!n) { game.state=ST.EXPLORE; return; }
   
-  // Heavenly glow
-  for (let y = 0; y < H; y++) {
-    const pct = y / H;
-    const r = Math.floor(20 + pct * 30);
-    const g = Math.floor(15 + pct * 25);
-    const b = Math.floor(40 + pct * 50);
-    drawRect(0, y, W, 1, `rgb(${r},${g},${b})`);
+  const fade = Math.min(1, game.scholar.timer*2);
+  ctx.globalAlpha = fade;
+  
+  drawText('A scholar\'s note lies on the ground...', W/2, 20, C.textDim, 0.45, 'center');
+  
+  // Note box
+  drawBox(W/2-100, 40, 200, 60, '#1a1a0a', C.goldDark);
+  
+  // Quote text wrapped
+  ctx.font = "5px 'Press Start 2P'";
+  const words = n.text.split(' '); const lines = []; let cur = '';
+  for (const w of words) {
+    const test = cur ? cur+' '+w : w;
+    if (ctx.measureText(test).width > 180) { lines.push(cur); cur = w; } else cur = test;
+  }
+  if (cur) lines.push(cur);
+  for (let i = 0; i < lines.length; i++)
+    drawText(lines[i], W/2, 50+i*10, C.gold, 0.4, 'center');
+  
+  // Hint
+  if (n.hint) {
+    drawTextShadow(n.hint, W/2, 115, C.textGreen, C.black, 0.4, 'center');
   }
   
-  // Golden rays
-  for (let i = 0; i < 8; i++) {
-    const angle = (i / 8) * Math.PI * 2 + game.anim.sparkle * 0.3;
-    const x1 = W / 2;
-    const y1 = H / 3;
-    const x2 = x1 + Math.cos(angle) * 150;
-    const y2 = y1 + Math.sin(angle) * 150;
-    
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.strokeStyle = `rgba(255,215,0,${0.1 + 0.05 * Math.sin(game.anim.sparkle + i)})`;
-    ctx.lineWidth = 3;
-    ctx.stroke();
+  // Demon type hint
+  if (n.demonType) {
+    const names = {deception:'Lying Spirit',wrath:'Flame Wraith',pride:'Imp of Pride',lust:'Veiled Whisper',
+      despair:'Shadow of Doubt',false_prophet:'Brimstone Sage',leviathan:'The Dragon'};
+    const weakNames = {praise:'Praise',wisdom:'Wisdom',warfare:'Warfare',fire:'Fire',mercy:'Mercy'};
+    drawText(`${names[n.demonType]||n.demonType} → ${weakNames[n.weakTo]}`, W/2, 130, C.textDim, 0.4, 'center');
   }
   
-  drawTextShadow('VICTORY', W / 2, 50, C.textGold, '#443300', 2, 'center');
-  drawTextShadow('The Dragon is Defeated!', W / 2, 75, C.holy, C.black, 0.6, 'center');
+  if (game.scholar.timer > 1.5) drawText('CLICK TO CONTINUE', W/2, H-20, C.textDim, 0.4, 'center');
+  ctx.globalAlpha = 1;
+}
+
+// ── SCROLL PICKUP ───────────────────────────────────────────
+function updateScroll(dt) { game.scroll.timer += dt; if (game.scroll.timer > 1 && (consumeClick()||keys['Enter']||keys[' '])) { keys['Enter']=false; keys[' ']=false; game.state=ST.EXPLORE; } }
+
+function drawScroll() {
+  clear();
+  drawRect(0,0,W,H,'rgba(5,5,15,0.95)');
+  const v = VERSES.find(v=>v.id===game.scroll.verseId);
+  if (!v) { game.state=ST.EXPLORE; return; }
   
-  // Stats
-  drawText(`Floor: ${game.floor}`, W / 2, 100, C.textMain, 0.5, 'center');
-  drawText(`Level: ${game.player.level}`, W / 2, 112, C.textMain, 0.5, 'center');
-  drawText(`Gold: ${game.player.gold}`, W / 2, 124, C.textGold, 0.5, 'center');
-  drawText(`Deaths: ${game.death.deathCount}`, W / 2, 136, C.textRed, 0.5, 'center');
-  drawText(`Verses Known: ${game.player.knownVerses.length}`, W / 2, 148, C.holy, 0.5, 'center');
+  const fade = Math.min(1, game.scroll.timer*2);
+  ctx.globalAlpha = fade;
   
-  if (Math.floor(game.anim.sparkle) % 2 === 0) {
-    drawText('CLICK TO PLAY AGAIN', W / 2, 170, C.textMain, 0.4, 'center');
+  drawText('A scroll unfurls before you...', W/2, 30, C.textDim, 0.45, 'center');
+  drawBox(W/2-100, 50, 200, 50, '#1a1a0a', C.goldDark);
+  
+  const typeColors = {praise:C.gold,wisdom:C.purple,warfare:C.blue,fire:C.red,mercy:C.green};
+  const typeNames = {praise:'PRAISE',wisdom:'WISDOM',warfare:'WARFARE',fire:'FIRE',mercy:'MERCY'};
+  drawText(typeNames[v.type], W/2, 55, typeColors[v.type], 0.4, 'center');
+  drawText(`"${v.text}"`, W/2, 70, C.holy, 0.4, 'center');
+  drawText(`— ${v.reference}`, W/2, 85, C.textGold, 0.35, 'center');
+  
+  if (game.scroll.timer > 1.5) drawText('CLICK TO CONTINUE', W/2, H-20, C.textDim, 0.4, 'center');
+  ctx.globalAlpha = 1;
+}
+
+// ── TITLE SCREEN ────────────────────────────────────────────
+function updateTitle(dt) {
+  game.anim.titlePulse += dt*2;
+  game.anim.sparkle += dt*3;
+  if (consumeClick()||keys['Enter']||keys[' ']) { keys['Enter']=false; keys[' ']=false; startNewGame(); }
+}
+
+function drawTitle() {
+  clear();
+  for (let y=0;y<H;y++) { const p=y/H; drawRect(0,y,W,1,`rgb(${Math.floor(10+p*15)},${Math.floor(10+p*5)},${Math.floor(26+p*20)})`); }
+  for (let i=0;i<30;i++) {
+    const sx=(i*37+Math.sin(game.anim.sparkle+i)*2)%W, sy=(i*23)%(H*0.6);
+    const b=0.3+0.7*Math.abs(Math.sin(game.anim.sparkle*0.5+i*0.7));
+    drawRect(sx,sy,1,1,`rgba(255,255,255,${b})`);
+  }
+  
+  // Cross
+  drawRect(W/2-1.5, 20, 3, 25, C.goldDark);
+  drawRect(W/2-6, 28, 12, 3, C.goldDark);
+  
+  drawTextShadow('SEVEN', W/2, 65, C.textGold, '#443300', 2, 'center');
+  drawTextShadow('FALLS', W/2, 85, C.textGold, '#443300', 2, 'center');
+  drawTextShadow('A Roguelike of Faith', W/2, 110, C.holyDim, C.black, 0.6, 'center');
+  
+  if (Math.floor(game.anim.titlePulse*2)%2===0) drawText('CLICK OR PRESS ENTER', W/2, 140, C.textMain, 0.5, 'center');
+  
+  // Stats from knowledge system
+  const stats = KnowledgeSystem.getRunStats();
+  if (stats.runs > 0) {
+    drawText(`Run #${stats.runs} | Best Floor: ${stats.bestFloor}`, W/2, 155, C.textDim, 0.4, 'center');
+    drawText(`Verses: ${stats.versesKnown}/${VERSES.length} | Demons: ${stats.bestiaryEntries}`, W/2, 165, C.textDim, 0.4, 'center');
+  }
+  
+  drawText('v0.2', W-5, H-10, C.textDim, 0.4, 'right');
+}
+
+// ── EXPLORE RENDER ──────────────────────────────────────────
+function drawDungeonFloor() {
+  for (let y=0;y<MAP_H;y++) for (let x=0;x<MAP_W;x++) {
+    const isEdge=x===0||y===0||x===MAP_W-1||y===MAP_H-1;
+    const col=isEdge?C.stoneDark:(RNG.random()>0.9?C.stoneLight:C.stone);
+    drawRect(x*(W/MAP_W),y*(H/MAP_H),W/MAP_W+1,H/MAP_H+1,col);
+  }
+  // Stone texture
+  for (let i=0;i<15;i++) {
+    const x=Math.floor(RNG.random()*MAP_W), y=Math.floor(RNG.random()*MAP_H);
+    drawRect(x*(W/MAP_W),y*(H/MAP_H),3,3,C.stoneDark);
   }
 }
 
-// ── GAME FLOW ───────────────────────────────────────────────
-function startNewGame() {
-  game.state = STATE.EXPLORE;
-  game.floor = 1;
-  game.player.hp = 50;
-  game.player.maxHp = 50;
-  game.player.attack = 10;
-  game.player.defense = 2;
-  game.player.gold = 0;
-  game.player.xp = 0;
-  game.player.level = 1;
-  game.player.knownVerses = ['ps23_1', '1jn4_8', 'eph6_10'];
-  game.player.shieldActive = false;
-  game.player.buffTurns = 0;
-  game.player.armorBonus = 0;
-  game.combat.messages = [];
+function drawExplore() {
+  clear();
+  drawDungeonFloor();
+  const room = game.dungeon.rooms[game.dungeon.currentRoom];
+  const cx = (W/MAP_W)*(MAP_W/2), cy = (H/MAP_H)*(MAP_H/2);
   
-  generateDungeon(game.floor);
-  addMessage('Enter the dungeon...', C.holyDim);
+  if (room.type === 'enemy' && !room.cleared) {
+    const pulse = 0.3+0.2*Math.sin(game.anim.frame*0.1);
+    drawRect(cx-20,cy-20,40,40,`rgba(139,0,0,${pulse})`);
+    drawTextShadow('!',cx+4,cy-8,C.textRed,C.black,1.5,'center');
+  }
+  if (room.type === 'exit') {
+    drawRect(W-35,H-35,24,24,'#2a1a0a');
+    drawRect(W-33,H-33,20,20,'#1a0a00');
+    drawTextShadow('EXIT',W-23,H-22,C.green,C.black,0.5,'center');
+  }
+  if (room.type === 'treasure' && !room.cleared) {
+    drawRect(cx-8,cy-6,16,12,C.goldDark);
+    drawRect(cx-6,cy-4,12,8,C.gold);
+    drawRect(cx-1,cy-2,2,2,C.goldDark);
+  }
+  if (room.type === 'shrine' && !room.cleared) {
+    drawRect(cx-4,cy-12,8,16,C.holy);
+    drawRect(cx-2,cy-14,4,3,C.gold);
+    drawRect(cx-6,cy+4,12,3,C.holyDim);
+  }
+  if (room.type === 'scholar' && !room.noteFound) {
+    drawTextShadow('?',cx+4,cy-8,C.gold,C.black,1.5,'center');
+  }
+  
+  // Player
+  const px = game.dungeon.playerPos.x*(W/MAP_W), py = game.dungeon.playerPos.y*(H/MAP_H);
+  // Body
+  drawRect(px+2,py+4,12,8,'#4466aa');
+  drawRect(px+4,py,8,8,'#ddb896');
+  drawRect(px+5,py+2,2,2,C.black);
+  drawRect(px+9,py+2,2,2,C.black);
+  drawRect(px+16,py+2,2,12,'#cccccc');
+  drawRect(px+15,py,4,3,C.gold);
+  drawRect(px+4,py+12,4,4,'#333355');
+  drawRect(px+8,py+12,4,4,'#333355');
+  
+  // Room info
+  drawBox(4,H-30,80,26);
+  drawText(`FLOOR ${game.floor}`,8,H-26,C.textGold,0.5);
+  drawText(`ROOM ${game.dungeon.currentRoom+1}/${game.dungeon.rooms.length}`,8,H-18,C.textDim,0.4);
+  drawText(`GOLD: ${game.player.gold}`,8,H-10,C.textGold,0.4);
+  
+  drawBox(W/2-50,H-30,100,26);
+  drawHPBar(W/2-46,H-26,92,6,game.player.hp,game.player.maxHp,C.green);
+  drawText(`HP ${game.player.hp}/${game.player.maxHp}`,W/2,H-18,C.textMain,0.4,'center');
+  drawText(`LVL ${game.player.level}`,W/2,H-10,C.textDim,0.4,'center');
+  
+  // Known verses count
+  const known = KnowledgeSystem.getAvailableVerses().length;
+  drawText(`${known} verses`,W-8,H-10,C.textDim,0.35,'right');
+  
+  drawMessages();
+  drawText('WASD/ARROWS: MOVE', W/2, 4, C.textDim, 0.35, 'center');
+}
+
+function addMsg(text,color=C.textMain) { game.combat.messages.push({text,color,timer:3.5}); }
+function drawMessages() {
+  const msgs = game.combat.messages.filter(m=>m.timer>0);
+  for (let i=0;i<msgs.length;i++) {
+    const m=msgs[i]; ctx.globalAlpha=Math.min(1,m.timer);
+    drawTextShadow(m.text,W/2,18+i*12,m.color,C.black,0.5,'center');
+    ctx.globalAlpha=1;
+  }
+}
+
+// ── COMBAT RENDER ───────────────────────────────────────────
+function drawCombat() {
+  clear();
+  let sx=0,sy=0;
+  if (game.combat.shakeTimer>0) { sx=(Math.random()-0.5)*game.combat.shakeIntensity*2; sy=(Math.random()-0.5)*game.combat.shakeIntensity*2; }
+  ctx.save(); ctx.translate(sx,sy);
+  
+  drawDungeonFloor();
+  drawRect(0,0,W,H,`rgba(139,0,0,${0.1+0.05*Math.sin(game.anim.frame*0.15)})`);
+  
+  const c=game.combat, d=c.demon;
+  
+  // Demon
+  const demonX=W/2-16, demonY=15;
+  if (c.demonStruck&&c.strikeTimer>0) ctx.globalAlpha=0.5+Math.sin(c.strikeTimer*20)*0.5;
+  // Demon pixel art
+  const dcolors={deception:'#6644aa',lust:'#aa4466',wrath:'#aa4422',pride:'#aaaa22',despair:'#444466',false_prophet:'#226644',whore:'#8844aa',leviathan:'#222244'};
+  const dcol=dcolors[d.type]||dcolors.deception;
+  const es=2;
+  drawRect(demonX,demonY+4*es,6*es,4*es,dcol);
+  drawRect(demonX-1*es,demonY+2*es,8*es,2*es,dcol);
+  drawRect(demonX,demonY,2*es,3*es,dcol);
+  drawRect(demonX+4*es,demonY,2*es,3*es,dcol);
+  drawRect(demonX+1*es,demonY+3*es,1.5*es,1*es,'#ff4444');
+  drawRect(demonX+3.5*es,demonY+3*es,1.5*es,1*es,'#ff4444');
+  drawRect(demonX+2*es,demonY+5*es,2*es,.5*es,'#000');
+  ctx.globalAlpha=1;
+  
+  drawBox(W/2-60,8,120,18);
+  drawTextShadow(d.name.toUpperCase(),W/2,10,C.textRed,C.black,0.5,'center');
+  drawHPBar(W/2-56,18,112,5,d.hp,d.maxHp,C.red);
+  
+  // Bestiary info (if known)
+  const entry = KnowledgeSystem.getBestiaryEntry(d.type);
+  if (entry && entry.killed >= 1) {
+    const weakNames={praise:'Praise',wisdom:'Wisdom',warfare:'Warfare',fire:'Fire',mercy:'Mercy'};
+    drawText(`Weak: ${weakNames[entry.weakTo]||'?'}`,W/2+65,14,C.textGreen,0.3);
+  } else if (entry && entry.seen >= 1) {
+    drawText('???',W/2+65,14,C.textDim,0.3);
+  }
+  
+  // Player
+  if (c.playerStruck&&c.strikeTimer>0) ctx.globalAlpha=0.5+Math.sin(c.strikeTimer*20)*0.5;
+  drawRect(12,H-48,12,8,'#4466aa');
+  drawRect(14,H-52,8,8,'#ddb896');
+  drawRect(15,H-50,2,2,C.black);
+  drawRect(19,H-50,2,2,C.black);
+  drawRect(28,H-50,2,12,'#cccccc');
+  drawRect(27,H-52,4,3,C.gold);
+  ctx.globalAlpha=1;
+  
+  drawBox(4,H-60,70,18);
+  drawHPBar(6,H-56,66,4,game.player.hp,game.player.maxHp,C.green);
+  drawText(`HP ${game.player.hp}/${game.player.maxHp}`,8,H-50,C.textMain,0.35);
+  if (game.player.shieldActive) drawText('SHIELD',80,H-56,C.cyan,0.35);
+  if (game.player.buffTurns>0) drawText(`BUFF ${game.player.buffTurns}`,80,H-48,C.textGold,0.35);
+  
+  // Verse prompt
+  const typeColors={praise:C.gold,wisdom:C.purple,warfare:C.blue,fire:C.red,mercy:C.green};
+  const typeNames={praise:'PRAISE',wisdom:'WISDOM',warfare:'WARFARE',fire:'FIRE',mercy:'MERCY'};
+  drawBox(W/2-80,50,160,18);
+  drawText(typeNames[c.verse.type],W/2,52,typeColors[c.verse.type],0.4,'center');
+  drawText(`${c.verse.words.length} words | ${c.verse.reference}`,W/2,60,C.textDim,0.35,'center');
+  
+  // Selected
+  drawBox(W/2-90,72,180,16);
+  const selText=c.selected.length>0?c.selected.join(' '):'Tap words to form a verse...';
+  drawText(selText,W/2,76,c.selected.length>0?C.textMain:C.textDim,0.35,'center');
+  
+  // Word bubbles
+  const pool=c.pool, cols=Math.min(5,pool.length), bW=38,bH=14,gap=3;
+  const tW=cols*(bW+gap)-gap, sX=(W-tW)/2, sY=94;
+  for (let i=0;i<pool.length;i++) {
+    const col=i%cols,row=Math.floor(i/cols);
+    const bx=sX+col*(bW+gap), by=sY+row*(bH+gap);
+    const sel=c.selected.includes(pool[i]);
+    const hov=mouseX>=bx&&mouseX<=bx+bW&&mouseY>=by&&mouseY<=by+bH;
+    drawBox(bx,by,bW,bH,sel?C.uiHighlight:hov?C.stoneLight:C.uiBg,sel?C.gold:C.uiBorder);
+    drawText(i<9?String(i+1):'0',bx+2,by+1,C.textDim,0.3);
+    drawText(pool[i],bx+bW/2,by+4,sel?C.gold:C.textMain,0.4,'center');
+  }
+  
+  // Submit
+  const subX=W/2-30,subY=170;
+  const canSub=c.selected.length>0;
+  const subHov=mouseX>=subX&&mouseX<=subX+60&&mouseY>=subY&&mouseY<=subY+14;
+  drawBox(subX,subY,60,14,canSub?(subHov?C.uiHighlight:C.uiBg):C.stoneDark,canSub?C.gold:C.stone);
+  drawText('SUBMIT',subX+30,subY+3,canSub?C.textGold:C.textDim,0.4,'center');
+  
+  // Timer
+  const tW2=100,tX=W/2-tW2/2,tY=H-20;
+  drawBox(tX-2,tY-2,tW2+4,12);
+  const pct=c.timer/c.timerMax;
+  drawRect(tX,tY,Math.floor(tW2*pct),8,pct>0.5?C.green:pct>0.25?C.gold:C.red);
+  drawText(`${Math.ceil(c.timer)}s`,W/2,tY,C.white,0.4,'center');
+  
+  drawMessages();
+  ctx.restore();
+}
+
+function drawCombatWin() {
+  drawCombat();
+  drawRect(0,0,W,H,'rgba(0,0,0,0.6)');
+  const d=game.combat.demon;
+  drawTextShadow('DEFEATED',W/2,60,C.textGold,C.black,1.5,'center');
+  drawTextShadow(d.name,W/2,80,C.textRed,C.black,0.7,'center');
+  drawText(`+${d.xp} XP  |  +${d.gold} Gold`,W/2,100,C.textGold,0.5,'center');
+  
+  const entry=KnowledgeSystem.getBestiaryEntry(d.type);
+  if (entry&&entry.killed===1) {
+    const weakNames={praise:'Praise',wisdom:'Wisdom',warfare:'Warfare',fire:'Fire',mercy:'Mercy'};
+    drawTextShadow(`Weakness learned: ${weakNames[entry.weakTo]}`,W/2,120,C.textGreen,C.black,0.45,'center');
+  }
+  
+  if (Math.floor(game.anim.frame*0.05)%2===0) drawText('CLICK TO CONTINUE',W/2,140,C.textMain,0.45,'center');
 }
 
 // ── MAIN LOOP ───────────────────────────────────────────────
 let lastTime = performance.now();
-
-function gameLoop(timestamp) {
-  const dt = Math.min((timestamp - lastTime) / 1000, 0.1);
-  lastTime = timestamp;
-  game.anim.frame++;
+function gameLoop(ts) {
+  const dt = Math.min((ts-lastTime)/1000, 0.1);
+  lastTime = ts; game.anim.frame++;
   
-  // Update
-  switch (game.state) {
-    case STATE.TITLE: updateTitle(dt); break;
-    case STATE.EXPLORE: updateExplore(dt); break;
-    case STATE.COMBAT: updateCombat(dt); break;
-    case STATE.COMBAT_WIN: updateCombatWin(dt); break;
-    case STATE.DEATH: updateDeath(dt); break;
-    case STATE.FLOOR_TRANSITION: updateTransition(dt); break;
-    case STATE.VICTORY: updateVictory(dt); break;
+  switch(game.state) {
+    case ST.TITLE: updateTitle(dt); break;
+    case ST.INTRO: updateIntro(dt); break;
+    case ST.EXPLORE: updateExplore(dt); break;
+    case ST.COMBAT: updateCombat(dt); break;
+    case ST.COMBAT_WIN: game.combat.messages.forEach(m=>m.timer-=dt); game.combat.messages=game.combat.messages.filter(m=>m.timer>0); if(consumeClick()||keys['Enter']||keys[' ']){keys['Enter']=false;keys[' ']=false;game.state=ST.EXPLORE;} break;
+    case ST.DEATH: updateDeath(dt); break;
+    case ST.FLOOR_TRANS: updateTransition(dt); break;
+    case ST.VICTORY: updateVictory(dt); break;
+    case ST.SCHOLAR: updateScholar(dt); break;
+    case ST.SCROLL: updateScroll(dt); break;
   }
   
-  // Draw
-  switch (game.state) {
-    case STATE.TITLE: drawTitle(); break;
-    case STATE.EXPLORE: drawExplore(); break;
-    case STATE.COMBAT: drawCombat(); break;
-    case STATE.COMBAT_WIN: drawCombatWin(); break;
-    case STATE.DEATH: drawDeath(); break;
-    case STATE.FLOOR_TRANSITION: drawTransition(); break;
-    case STATE.VICTORY: drawVictory(); break;
+  switch(game.state) {
+    case ST.TITLE: drawTitle(); break;
+    case ST.INTRO: drawIntro(); break;
+    case ST.EXPLORE: drawExplore(); break;
+    case ST.COMBAT: drawCombat(); break;
+    case ST.COMBAT_WIN: drawCombatWin(); break;
+    case ST.DEATH: drawDeath(); break;
+    case ST.FLOOR_TRANS: drawTransition(); break;
+    case ST.VICTORY: drawVictory(); break;
+    case ST.SCHOLAR: drawScholar(); break;
+    case ST.SCROLL: drawScroll(); break;
   }
   
   resetFrame();
   requestAnimationFrame(gameLoop);
 }
 
-// ── START ───────────────────────────────────────────────────
+// ── INIT ────────────────────────────────────────────────────
+KnowledgeSystem.load();
 requestAnimationFrame(gameLoop);
 </script>
 </body>
