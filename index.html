@@ -1230,17 +1230,7 @@ function renderMap(){
     // glyph inside node
     text(nodeIcon(n.type), p.x, p.y-4, visited ? C.stone2 : C.bg, 6, 'center');
 
-    // type label to the right of the node
-    if (!n.type || n.type === NODE_TYPE.START){
-      text('START', p.x + r + 2, p.y-3, C.holy, 5, 'left');
-    } else {
-      const tlabel = {
-        [NODE_TYPE.COMBAT]:'Battle', [NODE_TYPE.ELITE]:'Elite', [NODE_TYPE.BOSS]:'BOSS',
-        [NODE_TYPE.EVENT]:'Mystery', [NODE_TYPE.SHOP]:'Shop', [NODE_TYPE.REST]:'Rest',
-        [NODE_TYPE.TREASURE]:'Treasure',
-      }[n.type] || '';
-      text(tlabel, p.x + r + 2, p.y-3, visited ? C.dim : col, 5, 'left');
-    }
+    // no text labels — legend at bottom explains symbols
 
     if (reachable){
       clickables.push({ x: p.x-8, y: p.y-8, w: 16, h: 16, onClick: () => {
@@ -1251,9 +1241,27 @@ function renderMap(){
     }
   }
 
-  // ── Legend (bottom) ──
-  text('↑ Boss     ↓ Entrance', W/2, H-16, C.dim, 5, 'center');
-  text('Choose your path', W/2, H-9, C.dim, 5, 'center');
+  // ── Legend (bottom-right) ──
+  const legendX = W - 88;
+  const legendY = H - 70;
+  rect(legendX - 4, legendY - 4, 90, 68, 'rgba(6,6,18,0.85)');
+  strokeRect(legendX - 4, legendY - 4, 90, 68, C.stone2);
+  text('LEGEND', legendX + 40, legendY, C.gold, 5, 'center');
+  const legendItems = [
+    ['⚔', 'Battle', C.red],
+    ['☠', 'Elite', C.gold],
+    ['♛', 'BOSS', C.red],
+    ['?', 'Mystery', C.purple],
+    ['$', 'Shop', C.gold],
+    ['♥', 'Rest', C.green],
+    ['◆', 'Loot', C.cyan],
+    ['⌂', 'Start', C.holy],
+  ];
+  legendItems.forEach((item, i) => {
+    const ly = legendY + 8 + i * 7;
+    text(item[0], legendX + 2, ly, item[2], 5, 'left');
+    text(item[1], legendX + 12, ly, C.dim, 4, 'left');
+  });
 }
 
 function renderExplore(){
