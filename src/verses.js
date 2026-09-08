@@ -172,9 +172,20 @@ const VERSES = [
 ];
 
 // Get verses available at a given floor depth (difficulty scales)
+function ensureWords(v) {
+  if (!v.words) {
+    // Split text into words, filter to max 12 words for gameplay
+    const raw = v.text.split(/\s+/).filter(w => w.length > 0);
+    v.words = raw.slice(0, 12);
+  }
+  return v;
+}
+
 function getVersesForFloor(floor) {
   const maxDiff = Math.min(3, 1 + Math.floor(floor / 3));
-  return VERSES.filter(v => v.difficulty <= maxDiff);
+  // Use BIBLE_VERSES (1050 verses) if available, else fall back to VERSES
+  const source = (typeof BIBLE_VERSES !== 'undefined') ? BIBLE_VERSES : VERSES;
+  return source.filter(v => v.difficulty <= maxDiff).map(ensureWords);
 }
 
 // Pick 2 distinct verses for a combat, preferring ones small enough to fit the

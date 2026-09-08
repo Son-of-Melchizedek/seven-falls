@@ -11,7 +11,7 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body {
     width:100%; height:100%;
-    background:#05050c;
+    background:#0a0a1a;
     overflow:hidden;
     font-family:'Press Start 2P', monospace;
     -webkit-user-select:none; user-select:none;
@@ -920,7 +920,8 @@ function rollTreasure(){
     const v = getRandomVerse(game.floor);
     KnowledgeSystem.discoverVerse(v.id);
     game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
-    game.rewardText = 'A scroll teaches: "' + v.text + '" (' + v.reference + ')';
+    const vText = (typeof getVerseText === 'function') ? getVerseText(v, v.difficulty || 1) : v.text;
+      game.rewardText = 'A scroll teaches: "' + vText + '" (' + v.reference + ')';
   }
   if (RNG.random() < 0.4){ // treasure rooms may hold items
     const it = randomItemType();
@@ -935,7 +936,8 @@ function applyEventEffect(effect, cost){
       const v = getRandomVerse(game.floor);
       KnowledgeSystem.discoverVerse(v.id);
       game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
-      return 'You learn: "' + v.text + '" (' + v.reference + ')';
+      const vText2 = (typeof getVerseText === 'function') ? getVerseText(v, v.difficulty || 1) : v.text;
+      return 'You learn: "' + vText2 + '" (' + v.reference + ')';
     }
     case 'heal_20':
       game.hp = Math.min(game.maxHp, game.hp + 20);
@@ -956,10 +958,12 @@ function applyEventEffect(effect, cost){
       return null;
     }
     case 'shop_verse':
-      if (game.gold >= (cost||20)){ game.gold -= cost; const v=getRandomVerse(game.floor); KnowledgeSystem.discoverVerse(v.id); game.discoveredCount=KnowledgeSystem.store.discoveredVerses.length; return 'Bought verse: "'+v.text+'"'; }
+      if (game.gold >= (cost||20)){ game.gold -= cost; const v=getRandomVerse(game.floor); KnowledgeSystem.discoverVerse(v.id); game.discoveredCount=KnowledgeSystem.store.discoveredVerses.length; const vText3 = (typeof getVerseText === 'function') ? getVerseText(v, v.difficulty || 1) : v.text;
+        return 'Bought verse: "'+vText3+'"'; }
       return 'Not enough gold.';
     case 'hp_cost_verse':
-      if (game.hp > 10){ game.hp -= 10; const v=getRandomVerse(game.floor); KnowledgeSystem.discoverVerse(v.id); game.discoveredCount=KnowledgeSystem.store.discoveredVerses.length; return 'Paid 10 HP to learn: "'+v.text+'"'; }
+      if (game.hp > 10){ game.hp -= 10; const v=getRandomVerse(game.floor); KnowledgeSystem.discoverVerse(v.id); game.discoveredCount=KnowledgeSystem.store.discoveredVerses.length; const vText4 = (typeof getVerseText === 'function') ? getVerseText(v, v.difficulty || 1) : v.text;
+        return 'Paid 10 HP to learn: "'+vText4+'"'; }
       return 'Too weak to pay.';
     case 'buff_attack':
       game.attackBuff += 2; return 'Your strikes grow fiercer (+2 attack).';
@@ -1029,13 +1033,13 @@ function renderTitle(){ MusicEngine.playTrack('title');
   // simple cross
   rect(cx-2, 80, 4, 22, C.holy);
   rect(cx-8, 86, 16, 4, C.holy);
-  text('A Bible Roguelike', cx, 110, C.dim, 7, 'center');
+  text('A Bible Roguelike', cx, 110, C.holy, 7, 'center');
 
   const s = KnowledgeSystem.getRunStats();
-  const stats = 'Runs ' + s.runs + '  Best F' + s.bestFloor +
+  const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 130, C.cyan, 6, 'center');
+  text(stats, cx, 130, C.cyan, 6, 'center'); text('v0.11', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 148, 100, 18, 'BEGIN', () => {
     if (!localStorage.getItem('seven_falls_seen_intro')){
