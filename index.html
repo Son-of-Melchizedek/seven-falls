@@ -338,11 +338,12 @@ function useItem(idx){
   if (idx < 0 || idx >= game.items.length) return;
   const type = game.items[idx];
   const def = ITEM_DEFS[type];
+  let causedStun = false;
   switch (type){
     case 'holy_water':    game.hp = Math.min(game.maxHp, game.hp + 20); break;
     case 'scroll_fire':   combat.flatBonus = (combat.flatBonus || 0) + 10; break;
     case 'prayer_beads':  game.shield += 15; break;
-    case 'exorcism_salt': combat.stunTurns = (combat.stunTurns || 0) + 1; break;
+    case 'exorcism_salt': causedStun = true; break;
     case 'golden_censer': combat.revealedWeak = combat.demon.weakTo || 'scripture'; break;
     case 'iron_cross':    game.defenseBuff += 5; break;
   }
@@ -350,14 +351,17 @@ function useItem(idx){
   combat.selected = [];
   combat.message = def.icon + ' ' + def.name + ' used.';
   combat.msgTimer = 1.4;
-  // Using an item takes your turn (demon still attacks unless stunned)
+  // Using an item takes your turn (demon still attacks unless currently stunned)
   if (combat.stunTurns > 0){
+    // enemy is already stunned from a previous turn — it loses this attack
     combat.stunTurns--;
     combat.twistTriggered.push(combat.demon.name + ' is stunned!');
   } else {
     demonAttack(true);
     if (game.hp <= 0){ die(); return; }
   }
+  // A stun from THIS item applies to the enemy's NEXT turn (after the current one)
+  if (causedStun) combat.stunTurns = (combat.stunTurns || 0) + 1;
   loadVerse();
 }
 
@@ -610,7 +614,7 @@ function startCombat(node){
     twistTriggered: [],   // twist messages to display
     isSwarm: false, swarmTimer: 0, swarmCount: 0,
     flatBonus: 0, stunTurns: 0,
-    isLust: (d.type === 'lust' || d.sin === 'Lust'),
+    isLust: (demon.type === 'lust' || demon.sin === 'Lust'),
     lustHits: 0, lustBroken: false, revealedWeak: null,
   };
   CombatTwists.twistTriggered = [];
