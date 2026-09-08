@@ -71,6 +71,11 @@
 <script src='src/demons.js'></script>
 <script src='src/knowledge.js'></script>
 <script src='src/map.js'></script>
+<script src='src/combos.js'></script>
+<script src='src/events.js'></script>
+<script src='src/combat-twists.js'></script>
+<script src='src/BIBLE_VERSES.js'></script>
+<script src='src/bible-ui.js'></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -133,6 +138,11 @@ ctx.imageSmoothingEnabled = false;
 
 const game = {
   state: 'TITLE',
+  bibleOpen: false,
+  biblePage: 'overview',
+  bibleScroll: 0,
+  bibleDetail: null,
+  bibleSearch: '',
   floor: 1,
   hp: 50, maxHp: 50,
   gold: 0,
@@ -140,6 +150,7 @@ const game = {
   attackBuff: 0,
   defenseBuff: 0,
   seed: 0,
+  nemesisEncounters: 0,
   nemesisDone: {},
   discoveredCount: 0,
   // node the player is about to enter (EXPLORE)
@@ -240,6 +251,7 @@ function startNewRun(){
   game.nemesisDone = {};
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   KnowledgeSystem.startRun();
+  CombatTwists.init();
   initMap(1);
   maybeShowScholarNote('MAP');
 }
@@ -302,11 +314,20 @@ function startCombat(node){
     isBoss, isElite, isNemesis,
     key: demonTypeKey(demon),
     verse: null, pool: [], selected: [],
+    verseTypesUsed: [],   // verse types used this combat (combo tracking)
+    correctStreak: 0,     // consecutive correct verses (ultimate trigger)
+    adds: [],             // reinforcement enemies
+    resistance: null,     // adaptive-resisted verse type
     timer: 0, maxTimer: 10,
     message: '', msgTimer: 0,
     buffNext: 0,
-    turn: 0,
+    turn: 0, turnCount: 0,
+    comboResult: null,    // active combo result to render
+    twistTriggered: [],   // twist messages to display
+    isSwarm: false, swarmTimer: 0, swarmCount: 0,
   };
+  CombatTwists.twistTriggered = [];
+  CombatTwists.swarmMode = false;
   KnowledgeSystem.observeDemon(combat.key);
   loadVerse();
   game.state = 'COMBAT';
@@ -342,6 +363,9 @@ function submitVerse(){
     // Scattered words — the verse slips away
     combat.message = 'SCATTERED! The words dissolve...';
     combat.msgTimer = 1.4;
+    combat.correctStreak = 0;
+    combat.comboResult = null;
+    combat.twistTriggered = [];
     combat.selected = [];
     demonAttack(false);
     if (game.hp <= 0){ die(); return; }
@@ -356,36 +380,139 @@ function resolveVerse(verse){
   let dmg = verse.damage;
   const mult = getDamageMultiplier(combat.demon.type, verse.type, combat.demon.weakTo);
   if (combat.buffNext > 0){ dmg = Math.floor(dmg * (1 + combat.buffNext)); combat.buffNext = 0; }
+  // Adaptive resistance: reduce damage if the demon learned this verse type
+  let resistedNote = '';
+  if (CombatTwists.isResisted(verse.type)){
+    dmg = Math.floor(dmg * 0.5);
+    resistedNote = ' (resisted!)';
+  }
+  if (combat.isSwarm){
+    // During swarm, damage scales down per remaining swarm enemy
+    dmg = Math.max(1, Math.floor(dmg * 0.6));
+  }
   dmg = Math.max(1, Math.floor(dmg * mult));
   combat.demon.hp -= dmg;
 
-  let effMsg = '';
-  if (cat === 'DEFENSE'){
-    const e = verse.effect;
-    if (e === 'shield'){ game.shield += 10; effMsg = 'SHIELD +10'; }
-    else if (e === 'armor'){ game.shield += 14; effMsg = 'ARMOR +14'; }
-    else if (e && e.startsWith('heal')){
-      const n = parseInt(e.split('_')[1] || '5', 10);
-      game.hp = Math.min(game.maxHp, game.hp + n);
-      effMsg = 'HEAL +' + n;
+  // Track verse type usage for combos + adaptive AI
+  if (!combat.verseTypesUsed.includes(verse.type)) combat.verseTypesUsed.push(verse.type);
+  combat.correctStreak++;
+  CombatTwists.recordVerseType(verse.type);
+  combat.lastPlayerDamage = dmg;
+
+  // ── Verse Combo System ──
+  const ctx = { correctStreak: combat.correctStreak, floor: game.floor, isBoss: combat.isBoss };
+  const combos = VerseComboSystem.detectCombo(combat.verseTypesUsed, ctx);
+  if (combos.length > 0){
+    const combo = combos[combos.length - 1]; // most specific / last detected
+    const res = VerseComboSystem.applyCombo(combo, combat, game);
+    let extra = '';
+    if (res.damage){ combat.demon.hp -= res.damage; extra += ' ' + res.damage + ' combo dmg'; }
+    if (res.heal){ game.hp = Math.min(game.maxHp, game.hp + res.heal); extra += ' +' + res.heal + ' HP'; }
+    if (res.shield){ game.shield += res.shield; extra += ' +' + res.shield + ' SH'; }
+    if (res.doubleNext) combat.buffNext += 1.0;
+    if (res.stunTurns) combat.twistTriggered.push(combat.demon.name + ' STUNNED ' + res.stunTurns + ' turns!');
+    if (res.debuffAttack) combat.demon._debuffAtk = res.debuffAttack;
+    combat.comboResult = { name: combo.name, quote: combo.quote, extra };
+    combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
+                     '  >> ' + combo.name.toUpperCase() + '!' + extra;
+    combat.msgTimer = 2.2;
+  } else {
+    let effMsg = '';
+    if (cat === 'DEFENSE'){
+      const e = verse.effect;
+      if (e === 'shield'){ game.shield += 10; effMsg = 'SHIELD +10'; }
+      else if (e === 'armor'){ game.shield += 14; effMsg = 'ARMOR +14'; }
+      else if (e && e.startsWith('heal')){
+        const n = parseInt(e.split('_')[1] || '5', 10);
+        game.hp = Math.min(game.maxHp, game.hp + n);
+        effMsg = 'HEAL +' + n;
+      }
+    } else if (cat === 'BUFF'){
+      combat.buffNext += 0.5;
+      effMsg = 'NEXT ATTACK +50%';
     }
-  } else if (cat === 'BUFF'){
-    combat.buffNext += 0.5;
-    effMsg = 'NEXT ATTACK +50%';
+    combat.comboResult = null;
+    combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
+                     (effMsg ? '  ' + effMsg : '');
+    combat.msgTimer = 1.6;
+  }
+  combat.turn++;
+  combat.turnCount++;
+
+  // ── Combat Twists: check each turn ──
+  const triggered = CombatTwists.checkTwists(combat, game);
+  for (const t of triggered){
+    applyTwistResult(t.twist, t.result);
+    if (t.result.message) combat.twistTriggered.push(t.result.message);
+  }
+  // Flee-return check
+  const flee = CombatTwists.checkFleeReturn(game.hp, game.maxHp);
+  if (flee && flee.return){
+    game.hp -= flee.damage;
+    combat.twistTriggered.push(flee.message);
   }
 
-  combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') +
-                   (effMsg ? '  ' + effMsg : '');
-  combat.msgTimer = 1.6;
-  combat.turn++;
-
-  if (combat.demon.hp <= 0){ winCombat(); return; }
+  if (combat.demon.hp <= 0){
+    // If swarm active and boss, end swarm then win
+    CombatTwists.swarmMode = false;
+    winCombat(); return;
+  }
 
   // Demon retaliates
   demonAttack(true);
   if (game.hp <= 0){ die(); return; }
 
   loadVerse();
+}
+
+// Apply a triggered twist's effect object to the combat/game state
+function applyTwistResult(twist, result){
+  switch (twist.type){
+    case CombatTwists.REINFORCEMENTS:
+      if (result.adds && result.adds.length){
+        for (const a of result.adds) combat.adds.push(a);
+      }
+      break;
+    case CombatTwists.FLEE_ATTACK:
+      if (result.flee){
+        CombatTwists.fleeingEnemy = {
+          name: combat.demon.name,
+          returnMessage: result.returnMessage,
+          returnDamage: result.returnDamage,
+        };
+        combat.twistTriggered.push(combat.demon.name + ' slips away...');
+      }
+      break;
+    case CombatTwists.SWARM:
+      if (result.timerMode){
+        combat.isSwarm = true;
+        combat.swarmTimer = result.timer;
+        combat.swarmCount = result.swarmCount;
+        CombatTwists.swarmMode = true;
+        CombatTwists.swarmTimer = result.timer;
+        CombatTwists.swarmCount = result.swarmCount;
+      }
+      break;
+    case CombatTwists.ADAPTIVE:
+      if (result.resistance){
+        combat.resistance = result.resistance;
+      }
+      break;
+    case CombatTwists.PHASE_SHIFT:
+      if (result.immuneTo) combat.immuneTo = result.immuneTo;
+      break;
+    case CombatTwists.MIRROR:
+      if (result.mirrorDamage) game.hp = Math.max(0, game.hp - result.mirrorDamage);
+      break;
+    case CombatTwists.DESPERATION:
+      if (result.attackBuff) combat.demon._enrage = result.attackBuff;
+      break;
+    case CombatTwists.SACRIFICE:
+      // handled inside effect (mutates combat.demon.hp + combat.adds)
+      break;
+    default:
+      break;
+  }
 }
 
 function demonAttack(full){
@@ -437,7 +564,12 @@ function enterNode(node){
     case NODE_TYPE.BOSS:
       startCombat(node); break;
     case NODE_TYPE.EVENT:
-      activeEvent = RNG.choice(EVENTS);
+      activeEvent = EventEngine.generate(game.floor, {
+        floor: game.floor,
+        hp: game.hp, maxHp: game.maxHp, gold: game.gold,
+        nemesisEncounters: game.nemesisEncounters,
+        knownVerses: KnowledgeSystem.getAvailableVerses(),
+      });
       game.state = 'EVENT'; break;
     case NODE_TYPE.SHOP:
       shopItems = generateShopItems(game.floor);
@@ -745,25 +877,51 @@ function renderCombat(){
     text('Weakness: ?', 6, 31, C.dim, 6, 'left');
   }
 
+  // ── Active twist indicators ──
+  if (combat.resistance){
+    text('RESIST ' + combat.resistance, 6, 39, C.red, 6, 'left');
+  }
+  const ati = CombatTwists.getActiveTwistInfo();
+  if (ati.length){
+    let ty = 39;
+    for (const t of ati){
+      if (combat.resistance && t.type === 'adaptive') continue;
+      text('⟁ ' + t.name, W-6, ty, C.purple, 5, 'right'); ty += 7;
+    }
+  }
+  // Swarm timer
+  if (combat.isSwarm){
+    text('SWARM ' + Math.ceil(combat.swarmTimer) + 's (' + combat.swarmCount + ')', W-6, 39, C.red, 6, 'right');
+  }
+  // Reinforcement enemies (adds)
+  if (combat.adds && combat.adds.length){
+    text('+ ' + combat.adds.length + ' ADD', 6, 47, C.purple, 6, 'left');
+  }
+
+  // ── Combo hint (potential combos from verse types used this combat) ──
+  const chint = VerseComboSystem.getComboHint(combat.verseTypesUsed);
+  if (chint){
+    text('COMBO? ' + chint.name, W-6, 47, C.gold, 6, 'right');
+  }
   // Verse card
   const v = combat.verse;
   const cat = verseCardType(v);
   text(verseTypeColor(v.type), 0, 0, C.white); // no-op keep order
-  text('VERSE [' + cat + ']', 6, 40, verseCatColor(cat), 6, 'left');
-  text(v.reference, W-6, 40, verseTypeColor(v.type), 6, 'right');
-  text('words: ' + v.words.length, 6, 48, C.dim, 6, 'left');
+  text('VERSE [' + cat + ']', 6, 52, verseCatColor(cat), 6, 'left');
+  text(v.reference, W-6, 52, verseTypeColor(v.type), 6, 'right');
+  text('words: ' + v.words.length, 6, 60, C.dim, 6, 'left');
 
   // Selected words
   const selWords = combat.selected.map(i => combat.pool[i]);
   const selStr = selWords.join(' ');
-  const sx = 6, sy = 56, sw = W-12;
+  const sx = 6, sy = 68, sw = W-12;
   rect(sx, sy, sw, 14, C.stoneDark);
   strokeRect(sx, sy, sw, 14, C.holy);
   const sl = wrapText(selStr || '...', 44);
   let syy = sy + 3; for (const l of sl.slice(0,1)){ text(l, sx+3, syy, selStr ? C.holy : C.dim, 6, 'left'); }
 
   // Word bubbles grid
-  const startY = 74;
+  const startY = 86;
   const cols = 6, bw = 39, bh = 12, gx = 2, gy = 2;
   for (let i = 0; i < combat.pool.length; i++){
     const col = i % cols, row = Math.floor(i / cols);
@@ -795,11 +953,25 @@ function renderCombat(){
   // Message
   if (combat.msgTimer > 0){
     const ml = wrapText(combat.message, 44);
-    let my = 176; for (const l of ml.slice(0,1)){ text(l, W/2, 120, C.holy, 6, 'center'); }
+    let my = 120; for (const l of ml.slice(0,2)){ text(l, W/2, my, C.holy, 6, 'center'); my += 10; }
+    // Combo quote
+    if (combat.comboResult){
+      const ql = wrapText(combat.comboResult.quote, 44);
+      for (const l of ql.slice(0,1)){ text(l, W/2, my, C.gold, 5, 'center'); my += 8; }
+    }
+    // Twist messages (scrolled)
+    for (const tm of combat.twistTriggered.slice(-1)){ text(tm, W/2, my, C.red, 5, 'center'); my += 8; }
+    combat.twistTriggered = [];
   }
 
   // flash on wrong
   if (game.flash > 0){ rect(0,0,W,H,'rgba(204,51,51,'+(game.flash)+')'); }
+  
+  // Bible overlay
+  if (game.bibleOpen) {
+    const discIds = KnowledgeSystem.store.discoveredVerses || [];
+    renderBible(ctx, W, H, discIds, game.biblePage, game.bibleScroll);
+  }
 }
 
 function renderCombatWin(){
@@ -821,6 +993,65 @@ function renderCombatWin(){
   }, C.gold);
 }
 
+// Apply a resolved EventEngine effect object (already from EventEngine.generate)
+function applyEventEffectResult(effect, cost){
+  if (!effect) return 'Nothing happens.';
+  let msg = effect.text || '...';
+
+  if (effect.heal){
+    game.hp = Math.min(game.maxHp, game.hp + effect.heal);
+  }
+  if (effect.gold){
+    game.gold = Math.max(0, game.gold + effect.gold);
+  }
+  if (effect.shield){
+    game.shield += effect.shield;
+  }
+  if (effect.buff){
+    if (effect.buff === 'attack') game.attackBuff += (effect.buffMultiplier ? effect.buffMultiplier : 3);
+    else if (effect.buff === 'defense') game.defenseBuff += 2;
+    else if (effect.buff === 'wisdom' || effect.buff === 'fire'){
+      // Temporary boost flagged for next verse multiplier
+      game._tempBuff = game._tempBuff || {};
+      game._tempBuff[effect.buff] = 0.5;
+    }
+  }
+  if (effect.hpCost){
+    game.hp = Math.max(1, game.hp - effect.hpCost);
+  }
+  if (effect.learnVerse){
+    const v = getRandomVerse(game.floor);
+    KnowledgeSystem.discoverVerse(v.id);
+    game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
+    msg += '  Learned: "' + v.text + '" (' + v.reference + ')';
+  }
+  if (effect.revealWeakness){
+    msg += '  (A demon\'s weakness is now known.)';
+  }
+  if (effect.revealAll || effect.revealTruth){
+    msg += '  All weaknesses revealed.';
+  }
+  if (effect.revealMap || effect.revealMapNode){
+    msg += '  The map reveals hidden paths.';
+  }
+  if (effect.invincible){
+    combat.invincibleTurns = (combat.invincibleTurns || 0) + effect.invincible;
+  }
+  if (effect.startCombat){
+    activeEvent = null;
+    const fake = { type: effect.multiEnemy ? NODE_TYPE.ELITE : NODE_TYPE.COMBAT };
+    startCombat(fake);
+    return null; // state changed to COMBAT
+  }
+  if (effect.permanentKnowledge){
+    msg += '  (Recorded in your knowledge.)';
+  }
+  if (effect.storeHeal){
+    game._storedHeal = (game._storedHeal || 0) + effect.storeHeal;
+  }
+  return msg;
+}
+
 function renderEvent(){
   const ev = activeEvent;
   rect(14, 14, W-28, H-36, C.stoneDark);
@@ -828,12 +1059,16 @@ function renderEvent(){
   text(ev.title, W/2, 22, C.cyan, 8, 'center');
   const lines = wrapText(ev.text, 36);
   let y = 40; for (const l of lines){ text(l, 22, y, C.holy, 7, 'left'); y += 12; }
-  y = 96;
+  y = Math.max(y, 84);
   ev.choices.forEach((ch, i) => {
     button(24, y, W-48, 16, (i+1) + '. ' + ch.text, () => {
-      if (ch.cost && game.gold < ch.cost){ game.rewardText = 'Not enough gold.'; return; }
-      const msg = applyEventEffect(ch.effect, ch.cost);
-      if (game.state === 'COMBAT') return; // elite_fight redirect
+      const effect = ch.effect; // already-resolved effect object from EventEngine
+      if (effect.gold !== undefined && effect.gold < 0 && game.gold < -effect.gold){
+        game.rewardText = 'Not enough gold.';
+        return;
+      }
+      const msg = applyEventEffectResult(effect, 0);
+      if (game.state === 'COMBAT') return; // startCombat redirect
       activeEvent = null;
       game.rewardText = msg || '';
       game.state = 'TREASURE';
@@ -943,12 +1178,26 @@ function loop(now){
 
   // combat timer
   if (game.state === 'COMBAT' && combat){
+    // swarm mode countdown
+    if (combat.isSwarm && CombatTwists.swarmMode){
+      const s = CombatTwists.updateSwarm(dt);
+      combat.swarmTimer = CombatTwists.swarmTimer;
+      combat.swarmCount = CombatTwists.swarmCount;
+      if (s && s.expired){
+        combat.isSwarm = false;
+        combat.twistTriggered.push('The swarm is broken!');
+        CombatTwists.swarmMode = false;
+      }
+    }
     combat.timer -= dt;
     if (combat.msgTimer > 0) combat.msgTimer -= dt;
     if (game.flash > 0) game.flash = Math.max(0, game.flash - dt);
     if (combat.timer <= 0){
       combat.message = 'TIME! The demon strikes!';
       combat.msgTimer = 1.2;
+      combat.correctStreak = 0;
+      combat.comboResult = null;
+      combat.twistTriggered = [];
       combat.selected = [];
       demonAttack(true);
       if (game.hp <= 0){ die(); }
@@ -972,6 +1221,17 @@ function toCanvas(e){
 canvas.addEventListener('pointerdown', e => {
   e.preventDefault();
   const p = toCanvas(e);
+  // Bible UI intercepts clicks when open
+  if (game.bibleOpen) {
+    const discIds = KnowledgeSystem.store.discoveredVerses || [];
+    const result = handleBibleClick(p.x, p.y, discIds, game.biblePage, game.bibleScroll);
+    if (result) {
+      if (result.action === 'back') game.bibleOpen = false;
+      else if (result.page) game.biblePage = result.page;
+      if (result.scrollY !== undefined) game.bibleScroll = result.scrollY;
+    }
+    return;
+  }
   for (let i = clickables.length - 1; i >= 0; i--){
     const c = clickables[i];
     if (p.x >= c.x && p.x <= c.x + c.w && p.y >= c.y && p.y <= c.y + c.h){
@@ -989,7 +1249,7 @@ window.addEventListener('keydown', e => {
       if (idx < combat.pool.length) selectWord(idx);
     } else if (e.key === 'Enter'){
       submitVerse();
-    } else if (e.key === 'Backspace'){
+    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
       e.preventDefault();
       combat.selected.pop();
     } else if (e.key === ' '){
