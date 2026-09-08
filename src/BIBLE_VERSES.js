@@ -7,6 +7,9 @@ const BIBLE_VERSES = [
   {
     id:'ps23_1',
     text:'A Psalm of David. The Lord is my shepherd; I shall not want',
+    nkjv: "The Lord is my shepherd; I shall not want.",
+    niv: "The Lord is my shepherd, I lack nothing.",
+    nlt: "The Lord is my shepherd; I have all that I need.",
     reference:'Psalm 23:1',
     book:'Psalms',
     category:'attack',
@@ -21,6 +24,9 @@ const BIBLE_VERSES = [
   {
     id:'ps91_1',
     text:'He that dwelleth in the secret place of the most High shall abide under the',
+    nkjv: "He who dwells in the secret place of the Most High Shall abide under the shadow of the Almighty.",
+    niv: "Whoever dwells in the shelter of the Most High will rest in the shadow of the Almighty.",
+    nlt: "Those who live in the shelter of the Most High will find rest in the shadow of the Almighty.",
     reference:'Psalm 91:1',
     book:'Psalms',
     category:'attack',
@@ -35,6 +41,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_2',
     text:'The Lord is my rock, and my fortress, and my deliverer; my God, my strength',
+    nkjv: "The LORD is my rock and my fortress and my deliverer; My God, my strength, in whom I will trust; My shield and the horn of my salvation, my stronghold.",
+    niv: "The LORD is my rock, my fortress and my deliverer; my God is my rock, in whom I take refuge, my shield and the horn of my salvation, my stronghold.",
+    nlt: "The LORD is my rock, my fortress, and my savior; my God is my rock, in whom I find protection. He is my shield, the power that saves me, and my place of safety.",
     reference:'Psalm 18:2',
     book:'Psalms',
     category:'attack',
@@ -49,6 +58,9 @@ const BIBLE_VERSES = [
   {
     id:'ps46_1',
     text:'To the chief Musician for the sons of Korah, A Song upon Alamoth. God is',
+    nkjv: "God is our refuge and strength, A very present help in trouble.",
+    niv: "God is our refuge and strength, an ever-present help in trouble.",
+    nlt: "God is our refuge and strength, always ready to help in times of trouble.",
     reference:'Psalm 46:1',
     book:'Psalms',
     category:'attack',
@@ -63,6 +75,9 @@ const BIBLE_VERSES = [
   {
     id:'ps27_1',
     text:'A Psalm of David. The Lord is my light and my salvation; whom shall I',
+    nkjv: "The LORD is my light and my salvation; Whom shall I fear? The LORD is the strength of my life; Of whom shall I be afraid?",
+    niv: "The LORD is my light and my salvation—whom shall I fear? The LORD is the stronghold of my life—of whom shall I be afraid?",
+    nlt: "The LORD is my light and my salvation—so why should I be afraid? The LORD is my fortress, protecting me from danger, so why should I tremble?",
     reference:'Psalm 27:1',
     book:'Psalms',
     category:'attack',
@@ -77,6 +92,9 @@ const BIBLE_VERSES = [
   {
     id:'ps144_1',
     text:'A Psalm of David. Blessed be the Lord my strength, which teacheth my hands to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 144:1',
     book:'Psalms',
     category:'attack',
@@ -91,6 +109,9 @@ const BIBLE_VERSES = [
   {
     id:'ps149_6',
     text:'Let the high praises of God be in their mouth, and a twoedged sword in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 149:6',
     book:'Psalms',
     category:'attack',
@@ -105,6 +126,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_1',
     text:'To the chief Musician, A Psalm or Song of David. Let God arise, let his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:1',
     book:'Psalms',
     category:'attack',
@@ -119,6 +143,9 @@ const BIBLE_VERSES = [
   {
     id:'ps35_1',
     text:'A Psalm of David. Plead my cause, O Lord, with them that strive with me',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 35:1',
     book:'Psalms',
     category:'attack',
@@ -133,6 +160,9 @@ const BIBLE_VERSES = [
   {
     id:'ps110_1',
     text:'A Psalm of David. The Lord said unto my Lord, Sit thou at my right',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 110:1',
     book:'Psalms',
     category:'attack',
@@ -147,6 +177,9 @@ const BIBLE_VERSES = [
   {
     id:'ps2_9',
     text:'Thou shalt break them with a rod of iron; thou shalt dash them in pieces',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 2:9',
     book:'Psalms',
     category:'attack',
@@ -161,6 +194,9 @@ const BIBLE_VERSES = [
   {
     id:'ps7_12',
     text:'If he turn not, he will whet his sword; he hath bent his bow, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 7:12',
     book:'Psalms',
     category:'attack',
@@ -175,6 +211,9 @@ const BIBLE_VERSES = [
   {
     id:'rev19_15',
     text:'And out of his mouth goeth a sharp sword, that with it he should smite',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 19:15',
     book:'Revelation',
     category:'attack',
@@ -189,6 +228,9 @@ const BIBLE_VERSES = [
   {
     id:'rev6_16',
     text:'And said to the mountains and rocks, Fall on us, and hide us from the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 6:16',
     book:'Revelation',
     category:'attack',
@@ -203,6 +245,9 @@ const BIBLE_VERSES = [
   {
     id:'rev2_27',
     text:'And he shall rule them with a rod of iron; as the vessels of a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 2:27',
     book:'Revelation',
     category:'attack',
@@ -217,6 +262,9 @@ const BIBLE_VERSES = [
   {
     id:'rev19_21',
     text:'And the remnant were slain with the sword of him that sat upon the horse',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 19:21',
     book:'Revelation',
     category:'attack',
@@ -231,6 +279,9 @@ const BIBLE_VERSES = [
   {
     id:'isa11_4',
     text:'But with righteousness shall he judge the poor, and reprove with equity for the meek',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 11:4',
     book:'Isaiah',
     category:'attack',
@@ -245,6 +296,9 @@ const BIBLE_VERSES = [
   {
     id:'isa34_5',
     text:'For my sword shall be bathed in heaven: behold, it shall come down upon Idumea',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 34:5',
     book:'Isaiah',
     category:'attack',
@@ -259,6 +313,9 @@ const BIBLE_VERSES = [
   {
     id:'isa37_36',
     text:'Then the angel of the Lord went forth, and smote in the camp of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 37:36',
     book:'Isaiah',
     category:'attack',
@@ -273,6 +330,9 @@ const BIBLE_VERSES = [
   {
     id:'isa63_1',
     text:'Who is this that cometh from Edom, with dyed garments from Bozrah? this that is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 63:1',
     book:'Isaiah',
     category:'attack',
@@ -287,6 +347,9 @@ const BIBLE_VERSES = [
   {
     id:'jer20_11',
     text:'But the Lord is with me as a mighty terrible one: therefore my persecutors shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 20:11',
     book:'Jeremiah',
     category:'attack',
@@ -301,6 +364,9 @@ const BIBLE_VERSES = [
   {
     id:'jer51_20',
     text:'Thou art my battle axe and weapons of war: for with thee will I break',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 51:20',
     book:'Jeremiah',
     category:'attack',
@@ -315,6 +381,9 @@ const BIBLE_VERSES = [
   {
     id:'ezk38_21',
     text:'And I will call for a sword against him throughout all my mountains, saith the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ezekiel 38:21',
     book:'Ezekiel',
     category:'attack',
@@ -329,6 +398,9 @@ const BIBLE_VERSES = [
   {
     id:'ezk39_3',
     text:'And I will smite thy bow out of thy left hand, and will cause thine',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ezekiel 39:3',
     book:'Ezekiel',
     category:'attack',
@@ -343,6 +415,9 @@ const BIBLE_VERSES = [
   {
     id:'dan3_25',
     text:'He answered and said, Lo, I see four men loose, walking in the midst of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Daniel 3:25',
     book:'Daniel',
     category:'attack',
@@ -357,6 +432,9 @@ const BIBLE_VERSES = [
   {
     id:'dan6_22',
     text:'My God hath sent his angel, and hath shut the lions’ mouths, that they have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Daniel 6:22',
     book:'Daniel',
     category:'attack',
@@ -371,6 +449,9 @@ const BIBLE_VERSES = [
   {
     id:'jos10_12',
     text:'Then spake Joshua to the Lord in the day when the Lord delivered up the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Joshua 10:12',
     book:'Joshua',
     category:'attack',
@@ -385,6 +466,9 @@ const BIBLE_VERSES = [
   {
     id:'jos23_10',
     text:'One man of you shall chase a thousand: for the Lord your God, he it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Joshua 23:10',
     book:'Joshua',
     category:'attack',
@@ -399,6 +483,9 @@ const BIBLE_VERSES = [
   {
     id:'jdg7_20',
     text:'And the three companies blew the trumpets, and brake the pitchers, and held the lamps',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Judges 7:20',
     book:'Judges',
     category:'attack',
@@ -413,6 +500,9 @@ const BIBLE_VERSES = [
   {
     id:'jdg15_15',
     text:'And he found a new jawbone of an ass, and put forth his hand, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Judges 15:15',
     book:'Judges',
     category:'attack',
@@ -427,6 +517,9 @@ const BIBLE_VERSES = [
   {
     id:'1sa17_45',
     text:'Then said David to the Philistine, Thou comest to me with a sword, and with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Samuel 17:45',
     book:'1 Samuel',
     category:'attack',
@@ -441,6 +534,9 @@ const BIBLE_VERSES = [
   {
     id:'1sa17_47',
     text:'And all this assembly shall know that the Lord saveth not with sword and spear',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Samuel 17:47',
     book:'1 Samuel',
     category:'attack',
@@ -455,6 +551,9 @@ const BIBLE_VERSES = [
   {
     id:'2sa22_35',
     text:'He teacheth my hands to war; so that a bow of steel is broken by',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Samuel 22:35',
     book:'2 Samuel',
     category:'attack',
@@ -469,6 +568,9 @@ const BIBLE_VERSES = [
   {
     id:'2sa23_8',
     text:'These be the names of the mighty men whom David had: The Tachmonite that sat',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Samuel 23:8',
     book:'2 Samuel',
     category:'attack',
@@ -483,6 +585,9 @@ const BIBLE_VERSES = [
   {
     id:'1ki18_38',
     text:'Then the fire of the Lord fell, and consumed the burnt sacrifice, and the wood',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Kings 18:38',
     book:'1 Kings',
     category:'attack',
@@ -497,6 +602,9 @@ const BIBLE_VERSES = [
   {
     id:'1ki19_11',
     text:'And he said, Go forth, and stand upon the mount before the Lord. And, behold',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Kings 19:11',
     book:'1 Kings',
     category:'attack',
@@ -511,6 +619,9 @@ const BIBLE_VERSES = [
   {
     id:'2ki2_11',
     text:'And it came to pass, as they still went on, and talked, that, behold, there',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Kings 2:11',
     book:'2 Kings',
     category:'attack',
@@ -525,6 +636,9 @@ const BIBLE_VERSES = [
   {
     id:'2ki6_17',
     text:'And Elisha prayed, and said, Lord, I pray thee, open his eyes, that he may',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Kings 6:17',
     book:'2 Kings',
     category:'attack',
@@ -539,6 +653,9 @@ const BIBLE_VERSES = [
   {
     id:'joe3_10',
     text:'Beat your plowshares into swords, and your pruninghooks into spears: let the weak say, I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Joel 3:10',
     book:'Joel',
     category:'attack',
@@ -553,6 +670,9 @@ const BIBLE_VERSES = [
   {
     id:'amo9_9',
     text:'For, lo, I will command, and I will sift the house of Israel among all',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Amos 9:9',
     book:'Amos',
     category:'attack',
@@ -567,6 +687,9 @@ const BIBLE_VERSES = [
   {
     id:'mic4_3',
     text:'And he shall judge among many people, and rebuke strong nations afar off; and they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Micah 4:3',
     book:'Micah',
     category:'attack',
@@ -581,6 +704,9 @@ const BIBLE_VERSES = [
   {
     id:'neh4_20',
     text:'In what place therefore ye hear the sound of the trumpet, resort ye thither unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Nehemiah 4:20',
     book:'Nehemiah',
     category:'attack',
@@ -595,6 +721,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_3',
     text:'But let the righteous be glad; let them rejoice before God: yea, let them exceedingly',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:3',
     book:'Psalms',
     category:'attack',
@@ -609,6 +738,9 @@ const BIBLE_VERSES = [
   {
     id:'ps29_5',
     text:'The voice of the Lord breaketh the cedars; yea, the Lord breaketh the cedars of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 29:5',
     book:'Psalms',
     category:'attack',
@@ -623,6 +755,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_175',
     text:'Let my soul live, and it shall praise thee; and let thy judgments help me',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:175',
     book:'Psalms',
     category:'attack',
@@ -637,6 +772,9 @@ const BIBLE_VERSES = [
   {
     id:'ps86_9',
     text:'All nations whom thou hast made shall come and worship before thee, O Lord; and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 86:9',
     book:'Psalms',
     category:'attack',
@@ -651,6 +789,9 @@ const BIBLE_VERSES = [
   {
     id:'ps39_5',
     text:'Behold, thou hast made my days as an handbreadth; and mine age is as nothing',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 39:5',
     book:'Psalms',
     category:'attack',
@@ -665,6 +806,9 @@ const BIBLE_VERSES = [
   {
     id:'ps123_4',
     text:'Our soul is exceedingly filled with the scorning of those that are at ease, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 123:4',
     book:'Psalms',
     category:'attack',
@@ -679,6 +823,9 @@ const BIBLE_VERSES = [
   {
     id:'ps12_6',
     text:'The words of the Lord are pure words: as silver tried in a furnace of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 12:6',
     book:'Psalms',
     category:'attack',
@@ -693,6 +840,9 @@ const BIBLE_VERSES = [
   {
     id:'ps30_10',
     text:'Hear, O Lord, and have mercy upon me: Lord, be thou my helper',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 30:10',
     book:'Psalms',
     category:'attack',
@@ -707,6 +857,9 @@ const BIBLE_VERSES = [
   {
     id:'ps44_1',
     text:'To the chief Musician for the sons of Korah, Maschil. We have heard with our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 44:1',
     book:'Psalms',
     category:'attack',
@@ -721,6 +874,9 @@ const BIBLE_VERSES = [
   {
     id:'ps89_33',
     text:'Nevertheless my lovingkindness will I not utterly take from him, nor suffer my faithfulness to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 89:33',
     book:'Psalms',
     category:'attack',
@@ -735,6 +891,9 @@ const BIBLE_VERSES = [
   {
     id:'ps64_5',
     text:'They encourage themselves in an evil matter: they commune of laying snares privily; they say',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 64:5',
     book:'Psalms',
     category:'attack',
@@ -749,6 +908,9 @@ const BIBLE_VERSES = [
   {
     id:'ps1_6',
     text:'For the Lord knoweth the way of the righteous: but the way of the ungodly',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 1:6',
     book:'Psalms',
     category:'attack',
@@ -763,6 +925,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_49',
     text:'Therefore will I give thanks unto thee, O Lord, among the heathen, and sing praises',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:49',
     book:'Psalms',
     category:'attack',
@@ -777,6 +942,9 @@ const BIBLE_VERSES = [
   {
     id:'ps10_1',
     text:'Why standest thou afar off, O Lord? why hidest thou thyself in times of trouble?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 10:1',
     book:'Psalms',
     category:'attack',
@@ -791,6 +959,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_109',
     text:'My soul is continually in my hand: yet do I not forget thy law',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:109',
     book:'Psalms',
     category:'attack',
@@ -805,6 +976,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_69',
     text:'The proud have forged a lie against me: but I will keep thy precepts with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:69',
     book:'Psalms',
     category:'attack',
@@ -819,6 +993,9 @@ const BIBLE_VERSES = [
   {
     id:'ps90_3',
     text:'Thou turnest man to destruction; and sayest, Return, ye children of men',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 90:3',
     book:'Psalms',
     category:'attack',
@@ -833,6 +1010,9 @@ const BIBLE_VERSES = [
   {
     id:'ps71_17',
     text:'O God, thou hast taught me from my youth: and hitherto have I declared thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 71:17',
     book:'Psalms',
     category:'attack',
@@ -847,6 +1027,9 @@ const BIBLE_VERSES = [
   {
     id:'ps49_10',
     text:'For he seeth that wise men die, likewise the fool and the brutish person perish',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 49:10',
     book:'Psalms',
     category:'attack',
@@ -861,6 +1044,9 @@ const BIBLE_VERSES = [
   {
     id:'ps28_6',
     text:'Blessed be the Lord, because he hath heard the voice of my supplications',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 28:6',
     book:'Psalms',
     category:'attack',
@@ -875,6 +1061,9 @@ const BIBLE_VERSES = [
   {
     id:'ps106_30',
     text:'Then stood up Phinehas, and executed judgment: and so the plague was stayed',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 106:30',
     book:'Psalms',
     category:'attack',
@@ -889,6 +1078,9 @@ const BIBLE_VERSES = [
   {
     id:'ps67_7',
     text:'God shall bless us; and all the ends of the earth shall fear him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 67:7',
     book:'Psalms',
     category:'attack',
@@ -903,6 +1095,9 @@ const BIBLE_VERSES = [
   {
     id:'ps144_2',
     text:'My goodness, and my fortress; my high tower, and my deliverer; my shield, and he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 144:2',
     book:'Psalms',
     category:'attack',
@@ -917,6 +1112,9 @@ const BIBLE_VERSES = [
   {
     id:'ps35_4',
     text:'Let them be confounded and put to shame that seek after my soul: let them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 35:4',
     book:'Psalms',
     category:'attack',
@@ -931,6 +1129,9 @@ const BIBLE_VERSES = [
   {
     id:'ps69_29',
     text:'But I am poor and sorrowful: let thy salvation, O God, set me up on',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 69:29',
     book:'Psalms',
     category:'attack',
@@ -945,6 +1146,9 @@ const BIBLE_VERSES = [
   {
     id:'ps50_4',
     text:'He shall call to the heavens from above, and to the earth, that he may',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 50:4',
     book:'Psalms',
     category:'attack',
@@ -959,6 +1163,9 @@ const BIBLE_VERSES = [
   {
     id:'ps66_15',
     text:'I will offer unto thee burnt sacrifices of fatlings, with the incense of rams; I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 66:15',
     book:'Psalms',
     category:'attack',
@@ -973,6 +1180,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_131',
     text:'I opened my mouth, and panted: for I longed for thy commandments',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:131',
     book:'Psalms',
     category:'attack',
@@ -987,6 +1197,9 @@ const BIBLE_VERSES = [
   {
     id:'ps30_4',
     text:'Sing unto the Lord, O ye saints of his, and give thanks at the remembrance',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 30:4',
     book:'Psalms',
     category:'attack',
@@ -1001,6 +1214,9 @@ const BIBLE_VERSES = [
   {
     id:'ps41_11',
     text:'By this I know that thou favourest me, because mine enemy doth not triumph over',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 41:11',
     book:'Psalms',
     category:'attack',
@@ -1015,6 +1231,9 @@ const BIBLE_VERSES = [
   {
     id:'ps16_8',
     text:'I have set the Lord always before me: because he is at my right hand',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 16:8',
     book:'Psalms',
     category:'attack',
@@ -1029,6 +1248,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_50',
     text:'This is my comfort in my affliction: for thy word hath quickened me',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:50',
     book:'Psalms',
     category:'attack',
@@ -1043,6 +1265,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_9',
     text:'He bowed the heavens also, and came down: and darkness was under his feet',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:9',
     book:'Psalms',
     category:'attack',
@@ -1057,6 +1282,9 @@ const BIBLE_VERSES = [
   {
     id:'ps79_4',
     text:'We are become a reproach to our neighbours, a scorn and derision to them that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 79:4',
     book:'Psalms',
     category:'attack',
@@ -1071,6 +1299,9 @@ const BIBLE_VERSES = [
   {
     id:'ps70_2',
     text:'Let them be ashamed and confounded that seek after my soul: let them be turned',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 70:2',
     book:'Psalms',
     category:'attack',
@@ -1085,6 +1316,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_43',
     text:'And take not the word of truth utterly out of my mouth; for I have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:43',
     book:'Psalms',
     category:'attack',
@@ -1099,6 +1333,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_164',
     text:'Seven times a day do I praise thee because of thy righteous judgments',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:164',
     book:'Psalms',
     category:'attack',
@@ -1113,6 +1350,9 @@ const BIBLE_VERSES = [
   {
     id:'ps50_9',
     text:'I will take no bullock out of thy house, nor he goats out of thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 50:9',
     book:'Psalms',
     category:'attack',
@@ -1127,6 +1367,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_35',
     text:'O God, thou art terrible out of thy holy places: the God of Israel is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:35',
     book:'Psalms',
     category:'attack',
@@ -1141,6 +1384,9 @@ const BIBLE_VERSES = [
   {
     id:'ps84_7',
     text:'They go from strength to strength, every one of them in Zion appeareth before God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 84:7',
     book:'Psalms',
     category:'attack',
@@ -1155,6 +1401,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_6',
     text:'God setteth the solitary in families: he bringeth out those which are bound with chains',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:6',
     book:'Psalms',
     category:'attack',
@@ -1169,6 +1418,9 @@ const BIBLE_VERSES = [
   {
     id:'ps42_1',
     text:'To the chief Musician, Maschil, for the sons of Korah. As the hart panteth after',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 42:1',
     book:'Psalms',
     category:'attack',
@@ -1183,6 +1435,9 @@ const BIBLE_VERSES = [
   {
     id:'ps66_2',
     text:'Sing forth the honour of his name: make his praise glorious',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 66:2',
     book:'Psalms',
     category:'attack',
@@ -1197,6 +1452,9 @@ const BIBLE_VERSES = [
   {
     id:'ps106_16',
     text:'They envied Moses also in the camp, and Aaron the saint of the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 106:16',
     book:'Psalms',
     category:'attack',
@@ -1211,6 +1469,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_45',
     text:'The strangers shall fade away, and be afraid out of their close places',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:45',
     book:'Psalms',
     category:'attack',
@@ -1225,6 +1486,9 @@ const BIBLE_VERSES = [
   {
     id:'ps25_20',
     text:'O keep my soul, and deliver me: let me not be ashamed; for I put',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 25:20',
     book:'Psalms',
     category:'attack',
@@ -1239,6 +1503,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_50',
     text:'Great deliverance giveth he to his king; and sheweth mercy to his anointed, to David',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:50',
     book:'Psalms',
     category:'attack',
@@ -1253,6 +1520,9 @@ const BIBLE_VERSES = [
   {
     id:'ps31_20',
     text:'Thou shalt hide them in the secret of thy presence from the pride of man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 31:20',
     book:'Psalms',
     category:'attack',
@@ -1267,6 +1537,9 @@ const BIBLE_VERSES = [
   {
     id:'ps60_1',
     text:'To the chief Musician upon Shushan–eduth, Michtam of David, to teach; when he strove with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 60:1',
     book:'Psalms',
     category:'attack',
@@ -1281,6 +1554,9 @@ const BIBLE_VERSES = [
   {
     id:'ps60_2',
     text:'Thou hast made the earth to tremble; thou hast broken it: heal the breaches thereof',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 60:2',
     book:'Psalms',
     category:'attack',
@@ -1295,6 +1571,9 @@ const BIBLE_VERSES = [
   {
     id:'ps22_31',
     text:'They shall come, and shall declare his righteousness unto a people that shall be born',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 22:31',
     book:'Psalms',
     category:'attack',
@@ -1309,6 +1588,9 @@ const BIBLE_VERSES = [
   {
     id:'ps51_13',
     text:'Then will I teach transgressors thy ways; and sinners shall be converted unto thee',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 51:13',
     book:'Psalms',
     category:'attack',
@@ -1323,6 +1605,9 @@ const BIBLE_VERSES = [
   {
     id:'ps94_18',
     text:'When I said, My foot slippeth; thy mercy, O Lord, held me up',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 94:18',
     book:'Psalms',
     category:'attack',
@@ -1337,6 +1622,9 @@ const BIBLE_VERSES = [
   {
     id:'ps79_1',
     text:'A Psalm of Asaph. O God, the heathen are come into thine inheritance; thy holy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 79:1',
     book:'Psalms',
     category:'attack',
@@ -1351,6 +1639,9 @@ const BIBLE_VERSES = [
   {
     id:'ps78_38',
     text:'But he, being full of compassion, forgave their iniquity, and destroyed them not: yea, many',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 78:38',
     book:'Psalms',
     category:'attack',
@@ -1365,6 +1656,9 @@ const BIBLE_VERSES = [
   {
     id:'ps139_13',
     text:'For thou hast possessed my reins: thou hast covered me in my mother’s womb',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 139:13',
     book:'Psalms',
     category:'attack',
@@ -1379,6 +1673,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_65',
     text:'ט TETH. Thou hast dealt well with thy servant, O Lord, according unto thy word',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:65',
     book:'Psalms',
     category:'attack',
@@ -1393,6 +1690,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_3',
     text:'They also do no iniquity: they walk in his ways',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:3',
     book:'Psalms',
     category:'attack',
@@ -1407,6 +1707,9 @@ const BIBLE_VERSES = [
   {
     id:'ps116_16',
     text:'O Lord, truly I am thy servant; I am thy servant, and the son of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 116:16',
     book:'Psalms',
     category:'attack',
@@ -1421,6 +1724,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_37',
     text:'I have pursued mine enemies, and overtaken them: neither did I turn again till they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:37',
     book:'Psalms',
     category:'attack',
@@ -1435,6 +1741,9 @@ const BIBLE_VERSES = [
   {
     id:'ps73_13',
     text:'Verily I have cleansed my heart in vain, and washed my hands in innocency',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 73:13',
     book:'Psalms',
     category:'attack',
@@ -1449,6 +1758,9 @@ const BIBLE_VERSES = [
   {
     id:'ps99_7',
     text:'He spake unto them in the cloudy pillar: they kept his testimonies, and the ordinance',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 99:7',
     book:'Psalms',
     category:'attack',
@@ -1463,6 +1775,9 @@ const BIBLE_VERSES = [
   {
     id:'ps29_11',
     text:'The Lord will give strength unto his people; the Lord will bless his people with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 29:11',
     book:'Psalms',
     category:'attack',
@@ -1477,6 +1792,9 @@ const BIBLE_VERSES = [
   {
     id:'ps13_5',
     text:'But I have trusted in thy mercy; my heart shall rejoice in thy salvation',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 13:5',
     book:'Psalms',
     category:'attack',
@@ -1491,6 +1809,9 @@ const BIBLE_VERSES = [
   {
     id:'ps33_7',
     text:'He gathereth the waters of the sea together as an heap: he layeth up the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 33:7',
     book:'Psalms',
     category:'attack',
@@ -1505,6 +1826,9 @@ const BIBLE_VERSES = [
   {
     id:'ps34_14',
     text:'Depart from evil, and do good; seek peace, and pursue it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 34:14',
     book:'Psalms',
     category:'attack',
@@ -1519,6 +1843,9 @@ const BIBLE_VERSES = [
   {
     id:'ps74_12',
     text:'For God is my King of old, working salvation in the midst of the earth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 74:12',
     book:'Psalms',
     category:'attack',
@@ -1533,6 +1860,9 @@ const BIBLE_VERSES = [
   {
     id:'ps51_19',
     text:'Then shalt thou be pleased with the sacrifices of righteousness, with burnt offering and whole',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 51:19',
     book:'Psalms',
     category:'attack',
@@ -1547,6 +1877,9 @@ const BIBLE_VERSES = [
   {
     id:'ps58_4',
     text:'Their poison is like the poison of a serpent: they are like the deaf adder',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 58:4',
     book:'Psalms',
     category:'attack',
@@ -1561,6 +1894,9 @@ const BIBLE_VERSES = [
   {
     id:'ps34_9',
     text:'O fear the Lord, ye his saints: for there is no want to them that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 34:9',
     book:'Psalms',
     category:'attack',
@@ -1575,6 +1911,9 @@ const BIBLE_VERSES = [
   {
     id:'ps49_3',
     text:'My mouth shall speak of wisdom; and the meditation of my heart shall be of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 49:3',
     book:'Psalms',
     category:'attack',
@@ -1589,6 +1928,9 @@ const BIBLE_VERSES = [
   {
     id:'ps73_19',
     text:'How are they brought into desolation, as in a moment! they are utterly consumed with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 73:19',
     book:'Psalms',
     category:'attack',
@@ -1603,6 +1945,9 @@ const BIBLE_VERSES = [
   {
     id:'ps2_1',
     text:'Why do the heathen rage, and the people imagine a vain thing?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 2:1',
     book:'Psalms',
     category:'attack',
@@ -1617,6 +1962,9 @@ const BIBLE_VERSES = [
   {
     id:'ps7_10',
     text:'My defence is of God, which saveth the upright in heart',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 7:10',
     book:'Psalms',
     category:'attack',
@@ -1631,6 +1979,9 @@ const BIBLE_VERSES = [
   {
     id:'ps55_14',
     text:'We took sweet counsel together, and walked unto the house of God in company',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 55:14',
     book:'Psalms',
     category:'attack',
@@ -1645,6 +1996,9 @@ const BIBLE_VERSES = [
   {
     id:'ps57_7',
     text:'My heart is fixed, O God, my heart is fixed: I will sing and give',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 57:7',
     book:'Psalms',
     category:'attack',
@@ -1659,6 +2013,9 @@ const BIBLE_VERSES = [
   {
     id:'ps69_22',
     text:'Let their table become a snare before them: and that which should have been for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 69:22',
     book:'Psalms',
     category:'attack',
@@ -1673,6 +2030,9 @@ const BIBLE_VERSES = [
   {
     id:'ps145_14',
     text:'The Lord upholdeth all that fall, and raiseth up all those that be bowed down',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 145:14',
     book:'Psalms',
     category:'attack',
@@ -1687,6 +2047,9 @@ const BIBLE_VERSES = [
   {
     id:'ps40_16',
     text:'Let all those that seek thee rejoice and be glad in thee: let such as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 40:16',
     book:'Psalms',
     category:'attack',
@@ -1701,6 +2064,9 @@ const BIBLE_VERSES = [
   {
     id:'ps62_2',
     text:'He only is my rock and my salvation; he is my defence; I shall not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 62:2',
     book:'Psalms',
     category:'attack',
@@ -1715,6 +2081,9 @@ const BIBLE_VERSES = [
   {
     id:'ps91_7',
     text:'A thousand shall fall at thy side, and ten thousand at thy right hand; but',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 91:7',
     book:'Psalms',
     category:'attack',
@@ -1729,6 +2098,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_132',
     text:'Look thou upon me, and be merciful unto me, as thou usest to do unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:132',
     book:'Psalms',
     category:'attack',
@@ -1743,6 +2115,9 @@ const BIBLE_VERSES = [
   {
     id:'ps101_1',
     text:'A Psalm of David. I will sing of mercy and judgment: unto thee, O Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 101:1',
     book:'Psalms',
     category:'attack',
@@ -1757,6 +2132,9 @@ const BIBLE_VERSES = [
   {
     id:'ps38_7',
     text:'For my loins are filled with a loathsome disease: and there is no soundness in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 38:7',
     book:'Psalms',
     category:'attack',
@@ -1771,6 +2149,9 @@ const BIBLE_VERSES = [
   {
     id:'ps74_4',
     text:'Thine enemies roar in the midst of thy congregations; they set up their ensigns for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 74:4',
     book:'Psalms',
     category:'attack',
@@ -1785,6 +2166,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_5',
     text:'A father of the fatherless, and a judge of the widows, is God in his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:5',
     book:'Psalms',
     category:'attack',
@@ -1799,6 +2183,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_39',
     text:'Again, they are minished and brought low through oppression, affliction, and sorrow',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:39',
     book:'Psalms',
     category:'attack',
@@ -1813,6 +2200,9 @@ const BIBLE_VERSES = [
   {
     id:'ps59_16',
     text:'But I will sing of thy power; yea, I will sing aloud of thy mercy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 59:16',
     book:'Psalms',
     category:'attack',
@@ -1827,6 +2217,9 @@ const BIBLE_VERSES = [
   {
     id:'ps148_3',
     text:'Praise ye him, sun and moon: praise him, all ye stars of light',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 148:3',
     book:'Psalms',
     category:'attack',
@@ -1841,6 +2234,9 @@ const BIBLE_VERSES = [
   {
     id:'ps139_17',
     text:'How precious also are thy thoughts unto me, O God! how great is the sum',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 139:17',
     book:'Psalms',
     category:'attack',
@@ -1855,6 +2251,9 @@ const BIBLE_VERSES = [
   {
     id:'ps136_11',
     text:'And brought out Israel from among them: for his mercy endureth for ever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 136:11',
     book:'Psalms',
     category:'attack',
@@ -1869,6 +2268,9 @@ const BIBLE_VERSES = [
   {
     id:'ps102_1',
     text:'A Prayer of the afflicted, when he is overwhelmed, and poureth out his complaint before',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 102:1',
     book:'Psalms',
     category:'attack',
@@ -1883,6 +2285,9 @@ const BIBLE_VERSES = [
   {
     id:'ps82_4',
     text:'Deliver the poor and needy: rid them out of the hand of the wicked',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 82:4',
     book:'Psalms',
     category:'attack',
@@ -1897,6 +2302,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_27',
     text:'They reel to and fro, and stagger like a drunken man, and are at their',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:27',
     book:'Psalms',
     category:'attack',
@@ -1911,6 +2319,9 @@ const BIBLE_VERSES = [
   {
     id:'ps106_2',
     text:'Who can utter the mighty acts of the Lord? who can shew forth all his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 106:2',
     book:'Psalms',
     category:'attack',
@@ -1925,6 +2336,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_29',
     text:'Remove from me the way of lying: and grant me thy law graciously',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:29',
     book:'Psalms',
     category:'attack',
@@ -1939,6 +2353,9 @@ const BIBLE_VERSES = [
   {
     id:'ps136_17',
     text:'To him which smote great kings: for his mercy endureth for ever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 136:17',
     book:'Psalms',
     category:'attack',
@@ -1953,6 +2370,9 @@ const BIBLE_VERSES = [
   {
     id:'ps83_15',
     text:'So persecute them with thy tempest, and make them afraid with thy storm',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 83:15',
     book:'Psalms',
     category:'attack',
@@ -1967,6 +2387,9 @@ const BIBLE_VERSES = [
   {
     id:'ps28_3',
     text:'Draw me not away with the wicked, and with the workers of iniquity, which speak',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 28:3',
     book:'Psalms',
     category:'attack',
@@ -1981,6 +2404,9 @@ const BIBLE_VERSES = [
   {
     id:'ps147_14',
     text:'He maketh peace in thy borders, and filleth thee with the finest of the wheat',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 147:14',
     book:'Psalms',
     category:'attack',
@@ -1995,6 +2421,9 @@ const BIBLE_VERSES = [
   {
     id:'ps99_1',
     text:'The Lord reigneth; let the people tremble: he sitteth between the cherubims; let the earth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 99:1',
     book:'Psalms',
     category:'attack',
@@ -2009,6 +2438,9 @@ const BIBLE_VERSES = [
   {
     id:'ps95_6',
     text:'O come, let us worship and bow down: let us kneel before the Lord our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 95:6',
     book:'Psalms',
     category:'attack',
@@ -2023,6 +2455,9 @@ const BIBLE_VERSES = [
   {
     id:'ps22_24',
     text:'For he hath not despised nor abhorred the affliction of the afflicted; neither hath he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 22:24',
     book:'Psalms',
     category:'attack',
@@ -2037,6 +2472,9 @@ const BIBLE_VERSES = [
   {
     id:'ps79_8',
     text:'O remember not against us former iniquities: let thy tender mercies speedily prevent us: for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 79:8',
     book:'Psalms',
     category:'attack',
@@ -2051,6 +2489,9 @@ const BIBLE_VERSES = [
   {
     id:'ps55_19',
     text:'God shall hear, and afflict them, even he that abideth of old. Selah. Because they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 55:19',
     book:'Psalms',
     category:'attack',
@@ -2065,6 +2506,9 @@ const BIBLE_VERSES = [
   {
     id:'ps89_6',
     text:'For who in the heaven can be compared unto the Lord? who among the sons',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 89:6',
     book:'Psalms',
     category:'attack',
@@ -2079,6 +2523,9 @@ const BIBLE_VERSES = [
   {
     id:'ps38_15',
     text:'For in thee, O Lord, do I hope: thou wilt hear, O Lord my God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 38:15',
     book:'Psalms',
     category:'attack',
@@ -2093,6 +2540,9 @@ const BIBLE_VERSES = [
   {
     id:'ps79_11',
     text:'Let the sighing of the prisoner come before thee; according to the greatness of thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 79:11',
     book:'Psalms',
     category:'attack',
@@ -2107,6 +2557,9 @@ const BIBLE_VERSES = [
   {
     id:'ps33_8',
     text:'Let all the earth fear the Lord: let all the inhabitants of the world stand',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 33:8',
     book:'Psalms',
     category:'attack',
@@ -2121,6 +2574,9 @@ const BIBLE_VERSES = [
   {
     id:'ps135_9',
     text:'Who sent tokens and wonders into the midst of thee, O Egypt, upon Pharaoh, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 135:9',
     book:'Psalms',
     category:'attack',
@@ -2135,6 +2591,9 @@ const BIBLE_VERSES = [
   {
     id:'ps19_7',
     text:'The law of the Lord is perfect, converting the soul: the testimony of the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 19:7',
     book:'Psalms',
     category:'attack',
@@ -2149,6 +2608,9 @@ const BIBLE_VERSES = [
   {
     id:'ps123_1',
     text:'A Song of degrees. Unto thee lift I up mine eyes, O thou that dwellest',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 123:1',
     book:'Psalms',
     category:'attack',
@@ -2163,6 +2625,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_17',
     text:'The chariots of God are twenty thousand, even thousands of angels: the Lord is among',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:17',
     book:'Psalms',
     category:'attack',
@@ -2177,6 +2642,9 @@ const BIBLE_VERSES = [
   {
     id:'ps27_10',
     text:'When my father and my mother forsake me, then the Lord will take me up',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 27:10',
     book:'Psalms',
     category:'attack',
@@ -2191,6 +2659,9 @@ const BIBLE_VERSES = [
   {
     id:'ps39_9',
     text:'I was dumb, I opened not my mouth; because thou didst it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 39:9',
     book:'Psalms',
     category:'attack',
@@ -2205,6 +2676,9 @@ const BIBLE_VERSES = [
   {
     id:'ps66_12',
     text:'Thou hast caused men to ride over our heads; we went through fire and through',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 66:12',
     book:'Psalms',
     category:'attack',
@@ -2219,6 +2693,9 @@ const BIBLE_VERSES = [
   {
     id:'ps146_1',
     text:'Praise ye the Lord. Praise the Lord, O my soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 146:1',
     book:'Psalms',
     category:'attack',
@@ -2233,6 +2710,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_26',
     text:'They mount up to the heaven, they go down again to the depths: their soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:26',
     book:'Psalms',
     category:'attack',
@@ -2247,6 +2727,9 @@ const BIBLE_VERSES = [
   {
     id:'ps103_21',
     text:'Bless ye the Lord, all ye his hosts; ye ministers of his, that do his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 103:21',
     book:'Psalms',
     category:'attack',
@@ -2261,6 +2744,9 @@ const BIBLE_VERSES = [
   {
     id:'ps74_15',
     text:'Thou didst cleave the fountain and the flood: thou driedst up mighty rivers',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 74:15',
     book:'Psalms',
     category:'attack',
@@ -2275,6 +2761,9 @@ const BIBLE_VERSES = [
   {
     id:'ps25_7',
     text:'Remember not the sins of my youth, nor my transgressions: according to thy mercy remember',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 25:7',
     book:'Psalms',
     category:'attack',
@@ -2289,6 +2778,9 @@ const BIBLE_VERSES = [
   {
     id:'ps85_7',
     text:'Shew us thy mercy, O Lord, and grant us thy salvation',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 85:7',
     book:'Psalms',
     category:'attack',
@@ -2303,6 +2795,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_15',
     text:'Their sword shall enter into their own heart, and their bows shall be broken',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:15',
     book:'Psalms',
     category:'attack',
@@ -2317,6 +2812,9 @@ const BIBLE_VERSES = [
   {
     id:'ps85_11',
     text:'Truth shall spring out of the earth; and righteousness shall look down from heaven',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 85:11',
     book:'Psalms',
     category:'attack',
@@ -2331,6 +2829,9 @@ const BIBLE_VERSES = [
   {
     id:'ps137_9',
     text:'Happy shall he be, that taketh and dasheth thy little ones against the stones',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 137:9',
     book:'Psalms',
     category:'attack',
@@ -2345,6 +2846,9 @@ const BIBLE_VERSES = [
   {
     id:'ps106_25',
     text:'But murmured in their tents, and hearkened not unto the voice of the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 106:25',
     book:'Psalms',
     category:'attack',
@@ -2359,6 +2863,9 @@ const BIBLE_VERSES = [
   {
     id:'ps70_4',
     text:'Let all those that seek thee rejoice and be glad in thee: and let such',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 70:4',
     book:'Psalms',
     category:'attack',
@@ -2373,6 +2880,9 @@ const BIBLE_VERSES = [
   {
     id:'ps40_8',
     text:'I delight to do thy will, O my God: yea, thy law is within my',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 40:8',
     book:'Psalms',
     category:'attack',
@@ -2387,6 +2897,9 @@ const BIBLE_VERSES = [
   {
     id:'ps22_4',
     text:'Our fathers trusted in thee: they trusted, and thou didst deliver them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 22:4',
     book:'Psalms',
     category:'attack',
@@ -2401,6 +2914,9 @@ const BIBLE_VERSES = [
   {
     id:'ps112_4',
     text:'Unto the upright there ariseth light in the darkness: he is gracious, and full of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 112:4',
     book:'Psalms',
     category:'attack',
@@ -2415,6 +2931,9 @@ const BIBLE_VERSES = [
   {
     id:'ps3_8',
     text:'Salvation belongeth unto the Lord: thy blessing is upon thy people. Selah',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 3:8',
     book:'Psalms',
     category:'attack',
@@ -2429,6 +2948,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_154',
     text:'Plead my cause, and deliver me: quicken me according to thy word',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:154',
     book:'Psalms',
     category:'attack',
@@ -2443,6 +2965,9 @@ const BIBLE_VERSES = [
   {
     id:'ps118_3',
     text:'Let the house of Aaron now say, that his mercy endureth for ever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 118:3',
     book:'Psalms',
     category:'attack',
@@ -2457,6 +2982,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_27',
     text:'Depart from evil, and do good; and dwell for evermore',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:27',
     book:'Psalms',
     category:'attack',
@@ -2471,6 +2999,9 @@ const BIBLE_VERSES = [
   {
     id:'ps88_11',
     text:'Shall thy lovingkindness be declared in the grave? or thy faithfulness in destruction?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 88:11',
     book:'Psalms',
     category:'attack',
@@ -2485,6 +3016,9 @@ const BIBLE_VERSES = [
   {
     id:'ps33_18',
     text:'Behold, the eye of the Lord is upon them that fear him, upon them that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 33:18',
     book:'Psalms',
     category:'attack',
@@ -2499,6 +3033,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_42',
     text:'Then did I beat them small as the dust before the wind: I did cast',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:42',
     book:'Psalms',
     category:'attack',
@@ -2513,6 +3050,9 @@ const BIBLE_VERSES = [
   {
     id:'ps22_13',
     text:'They gaped upon me with their mouths, as a ravening and a roaring lion',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 22:13',
     book:'Psalms',
     category:'attack',
@@ -2527,6 +3067,9 @@ const BIBLE_VERSES = [
   {
     id:'ps59_15',
     text:'Let them wander up and down for meat, and grudge if they be not satisfied',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 59:15',
     book:'Psalms',
     category:'attack',
@@ -2541,6 +3084,9 @@ const BIBLE_VERSES = [
   {
     id:'ps96_12',
     text:'Let the field be joyful, and all that is therein: then shall all the trees',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 96:12',
     book:'Psalms',
     category:'attack',
@@ -2555,6 +3101,9 @@ const BIBLE_VERSES = [
   {
     id:'ps128_1',
     text:'A Song of degrees. Blessed is every one that feareth the Lord; that walketh in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 128:1',
     book:'Psalms',
     category:'attack',
@@ -2569,6 +3118,9 @@ const BIBLE_VERSES = [
   {
     id:'ps31_18',
     text:'Let the lying lips be put to silence; which speak grievous things proudly and contemptuously',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 31:18',
     book:'Psalms',
     category:'attack',
@@ -2583,6 +3135,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_10',
     text:'Such as sit in darkness and in the shadow of death, being bound in affliction',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:10',
     book:'Psalms',
     category:'attack',
@@ -2597,6 +3152,9 @@ const BIBLE_VERSES = [
   {
     id:'ps3_6',
     text:'I will not be afraid of ten thousands of people, that have set themselves against',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 3:6',
     book:'Psalms',
     category:'attack',
@@ -2611,6 +3169,9 @@ const BIBLE_VERSES = [
   {
     id:'ps106_8',
     text:'Nevertheless he saved them for his name’s sake, that he might make his mighty power',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 106:8',
     book:'Psalms',
     category:'attack',
@@ -2625,6 +3186,9 @@ const BIBLE_VERSES = [
   {
     id:'ps42_5',
     text:'Why art thou cast down, O my soul? and why art thou disquieted in me?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 42:5',
     book:'Psalms',
     category:'attack',
@@ -2639,6 +3203,9 @@ const BIBLE_VERSES = [
   {
     id:'ps102_17',
     text:'He will regard the prayer of the destitute, and not despise their prayer',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 102:17',
     book:'Psalms',
     category:'attack',
@@ -2653,6 +3220,9 @@ const BIBLE_VERSES = [
   {
     id:'ps139_7',
     text:'Whither shall I go from thy spirit? or whither shall I flee from thy presence?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 139:7',
     book:'Psalms',
     category:'attack',
@@ -2667,6 +3237,9 @@ const BIBLE_VERSES = [
   {
     id:'ps126_3',
     text:'The Lord hath done great things for us; whereof we are glad',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 126:3',
     book:'Psalms',
     category:'attack',
@@ -2681,6 +3254,9 @@ const BIBLE_VERSES = [
   {
     id:'ps149_9',
     text:'To execute upon them the judgment written: this honour have all his saints. Praise ye',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 149:9',
     book:'Psalms',
     category:'attack',
@@ -2695,6 +3271,9 @@ const BIBLE_VERSES = [
   {
     id:'ps44_14',
     text:'Thou makest us a byword among the heathen, a shaking of the head among the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 44:14',
     book:'Psalms',
     category:'attack',
@@ -2709,6 +3288,9 @@ const BIBLE_VERSES = [
   {
     id:'ps55_22',
     text:'Cast thy burden upon the Lord, and he shall sustain thee: he shall never suffer',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 55:22',
     book:'Psalms',
     category:'attack',
@@ -2723,6 +3305,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_31',
     text:'The law of his God is in his heart; none of his steps shall slide',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:31',
     book:'Psalms',
     category:'attack',
@@ -2737,6 +3322,9 @@ const BIBLE_VERSES = [
   {
     id:'ps69_12',
     text:'They that sit in the gate speak against me; and I was the song of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 69:12',
     book:'Psalms',
     category:'attack',
@@ -2751,6 +3339,9 @@ const BIBLE_VERSES = [
   {
     id:'ps50_1',
     text:'A Psalm of Asaph. The mighty God, even the Lord, hath spoken, and called the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 50:1',
     book:'Psalms',
     category:'attack',
@@ -2765,6 +3356,9 @@ const BIBLE_VERSES = [
   {
     id:'ps21_1',
     text:'To the chief Musician, A Psalm of David. The king shall joy in thy strength',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 21:1',
     book:'Psalms',
     category:'attack',
@@ -2779,6 +3373,9 @@ const BIBLE_VERSES = [
   {
     id:'ps110_2',
     text:'The Lord shall send the rod of thy strength out of Zion: rule thou in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 110:2',
     book:'Psalms',
     category:'attack',
@@ -2793,6 +3390,9 @@ const BIBLE_VERSES = [
   {
     id:'ps35_18',
     text:'I will give thee thanks in the great congregation: I will praise thee among much',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 35:18',
     book:'Psalms',
     category:'attack',
@@ -2807,6 +3407,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_35',
     text:'Thou hast also given me the shield of thy salvation: and thy right hand hath',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:35',
     book:'Psalms',
     category:'attack',
@@ -2821,6 +3424,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_124',
     text:'Deal with thy servant according unto thy mercy, and teach me thy statutes',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:124',
     book:'Psalms',
     category:'attack',
@@ -2835,6 +3441,9 @@ const BIBLE_VERSES = [
   {
     id:'ps93_2',
     text:'Thy throne is established of old: thou art from everlasting',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 93:2',
     book:'Psalms',
     category:'attack',
@@ -2849,6 +3458,9 @@ const BIBLE_VERSES = [
   {
     id:'ps109_7',
     text:'When he shall be judged, let him be condemned: and let his prayer become sin',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 109:7',
     book:'Psalms',
     category:'attack',
@@ -2863,6 +3475,9 @@ const BIBLE_VERSES = [
   {
     id:'ps84_12',
     text:'O Lord of hosts, blessed is the man that trusteth in thee',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 84:12',
     book:'Psalms',
     category:'attack',
@@ -2877,6 +3492,9 @@ const BIBLE_VERSES = [
   {
     id:'ps35_3',
     text:'Draw out also the spear, and stop the way against them that persecute me: say',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 35:3',
     book:'Psalms',
     category:'attack',
@@ -2891,6 +3509,9 @@ const BIBLE_VERSES = [
   {
     id:'ps11_1',
     text:'To the chief Musician, A Psalm of David. In the Lord put I my trust',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 11:1',
     book:'Psalms',
     category:'attack',
@@ -2905,6 +3526,9 @@ const BIBLE_VERSES = [
   {
     id:'ps89_47',
     text:'Remember how short my time is: wherefore hast thou made all men in vain?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 89:47',
     book:'Psalms',
     category:'attack',
@@ -2919,6 +3543,9 @@ const BIBLE_VERSES = [
   {
     id:'ps126_6',
     text:'He that goeth forth and weepeth, bearing precious seed, shall doubtless come again with rejoicing',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 126:6',
     book:'Psalms',
     category:'attack',
@@ -2933,6 +3560,9 @@ const BIBLE_VERSES = [
   {
     id:'ps89_2',
     text:'For I have said, Mercy shall be built up for ever: thy faithfulness shalt thou',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 89:2',
     book:'Psalms',
     category:'attack',
@@ -2947,6 +3577,9 @@ const BIBLE_VERSES = [
   {
     id:'ps73_6',
     text:'Therefore pride compasseth them about as a chain; violence covereth them as a garment',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 73:6',
     book:'Psalms',
     category:'attack',
@@ -2961,6 +3594,9 @@ const BIBLE_VERSES = [
   {
     id:'ps42_11',
     text:'Why art thou cast down, O my soul? and why art thou disquieted within me?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 42:11',
     book:'Psalms',
     category:'attack',
@@ -2975,6 +3611,9 @@ const BIBLE_VERSES = [
   {
     id:'ps110_4',
     text:'The Lord hath sworn, and will not repent, Thou art a priest for ever after',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 110:4',
     book:'Psalms',
     category:'attack',
@@ -2989,6 +3628,9 @@ const BIBLE_VERSES = [
   {
     id:'ps73_9',
     text:'They set their mouth against the heavens, and their tongue walketh through the earth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 73:9',
     book:'Psalms',
     category:'attack',
@@ -3003,6 +3645,9 @@ const BIBLE_VERSES = [
   {
     id:'ps141_3',
     text:'Set a watch, O Lord, before my mouth; keep the door of my lips',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 141:3',
     book:'Psalms',
     category:'attack',
@@ -3017,6 +3662,9 @@ const BIBLE_VERSES = [
   {
     id:'ps72_19',
     text:'And blessed be his glorious name for ever: and let the whole earth be filled',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 72:19',
     book:'Psalms',
     category:'attack',
@@ -3031,6 +3679,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_21',
     text:'Oh that men would praise the Lord for his goodness, and for his wonderful works',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:21',
     book:'Psalms',
     category:'attack',
@@ -3045,6 +3696,9 @@ const BIBLE_VERSES = [
   {
     id:'ps135_19',
     text:'Bless the Lord, O house of Israel: bless the Lord, O house of Aaron',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 135:19',
     book:'Psalms',
     category:'attack',
@@ -3059,6 +3713,9 @@ const BIBLE_VERSES = [
   {
     id:'ps10_13',
     text:'Wherefore doth the wicked contemn God? he hath said in his heart, Thou wilt not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 10:13',
     book:'Psalms',
     category:'attack',
@@ -3073,6 +3730,9 @@ const BIBLE_VERSES = [
   {
     id:'ps109_20',
     text:'Let this be the reward of mine adversaries from the Lord, and of them that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 109:20',
     book:'Psalms',
     category:'attack',
@@ -3087,6 +3747,9 @@ const BIBLE_VERSES = [
   {
     id:'ps138_5',
     text:'Yea, they shall sing in the ways of the Lord: for great is the glory',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 138:5',
     book:'Psalms',
     category:'attack',
@@ -3101,6 +3764,9 @@ const BIBLE_VERSES = [
   {
     id:'ps143_6',
     text:'I stretch forth my hands unto thee: my soul thirsteth after thee, as a thirsty',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 143:6',
     book:'Psalms',
     category:'attack',
@@ -3115,6 +3781,9 @@ const BIBLE_VERSES = [
   {
     id:'rev2_22',
     text:'Behold, I will cast her into a bed, and them that commit adultery with her',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 2:22',
     book:'Revelation',
     category:'attack',
@@ -3129,6 +3798,9 @@ const BIBLE_VERSES = [
   {
     id:'rev19_13',
     text:'And he was clothed with a vesture dipped in blood: and his name is called',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 19:13',
     book:'Revelation',
     category:'attack',
@@ -3143,6 +3815,9 @@ const BIBLE_VERSES = [
   {
     id:'rev9_9',
     text:'And they had breastplates, as it were breastplates of iron; and the sound of their',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 9:9',
     book:'Revelation',
     category:'attack',
@@ -3157,6 +3832,9 @@ const BIBLE_VERSES = [
   {
     id:'rev21_23',
     text:'And the city had no need of the sun, neither of the moon, to shine',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 21:23',
     book:'Revelation',
     category:'attack',
@@ -3171,6 +3849,9 @@ const BIBLE_VERSES = [
   {
     id:'rev15_6',
     text:'And the seven angels came out of the temple, having the seven plagues, clothed in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 15:6',
     book:'Revelation',
     category:'attack',
@@ -3185,6 +3866,9 @@ const BIBLE_VERSES = [
   {
     id:'rev14_12',
     text:'Here is the patience of the saints: here are they that keep the commandments of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 14:12',
     book:'Revelation',
     category:'attack',
@@ -3199,6 +3883,9 @@ const BIBLE_VERSES = [
   {
     id:'rev20_14',
     text:'And death and hell were cast into the lake of fire. This is the second',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 20:14',
     book:'Revelation',
     category:'attack',
@@ -3213,6 +3900,9 @@ const BIBLE_VERSES = [
   {
     id:'rev2_5',
     text:'Remember therefore from whence thou art fallen, and repent, and do the first works; or',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 2:5',
     book:'Revelation',
     category:'attack',
@@ -3227,6 +3917,9 @@ const BIBLE_VERSES = [
   {
     id:'rev20_11',
     text:'And I saw a great white throne, and him that sat on it, from whose',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 20:11',
     book:'Revelation',
     category:'attack',
@@ -3241,6 +3934,9 @@ const BIBLE_VERSES = [
   {
     id:'rev18_11',
     text:'And the merchants of the earth shall weep and mourn over her; for no man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 18:11',
     book:'Revelation',
     category:'attack',
@@ -3255,6 +3951,9 @@ const BIBLE_VERSES = [
   {
     id:'rev9_5',
     text:'And to them it was given that they should not kill them, but that they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 9:5',
     book:'Revelation',
     category:'attack',
@@ -3269,6 +3968,9 @@ const BIBLE_VERSES = [
   {
     id:'rev3_1',
     text:'And unto the angel of the church in Sardis write; These things saith he that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 3:1',
     book:'Revelation',
     category:'attack',
@@ -3283,6 +3985,9 @@ const BIBLE_VERSES = [
   {
     id:'rev9_13',
     text:'And the sixth angel sounded, and I heard a voice from the four horns of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 9:13',
     book:'Revelation',
     category:'attack',
@@ -3297,6 +4002,9 @@ const BIBLE_VERSES = [
   {
     id:'rev1_11',
     text:'Saying, I am Alpha and Omega, the first and the last: and, What thou seest',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 1:11',
     book:'Revelation',
     category:'attack',
@@ -3311,6 +4019,9 @@ const BIBLE_VERSES = [
   {
     id:'rev1_4',
     text:'John to the seven churches which are in Asia: Grace be unto you, and peace',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 1:4',
     book:'Revelation',
     category:'attack',
@@ -3325,6 +4036,9 @@ const BIBLE_VERSES = [
   {
     id:'rev19_2',
     text:'For true and righteous are his judgments: for he hath judged the great whore, which',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 19:2',
     book:'Revelation',
     category:'attack',
@@ -3339,6 +4053,9 @@ const BIBLE_VERSES = [
   {
     id:'rev2_13',
     text:'I know thy works, and where thou dwellest, even where Satan’s seat is: and thou',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 2:13',
     book:'Revelation',
     category:'attack',
@@ -3353,6 +4070,9 @@ const BIBLE_VERSES = [
   {
     id:'rev18_6',
     text:'Reward her even as she rewarded you, and double unto her double according to her',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 18:6',
     book:'Revelation',
     category:'attack',
@@ -3367,6 +4087,9 @@ const BIBLE_VERSES = [
   {
     id:'rev2_21',
     text:'And I gave her space to repent of her fornication; and she repented not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 2:21',
     book:'Revelation',
     category:'attack',
@@ -3381,6 +4104,9 @@ const BIBLE_VERSES = [
   {
     id:'rev7_11',
     text:'And all the angels stood round about the throne, and about the elders and the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 7:11',
     book:'Revelation',
     category:'attack',
@@ -3395,6 +4121,9 @@ const BIBLE_VERSES = [
   {
     id:'rev5_4',
     text:'And I wept much, because no man was found worthy to open and to read',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 5:4',
     book:'Revelation',
     category:'attack',
@@ -3409,6 +4138,9 @@ const BIBLE_VERSES = [
   {
     id:'rev20_10',
     text:'And the devil that deceived them was cast into the lake of fire and brimstone',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 20:10',
     book:'Revelation',
     category:'attack',
@@ -3423,6 +4155,9 @@ const BIBLE_VERSES = [
   {
     id:'isa36_11',
     text:'Then said Eliakim and Shebna and Joah unto Rabshakeh, Speak, I pray thee, unto thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 36:11',
     book:'Isaiah',
     category:'attack',
@@ -3437,6 +4172,9 @@ const BIBLE_VERSES = [
   {
     id:'isa66_24',
     text:'And they shall go forth, and look upon the carcases of the men that have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 66:24',
     book:'Isaiah',
     category:'attack',
@@ -3451,6 +4189,9 @@ const BIBLE_VERSES = [
   {
     id:'isa41_21',
     text:'Produce your cause, saith the Lord; bring forth your strong reasons, saith the King of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 41:21',
     book:'Isaiah',
     category:'attack',
@@ -3465,6 +4206,9 @@ const BIBLE_VERSES = [
   {
     id:'isa45_13',
     text:'I have raised him up in righteousness, and I will direct all his ways: he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 45:13',
     book:'Isaiah',
     category:'attack',
@@ -3479,6 +4223,9 @@ const BIBLE_VERSES = [
   {
     id:'isa56_1',
     text:'Thus saith the Lord, Keep ye judgment, and do justice: for my salvation is near',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 56:1',
     book:'Isaiah',
     category:'attack',
@@ -3493,6 +4240,9 @@ const BIBLE_VERSES = [
   {
     id:'isa51_9',
     text:'Awake, awake, put on strength, O arm of the Lord; awake, as in the ancient',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 51:9',
     book:'Isaiah',
     category:'attack',
@@ -3507,6 +4257,9 @@ const BIBLE_VERSES = [
   {
     id:'isa47_2',
     text:'Take the millstones, and grind meal: uncover thy locks, make bare the leg, uncover the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 47:2',
     book:'Isaiah',
     category:'attack',
@@ -3521,6 +4274,9 @@ const BIBLE_VERSES = [
   {
     id:'isa28_17',
     text:'Judgment also will I lay to the line, and righteousness to the plummet: and the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 28:17',
     book:'Isaiah',
     category:'attack',
@@ -3535,6 +4291,9 @@ const BIBLE_VERSES = [
   {
     id:'isa5_1',
     text:'Now will I sing to my wellbeloved a song of my beloved touching his vineyard',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 5:1',
     book:'Isaiah',
     category:'attack',
@@ -3549,6 +4308,9 @@ const BIBLE_VERSES = [
   {
     id:'isa33_16',
     text:'He shall dwell on high: his place of defence shall be the munitions of rocks',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 33:16',
     book:'Isaiah',
     category:'attack',
@@ -3563,6 +4325,9 @@ const BIBLE_VERSES = [
   {
     id:'isa28_2',
     text:'Behold, the Lord hath a mighty and strong one, which as a tempest of hail',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 28:2',
     book:'Isaiah',
     category:'attack',
@@ -3577,6 +4342,9 @@ const BIBLE_VERSES = [
   {
     id:'isa42_5',
     text:'Thus saith God the Lord, he that created the heavens, and stretched them out; he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 42:5',
     book:'Isaiah',
     category:'attack',
@@ -3591,6 +4359,9 @@ const BIBLE_VERSES = [
   {
     id:'isa44_22',
     text:'I have blotted out, as a thick cloud, thy transgressions, and, as a cloud, thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 44:22',
     book:'Isaiah',
     category:'attack',
@@ -3605,6 +4376,9 @@ const BIBLE_VERSES = [
   {
     id:'isa25_8',
     text:'He will swallow up death in victory; and the Lord God will wipe away tears',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 25:8',
     book:'Isaiah',
     category:'attack',
@@ -3619,6 +4393,9 @@ const BIBLE_VERSES = [
   {
     id:'isa2_17',
     text:'And the loftiness of man shall be bowed down, and the haughtiness of men shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 2:17',
     book:'Isaiah',
     category:'attack',
@@ -3633,6 +4410,9 @@ const BIBLE_VERSES = [
   {
     id:'isa6_3',
     text:'And one cried unto another, and said, Holy, holy, holy, is the Lord of hosts',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 6:3',
     book:'Isaiah',
     category:'attack',
@@ -3647,6 +4427,9 @@ const BIBLE_VERSES = [
   {
     id:'isa5_14',
     text:'Therefore hell hath enlarged herself, and opened her mouth without measure: and their glory, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 5:14',
     book:'Isaiah',
     category:'attack',
@@ -3661,6 +4444,9 @@ const BIBLE_VERSES = [
   {
     id:'isa32_11',
     text:'Tremble, ye women that are at ease; be troubled, ye careless ones: strip you, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 32:11',
     book:'Isaiah',
     category:'attack',
@@ -3675,6 +4461,9 @@ const BIBLE_VERSES = [
   {
     id:'isa9_21',
     text:'Manasseh, Ephraim; and Ephraim, Manasseh: and they together shall be against Judah. For all this',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 9:21',
     book:'Isaiah',
     category:'attack',
@@ -3689,6 +4478,9 @@ const BIBLE_VERSES = [
   {
     id:'isa56_6',
     text:'Also the sons of the stranger, that join themselves to the Lord, to serve him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 56:6',
     book:'Isaiah',
     category:'attack',
@@ -3703,6 +4495,9 @@ const BIBLE_VERSES = [
   {
     id:'isa61_6',
     text:'But ye shall be named the Priests of the Lord: men shall call you the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 61:6',
     book:'Isaiah',
     category:'attack',
@@ -3717,6 +4512,9 @@ const BIBLE_VERSES = [
   {
     id:'isa45_20',
     text:'Assemble yourselves and come; draw near together, ye that are escaped of the nations: they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 45:20',
     book:'Isaiah',
     category:'attack',
@@ -3731,6 +4529,9 @@ const BIBLE_VERSES = [
   {
     id:'isa5_5',
     text:'And now go to; I will tell you what I will do to my vineyard',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 5:5',
     book:'Isaiah',
     category:'attack',
@@ -3745,6 +4546,9 @@ const BIBLE_VERSES = [
   {
     id:'isa15_5',
     text:'My heart shall cry out for Moab; his fugitives shall flee unto Zoar, an heifer',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 15:5',
     book:'Isaiah',
     category:'attack',
@@ -3759,6 +4563,9 @@ const BIBLE_VERSES = [
   {
     id:'isa48_11',
     text:'For mine own sake, even for mine own sake, will I do it: for how',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 48:11',
     book:'Isaiah',
     category:'attack',
@@ -3773,6 +4580,9 @@ const BIBLE_VERSES = [
   {
     id:'isa59_6',
     text:'Their webs shall not become garments, neither shall they cover themselves with their works: their',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 59:6',
     book:'Isaiah',
     category:'attack',
@@ -3787,6 +4597,9 @@ const BIBLE_VERSES = [
   {
     id:'isa10_3',
     text:'And what will ye do in the day of visitation, and in the desolation which',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 10:3',
     book:'Isaiah',
     category:'attack',
@@ -3801,6 +4614,9 @@ const BIBLE_VERSES = [
   {
     id:'isa10_23',
     text:'For the Lord God of hosts shall make a consumption, even determined, in the midst',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 10:23',
     book:'Isaiah',
     category:'attack',
@@ -3815,6 +4631,9 @@ const BIBLE_VERSES = [
   {
     id:'isa53_4',
     text:'Surely he hath borne our griefs, and carried our sorrows: yet we did esteem him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 53:4',
     book:'Isaiah',
     category:'attack',
@@ -3829,6 +4648,9 @@ const BIBLE_VERSES = [
   {
     id:'isa6_11',
     text:'Then said I, Lord, how long? And he answered, Until the cities be wasted without',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 6:11',
     book:'Isaiah',
     category:'attack',
@@ -3843,6 +4665,9 @@ const BIBLE_VERSES = [
   {
     id:'isa59_7',
     text:'Their feet run to evil, and they make haste to shed innocent blood: their thoughts',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 59:7',
     book:'Isaiah',
     category:'attack',
@@ -3857,6 +4682,9 @@ const BIBLE_VERSES = [
   {
     id:'isa13_13',
     text:'Therefore I will shake the heavens, and the earth shall remove out of her place',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 13:13',
     book:'Isaiah',
     category:'attack',
@@ -3871,6 +4699,9 @@ const BIBLE_VERSES = [
   {
     id:'isa37_4',
     text:'It may be the Lord thy God will hear the words of Rabshakeh, whom the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 37:4',
     book:'Isaiah',
     category:'attack',
@@ -3885,6 +4716,9 @@ const BIBLE_VERSES = [
   {
     id:'isa59_16',
     text:'And he saw that there was no man, and wondered that there was no intercessor',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 59:16',
     book:'Isaiah',
     category:'attack',
@@ -3899,6 +4733,9 @@ const BIBLE_VERSES = [
   {
     id:'isa44_28',
     text:'That saith of Cyrus, He is my shepherd, and shall perform all my pleasure: even',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 44:28',
     book:'Isaiah',
     category:'attack',
@@ -3913,6 +4750,9 @@ const BIBLE_VERSES = [
   {
     id:'isa9_18',
     text:'For wickedness burneth as the fire: it shall devour the briers and thorns, and shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 9:18',
     book:'Isaiah',
     category:'attack',
@@ -3927,6 +4767,9 @@ const BIBLE_VERSES = [
   {
     id:'isa28_23',
     text:'Give ye ear, and hear my voice; hearken, and hear my speech',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 28:23',
     book:'Isaiah',
     category:'attack',
@@ -3941,6 +4784,9 @@ const BIBLE_VERSES = [
   {
     id:'isa27_1',
     text:'In that day the Lord with his sore and great and strong sword shall punish',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 27:1',
     book:'Isaiah',
     category:'attack',
@@ -3955,6 +4801,9 @@ const BIBLE_VERSES = [
   {
     id:'isa21_15',
     text:'For they fled from the swords, from the drawn sword, and from the bent bow',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 21:15',
     book:'Isaiah',
     category:'attack',
@@ -3969,6 +4818,9 @@ const BIBLE_VERSES = [
   {
     id:'isa3_4',
     text:'And I will give children to be their princes, and babes shall rule over them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 3:4',
     book:'Isaiah',
     category:'attack',
@@ -3983,6 +4835,9 @@ const BIBLE_VERSES = [
   {
     id:'isa66_6',
     text:'A voice of noise from the city, a voice from the temple, a voice of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 66:6',
     book:'Isaiah',
     category:'attack',
@@ -3997,6 +4852,9 @@ const BIBLE_VERSES = [
   {
     id:'isa3_2',
     text:'The mighty man, and the man of war, the judge, and the prophet, and the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 3:2',
     book:'Isaiah',
     category:'attack',
@@ -4011,6 +4869,9 @@ const BIBLE_VERSES = [
   {
     id:'isa42_8',
     text:'I am the Lord: that is my name: and my glory will I not give',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 42:8',
     book:'Isaiah',
     category:'attack',
@@ -4025,6 +4886,9 @@ const BIBLE_VERSES = [
   {
     id:'isa7_8',
     text:'For the head of Syria is Damascus, and the head of Damascus is Rezin; and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 7:8',
     book:'Isaiah',
     category:'attack',
@@ -4039,6 +4903,9 @@ const BIBLE_VERSES = [
   {
     id:'isa51_16',
     text:'And I have put my words in thy mouth, and I have covered thee in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 51:16',
     book:'Isaiah',
     category:'attack',
@@ -4053,6 +4920,9 @@ const BIBLE_VERSES = [
   {
     id:'isa36_17',
     text:'Until I come and take you away to a land like your own land, a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 36:17',
     book:'Isaiah',
     category:'attack',
@@ -4067,6 +4937,9 @@ const BIBLE_VERSES = [
   {
     id:'isa26_1',
     text:'In that day shall this song be sung in the land of Judah; We have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 26:1',
     book:'Isaiah',
     category:'attack',
@@ -4081,6 +4954,9 @@ const BIBLE_VERSES = [
   {
     id:'isa43_28',
     text:'Therefore I have profaned the princes of the sanctuary, and have given Jacob to the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 43:28',
     book:'Isaiah',
     category:'attack',
@@ -4095,6 +4971,9 @@ const BIBLE_VERSES = [
   {
     id:'isa14_14',
     text:'I will ascend above the heights of the clouds; I will be like the most',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 14:14',
     book:'Isaiah',
     category:'attack',
@@ -4109,6 +4988,9 @@ const BIBLE_VERSES = [
   {
     id:'isa45_10',
     text:'Woe unto him that saith unto his father, What begettest thou? or to the woman',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 45:10',
     book:'Isaiah',
     category:'attack',
@@ -4123,6 +5005,9 @@ const BIBLE_VERSES = [
   {
     id:'isa27_9',
     text:'By this therefore shall the iniquity of Jacob be purged; and this is all the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 27:9',
     book:'Isaiah',
     category:'attack',
@@ -4137,6 +5022,9 @@ const BIBLE_VERSES = [
   {
     id:'isa66_15',
     text:'For, behold, the Lord will come with fire, and with his chariots like a whirlwind',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 66:15',
     book:'Isaiah',
     category:'attack',
@@ -4151,6 +5039,9 @@ const BIBLE_VERSES = [
   {
     id:'isa64_11',
     text:'Our holy and our beautiful house, where our fathers praised thee, is burned up with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 64:11',
     book:'Isaiah',
     category:'attack',
@@ -4165,6 +5056,9 @@ const BIBLE_VERSES = [
   {
     id:'isa17_6',
     text:'Yet gleaning grapes shall be left in it, as the shaking of an olive tree',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 17:6',
     book:'Isaiah',
     category:'attack',
@@ -4179,6 +5073,9 @@ const BIBLE_VERSES = [
   {
     id:'isa1_14',
     text:'Your new moons and your appointed feasts my soul hateth: they are a trouble unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 1:14',
     book:'Isaiah',
     category:'attack',
@@ -4193,6 +5090,9 @@ const BIBLE_VERSES = [
   {
     id:'isa13_17',
     text:'Behold, I will stir up the Medes against them, which shall not regard silver; and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 13:17',
     book:'Isaiah',
     category:'attack',
@@ -4207,6 +5107,9 @@ const BIBLE_VERSES = [
   {
     id:'isa30_24',
     text:'The oxen likewise and the young asses that ear the ground shall eat clean provender',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 30:24',
     book:'Isaiah',
     category:'attack',
@@ -4221,6 +5124,9 @@ const BIBLE_VERSES = [
   {
     id:'isa14_23',
     text:'I will also make it a possession for the bittern, and pools of water: and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 14:23',
     book:'Isaiah',
     category:'attack',
@@ -4235,6 +5141,9 @@ const BIBLE_VERSES = [
   {
     id:'isa1_19',
     text:'If ye be willing and obedient, ye shall eat the good of the land',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 1:19',
     book:'Isaiah',
     category:'attack',
@@ -4249,6 +5158,9 @@ const BIBLE_VERSES = [
   {
     id:'isa40_24',
     text:'Yea, they shall not be planted; yea, they shall not be sown: yea, their stock',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 40:24',
     book:'Isaiah',
     category:'attack',
@@ -4263,6 +5175,9 @@ const BIBLE_VERSES = [
   {
     id:'isa44_23',
     text:'Sing, O ye heavens; for the Lord hath done it: shout, ye lower parts of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 44:23',
     book:'Isaiah',
     category:'attack',
@@ -4277,6 +5192,9 @@ const BIBLE_VERSES = [
   {
     id:'isa25_3',
     text:'Therefore shall the strong people glorify thee, the city of the terrible nations shall fear',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 25:3',
     book:'Isaiah',
     category:'attack',
@@ -4291,6 +5209,9 @@ const BIBLE_VERSES = [
   {
     id:'isa30_29',
     text:'Ye shall have a song, as in the night when a holy solemnity is kept',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 30:29',
     book:'Isaiah',
     category:'attack',
@@ -4305,6 +5226,9 @@ const BIBLE_VERSES = [
   {
     id:'isa14_31',
     text:'Howl, O gate; cry, O city; thou, whole Palestina, art dissolved: for there shall come',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 14:31',
     book:'Isaiah',
     category:'attack',
@@ -4319,6 +5243,9 @@ const BIBLE_VERSES = [
   {
     id:'isa42_2',
     text:'He shall not cry, nor lift up, nor cause his voice to be heard in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 42:2',
     book:'Isaiah',
     category:'attack',
@@ -4333,6 +5260,9 @@ const BIBLE_VERSES = [
   {
     id:'isa19_18',
     text:'In that day shall five cities in the land of Egypt speak the language of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 19:18',
     book:'Isaiah',
     category:'attack',
@@ -4347,6 +5277,9 @@ const BIBLE_VERSES = [
   {
     id:'jer30_10',
     text:'Therefore fear thou not, O my servant Jacob, saith the Lord; neither be dismayed, O',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 30:10',
     book:'Jeremiah',
     category:'attack',
@@ -4361,6 +5294,9 @@ const BIBLE_VERSES = [
   {
     id:'jer34_3',
     text:'And thou shalt not escape out of his hand, but shalt surely be taken, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 34:3',
     book:'Jeremiah',
     category:'attack',
@@ -4375,6 +5311,9 @@ const BIBLE_VERSES = [
   {
     id:'jer51_43',
     text:'Her cities are a desolation, a dry land, and a wilderness, a land wherein no',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 51:43',
     book:'Jeremiah',
     category:'attack',
@@ -4389,6 +5328,9 @@ const BIBLE_VERSES = [
   {
     id:'jer4_16',
     text:'Make ye mention to the nations; behold, publish against Jerusalem, that watchers come from a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 4:16',
     book:'Jeremiah',
     category:'attack',
@@ -4403,6 +5345,9 @@ const BIBLE_VERSES = [
   {
     id:'jer31_36',
     text:'If those ordinances depart from before me, saith the Lord, then the seed of Israel',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 31:36',
     book:'Jeremiah',
     category:'attack',
@@ -4417,6 +5362,9 @@ const BIBLE_VERSES = [
   {
     id:'jer11_18',
     text:'And the Lord hath given me knowledge of it, and I know it: then thou',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 11:18',
     book:'Jeremiah',
     category:'attack',
@@ -4431,6 +5379,9 @@ const BIBLE_VERSES = [
   {
     id:'jer30_5',
     text:'For thus saith the Lord; We have heard a voice of trembling, of fear, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 30:5',
     book:'Jeremiah',
     category:'attack',
@@ -4445,6 +5396,9 @@ const BIBLE_VERSES = [
   {
     id:'jer51_28',
     text:'Prepare against her the nations with the kings of the Medes, the captains thereof, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 51:28',
     book:'Jeremiah',
     category:'attack',
@@ -4459,6 +5413,9 @@ const BIBLE_VERSES = [
   {
     id:'jer33_16',
     text:'In those days shall Judah be saved, and Jerusalem shall dwell safely: and this is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 33:16',
     book:'Jeremiah',
     category:'attack',
@@ -4473,6 +5430,9 @@ const BIBLE_VERSES = [
   {
     id:'jer20_2',
     text:'Then Pashur smote Jeremiah the prophet, and put him in the stocks that were in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 20:2',
     book:'Jeremiah',
     category:'attack',
@@ -4487,6 +5447,9 @@ const BIBLE_VERSES = [
   {
     id:'jer20_15',
     text:'Cursed be the man who brought tidings to my father, saying, A man child is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 20:15',
     book:'Jeremiah',
     category:'attack',
@@ -4501,6 +5464,9 @@ const BIBLE_VERSES = [
   {
     id:'jer52_33',
     text:'And changed his prison garments: and he did continually eat bread before him all the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 52:33',
     book:'Jeremiah',
     category:'attack',
@@ -4515,6 +5481,9 @@ const BIBLE_VERSES = [
   {
     id:'jer20_4',
     text:'For thus saith the Lord, Behold, I will make thee a terror to thyself, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 20:4',
     book:'Jeremiah',
     category:'attack',
@@ -4529,6 +5498,9 @@ const BIBLE_VERSES = [
   {
     id:'jer31_22',
     text:'How long wilt thou go about, O thou backsliding daughter? for the Lord hath created',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 31:22',
     book:'Jeremiah',
     category:'attack',
@@ -4543,6 +5515,9 @@ const BIBLE_VERSES = [
   {
     id:'jer39_11',
     text:'Now Nebuchadrezzar king of Babylon gave charge concerning Jeremiah to Nebuzar–adan the captain of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 39:11',
     book:'Jeremiah',
     category:'attack',
@@ -4557,6 +5532,9 @@ const BIBLE_VERSES = [
   {
     id:'jer50_34',
     text:'Their Redeemer is strong; the Lord of hosts is his name: he shall throughly plead',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 50:34',
     book:'Jeremiah',
     category:'attack',
@@ -4571,6 +5549,9 @@ const BIBLE_VERSES = [
   {
     id:'jer28_12',
     text:'Then the word of the Lord came unto Jeremiah the prophet, after that Hananiah the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 28:12',
     book:'Jeremiah',
     category:'attack',
@@ -4585,6 +5566,9 @@ const BIBLE_VERSES = [
   {
     id:'jer38_3',
     text:'Thus saith the Lord, This city shall surely be given into the hand of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 38:3',
     book:'Jeremiah',
     category:'attack',
@@ -4599,6 +5583,9 @@ const BIBLE_VERSES = [
   {
     id:'jer26_7',
     text:'So the priests and the prophets and all the people heard Jeremiah speaking these words',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 26:7',
     book:'Jeremiah',
     category:'attack',
@@ -4613,6 +5600,9 @@ const BIBLE_VERSES = [
   {
     id:'jer44_29',
     text:'And this shall be a sign unto you, saith the Lord, that I will punish',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 44:29',
     book:'Jeremiah',
     category:'attack',
@@ -4627,6 +5617,9 @@ const BIBLE_VERSES = [
   {
     id:'jer8_22',
     text:'Is there no balm in Gilead; is there no physician there? why then is not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 8:22',
     book:'Jeremiah',
     category:'attack',
@@ -4641,6 +5634,9 @@ const BIBLE_VERSES = [
   {
     id:'jer44_6',
     text:'Wherefore my fury and mine anger was poured forth, and was kindled in the cities',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 44:6',
     book:'Jeremiah',
     category:'attack',
@@ -4655,6 +5651,9 @@ const BIBLE_VERSES = [
   {
     id:'jer14_11',
     text:'Then said the Lord unto me, Pray not for this people for their good',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 14:11',
     book:'Jeremiah',
     category:'attack',
@@ -4669,6 +5668,9 @@ const BIBLE_VERSES = [
   {
     id:'jer51_62',
     text:'Then shalt thou say, O Lord, thou hast spoken against this place, to cut it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 51:62',
     book:'Jeremiah',
     category:'attack',
@@ -4683,6 +5685,9 @@ const BIBLE_VERSES = [
   {
     id:'jer39_7',
     text:'Moreover he put out Zedekiah’s eyes, and bound him with chains, to carry him to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 39:7',
     book:'Jeremiah',
     category:'attack',
@@ -4697,6 +5702,9 @@ const BIBLE_VERSES = [
   {
     id:'jer21_8',
     text:'And unto this people thou shalt say, Thus saith the Lord; Behold, I set before',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 21:8',
     book:'Jeremiah',
     category:'attack',
@@ -4711,6 +5719,9 @@ const BIBLE_VERSES = [
   {
     id:'jer3_4',
     text:'Wilt thou not from this time cry unto me, My father, thou art the guide',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 3:4',
     book:'Jeremiah',
     category:'attack',
@@ -4725,6 +5736,9 @@ const BIBLE_VERSES = [
   {
     id:'jer49_25',
     text:'How is the city of praise not left, the city of my joy!',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 49:25',
     book:'Jeremiah',
     category:'attack',
@@ -4739,6 +5753,9 @@ const BIBLE_VERSES = [
   {
     id:'jer22_12',
     text:'But he shall die in the place whither they have led him captive, and shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 22:12',
     book:'Jeremiah',
     category:'attack',
@@ -4753,6 +5770,9 @@ const BIBLE_VERSES = [
   {
     id:'jer50_15',
     text:'Shout against her round about: she hath given her hand: her foundations are fallen, her',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 50:15',
     book:'Jeremiah',
     category:'attack',
@@ -4767,6 +5787,9 @@ const BIBLE_VERSES = [
   {
     id:'jer46_14',
     text:'Declare ye in Egypt, and publish in Migdol, and publish in Noph and in Tahpanhes',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 46:14',
     book:'Jeremiah',
     category:'attack',
@@ -4781,6 +5804,9 @@ const BIBLE_VERSES = [
   {
     id:'jer51_39',
     text:'In their heat I will make their feasts, and I will make them drunken, that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 51:39',
     book:'Jeremiah',
     category:'attack',
@@ -4795,6 +5821,9 @@ const BIBLE_VERSES = [
   {
     id:'jer9_5',
     text:'And they will deceive every one his neighbour, and will not speak the truth: they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 9:5',
     book:'Jeremiah',
     category:'attack',
@@ -4809,6 +5838,9 @@ const BIBLE_VERSES = [
   {
     id:'jer13_26',
     text:'Therefore will I discover thy skirts upon thy face, that thy shame may appear',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 13:26',
     book:'Jeremiah',
     category:'attack',
@@ -4823,6 +5855,9 @@ const BIBLE_VERSES = [
   {
     id:'jer25_35',
     text:'And the shepherds shall have no way to flee, nor the principal of the flock',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 25:35',
     book:'Jeremiah',
     category:'attack',
@@ -4837,6 +5872,9 @@ const BIBLE_VERSES = [
   {
     id:'jer36_27',
     text:'Then the word of the Lord came to Jeremiah, after that the king had burned',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 36:27',
     book:'Jeremiah',
     category:'attack',
@@ -4851,6 +5889,9 @@ const BIBLE_VERSES = [
   {
     id:'jer11_2',
     text:'Hear ye the words of this covenant, and speak unto the men of Judah, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 11:2',
     book:'Jeremiah',
     category:'attack',
@@ -4865,6 +5906,9 @@ const BIBLE_VERSES = [
   {
     id:'jer2_22',
     text:'For though thou wash thee with nitre, and take thee much soap, yet thine iniquity',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 2:22',
     book:'Jeremiah',
     category:'attack',
@@ -4879,6 +5923,9 @@ const BIBLE_VERSES = [
   {
     id:'jer40_12',
     text:'Even all the Jews returned out of all places whither they were driven, and came',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 40:12',
     book:'Jeremiah',
     category:'attack',
@@ -4893,6 +5940,9 @@ const BIBLE_VERSES = [
   {
     id:'jer25_33',
     text:'And the slain of the Lord shall be at that day from one end of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 25:33',
     book:'Jeremiah',
     category:'attack',
@@ -4907,6 +5957,9 @@ const BIBLE_VERSES = [
   {
     id:'jer39_15',
     text:'Now the word of the Lord came unto Jeremiah, while he was shut up in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 39:15',
     book:'Jeremiah',
     category:'attack',
@@ -4921,6 +5974,9 @@ const BIBLE_VERSES = [
   {
     id:'jer50_42',
     text:'They shall hold the bow and the lance: they are cruel, and will not shew',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 50:42',
     book:'Jeremiah',
     category:'attack',
@@ -4935,6 +5991,9 @@ const BIBLE_VERSES = [
   {
     id:'jer19_13',
     text:'And the houses of Jerusalem, and the houses of the kings of Judah, shall be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 19:13',
     book:'Jeremiah',
     category:'attack',
@@ -4949,6 +6008,9 @@ const BIBLE_VERSES = [
   {
     id:'jer13_23',
     text:'Can the Ethiopian change his skin, or the leopard his spots? then may ye also',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 13:23',
     book:'Jeremiah',
     category:'attack',
@@ -4963,6 +6025,9 @@ const BIBLE_VERSES = [
   {
     id:'jer3_11',
     text:'And the Lord said unto me, The backsliding Israel hath justified herself more than treacherous',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 3:11',
     book:'Jeremiah',
     category:'attack',
@@ -4977,6 +6042,9 @@ const BIBLE_VERSES = [
   {
     id:'jer26_11',
     text:'Then spake the priests and the prophets unto the princes and to all the people',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 26:11',
     book:'Jeremiah',
     category:'attack',
@@ -4991,6 +6059,9 @@ const BIBLE_VERSES = [
   {
     id:'jer51_1',
     text:'Thus saith the Lord; Behold, I will raise up against Babylon, and against them that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 51:1',
     book:'Jeremiah',
     category:'attack',
@@ -5005,6 +6076,9 @@ const BIBLE_VERSES = [
   {
     id:'jer4_22',
     text:'For my people is foolish, they have not known me; they are sottish children, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 4:22',
     book:'Jeremiah',
     category:'attack',
@@ -5019,6 +6093,9 @@ const BIBLE_VERSES = [
   {
     id:'jer49_1',
     text:'Concerning the Ammonites, thus saith the Lord; Hath Israel no sons? hath he no heir?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 49:1',
     book:'Jeremiah',
     category:'attack',
@@ -5033,6 +6110,9 @@ const BIBLE_VERSES = [
   {
     id:'jer36_11',
     text:'When Michaiah the son of Gemariah, the son of Shaphan, had heard out of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 36:11',
     book:'Jeremiah',
     category:'attack',
@@ -5047,6 +6127,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_11',
     text:'Put on the whole armour of God, that ye may be able to stand against',
+    nkjv: "Put on the whole armor of God, that you may be able to stand against the wiles of the devil.",
+    niv: "Put on the full armor of God, so that you can take your stand against the devil's schemes.",
+    nlt: "Put on all of God's armor so that you will be able to stand firm against all strategies of the devil.",
     reference:'Ephesians 6:11',
     book:'Ephesians',
     category:'defense',
@@ -5061,6 +6144,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_13',
     text:'Wherefore take unto you the whole armour of God, that ye may be able to',
+    nkjv: "Therefore take up the whole armor of God, that you may be able to withstand in the evil day, and having done all, to stand.",
+    niv: "Therefore put on the full armor of God, so that when the day of evil comes, you may be able to stand your ground, and after you have done everything, to stand.",
+    nlt: "Therefore, put on every piece of God's armor so you will be able to resist the enemy in the time of evil, and when it is finished, stand firm.",
     reference:'Ephesians 6:13',
     book:'Ephesians',
     category:'defense',
@@ -5075,6 +6161,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_16',
     text:'Above all, taking the shield of faith, wherewith ye shall be able to quench all',
+    nkjv: "above all, taking the shield of faith with which you will be able to quench all the fiery darts of the wicked one.",
+    niv: "In addition to all this, take up the shield of faith, with which you can extinguish all the flaming arrows of the evil one.",
+    nlt: "In addition to all these, hold up the shield of faith to stop the fiery arrows of the devil.",
     reference:'Ephesians 6:16',
     book:'Ephesians',
     category:'defense',
@@ -5089,6 +6178,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_17',
     text:'And take the helmet of salvation, and the sword of the Spirit, which is the',
+    nkjv: "And take the helmet of salvation, and the sword of the Spirit, which is the word of God;",
+    niv: "Take the helmet of salvation and the sword of the Spirit, which is the word of God.",
+    nlt: "Put on salvation as your helmet, and take the sword of the Spirit, which is the word of God.",
     reference:'Ephesians 6:17',
     book:'Ephesians',
     category:'defense',
@@ -5103,6 +6195,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_14',
     text:'Stand therefore, having your loins girt about with truth, and having on the breastplate of',
+    nkjv: "Stand therefore, having girded your waist with truth, having put on the breastplate of righteousness,",
+    niv: "Stand firm then, with the belt of truth buckled around your waist, with the breastplate of righteousness in place,",
+    nlt: "Stand your ground, putting on the belt of truth and the body armor of God's righteousness.",
     reference:'Ephesians 6:14',
     book:'Ephesians',
     category:'defense',
@@ -5117,6 +6212,9 @@ const BIBLE_VERSES = [
   {
     id:'ps91_4',
     text:'He shall cover thee with his feathers, and under his wings shalt thou trust: his',
+    nkjv: "He shall cover you with His feathers, And under His wings you shall take refuge; His truth shall be your shield and buckler.",
+    niv: "He will cover you with his feathers, and under his wings you will find refuge; his faithfulness will be your shield and rampart.",
+    nlt: "He will cover you with his feathers. He will shelter you with his wings. His faithful promises are your armor and protection.",
     reference:'Psalm 91:4',
     book:'Psalms',
     category:'defense',
@@ -5131,6 +6229,9 @@ const BIBLE_VERSES = [
   {
     id:'ps121_1',
     text:'A Song of degrees. I will lift up mine eyes unto the hills, from whence',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 121:1',
     book:'Psalms',
     category:'defense',
@@ -5145,6 +6246,9 @@ const BIBLE_VERSES = [
   {
     id:'ps121_7',
     text:'The Lord shall preserve thee from all evil: he shall preserve thy soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 121:7',
     book:'Psalms',
     category:'defense',
@@ -5159,6 +6263,9 @@ const BIBLE_VERSES = [
   {
     id:'ps23_4',
     text:'Yea, though I walk through the valley of the shadow of death, I will fear',
+    nkjv: "Yea, though I walk through the valley of the shadow of death, I will fear no evil; For You are with me; Your rod and Your staff, they comfort me.",
+    niv: "Even though I walk through the darkest valley, I will fear no evil, for you are with me; your rod and your staff, they comfort me.",
+    nlt: "Even when I walk through the darkest valley, I will not be afraid, for you are close beside me. Your rod and your staff protect and comfort me.",
     reference:'Psalm 23:4',
     book:'Psalms',
     category:'defense',
@@ -5173,6 +6280,9 @@ const BIBLE_VERSES = [
   {
     id:'ps34_7',
     text:'The angel of the Lord encampeth round about them that fear him, and delivereth them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 34:7',
     book:'Psalms',
     category:'defense',
@@ -5187,6 +6297,9 @@ const BIBLE_VERSES = [
   {
     id:'ps103_3',
     text:'Who forgiveth all thine iniquities; who healeth all thy diseases',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 103:3',
     book:'Psalms',
     category:'defense',
@@ -5201,6 +6314,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_20',
     text:'He sent his word, and healed them, and delivered them from their destructions',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:20',
     book:'Psalms',
     category:'defense',
@@ -5215,6 +6331,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_10',
     text:'The name of the Lord is a strong tower: the righteous runneth into it, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:10',
     book:'Proverbs',
     category:'defense',
@@ -5229,6 +6348,9 @@ const BIBLE_VERSES = [
   {
     id:'pro2_8',
     text:'He keepeth the paths of judgment, and preserveth the way of his saints',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 2:8',
     book:'Proverbs',
     category:'defense',
@@ -5243,6 +6365,9 @@ const BIBLE_VERSES = [
   {
     id:'pro3_24',
     text:'When thou liest down, thou shalt not be afraid: yea, thou shalt lie down, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 3:24',
     book:'Proverbs',
     category:'defense',
@@ -5257,6 +6382,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe5_7',
     text:'Casting all your care upon him; for he careth for you',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 5:7',
     book:'1 Peter',
     category:'defense',
@@ -5271,6 +6399,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe5_8',
     text:'Be sober, be vigilant; because your adversary the devil, as a roaring lion, walketh about',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 5:8',
     book:'1 Peter',
     category:'defense',
@@ -5285,6 +6416,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe1_5',
     text:'Who are kept by the power of God through faith unto salvation ready to be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 1:5',
     book:'1 Peter',
     category:'defense',
@@ -5299,6 +6433,9 @@ const BIBLE_VERSES = [
   {
     id:'2pe3_9',
     text:'The Lord is not slack concerning his promise, as some men count slackness; but is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Peter 3:9',
     book:'2 Peter',
     category:'defense',
@@ -5313,6 +6450,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti6_12',
     text:'Fight the good fight of faith, lay hold on eternal life, whereunto thou art also',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 6:12',
     book:'1 Timothy',
     category:'defense',
@@ -5327,6 +6467,9 @@ const BIBLE_VERSES = [
   {
     id:'2ti2_3',
     text:'Thou therefore endure hardness, as a good soldier of Jesus Christ',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Timothy 2:3',
     book:'2 Timothy',
     category:'defense',
@@ -5341,6 +6484,9 @@ const BIBLE_VERSES = [
   {
     id:'jam1_12',
     text:'Blessed is the man that endureth temptation: for when he is tried, he shall receive',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 1:12',
     book:'James',
     category:'defense',
@@ -5355,6 +6501,9 @@ const BIBLE_VERSES = [
   {
     id:'heb6_18',
     text:'That by two immutable things, in which it was impossible for God to lie, we',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 6:18',
     book:'Hebrews',
     category:'defense',
@@ -5369,6 +6518,9 @@ const BIBLE_VERSES = [
   {
     id:'heb4_16',
     text:'Let us therefore come boldly unto the throne of grace, that we may obtain mercy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 4:16',
     book:'Hebrews',
     category:'defense',
@@ -5383,6 +6535,9 @@ const BIBLE_VERSES = [
   {
     id:'heb13_5',
     text:'Let your conversation be without covetousness; and be content with such things as ye have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 13:5',
     book:'Hebrews',
     category:'defense',
@@ -5397,6 +6552,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_33',
     text:'Who through faith subdued kingdoms, wrought righteousness, obtained promises, stopped the mouths of lions',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:33',
     book:'Hebrews',
     category:'defense',
@@ -5411,6 +6569,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_19',
     text:'And to know the love of Christ, which passeth knowledge, that ye might be filled',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:19',
     book:'Ephesians',
     category:'defense',
@@ -5425,6 +6586,9 @@ const BIBLE_VERSES = [
   {
     id:'eph2_15',
     text:'Having abolished in his flesh the enmity, even the law of commandments contained in ordinances',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 2:15',
     book:'Ephesians',
     category:'defense',
@@ -5439,6 +6603,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_12',
     text:'For the perfecting of the saints, for the work of the ministry, for the edifying',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:12',
     book:'Ephesians',
     category:'defense',
@@ -5453,6 +6620,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_13',
     text:'In whom ye also trusted, after that ye heard the word of truth, the gospel',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:13',
     book:'Ephesians',
     category:'defense',
@@ -5467,6 +6637,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_11',
     text:'And he gave some, apostles; and some, prophets; and some, evangelists; and some, pastors and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:11',
     book:'Ephesians',
     category:'defense',
@@ -5481,6 +6654,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_20',
     text:'But ye have not so learned Christ',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:20',
     book:'Ephesians',
     category:'defense',
@@ -5495,6 +6671,9 @@ const BIBLE_VERSES = [
   {
     id:'eph2_2',
     text:'Wherein in time past ye walked according to the course of this world, according to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 2:2',
     book:'Ephesians',
     category:'defense',
@@ -5509,6 +6688,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_22',
     text:'Wives, submit yourselves unto your own husbands, as unto the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:22',
     book:'Ephesians',
     category:'defense',
@@ -5523,6 +6705,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_24',
     text:'And that ye put on the new man, which after God is created in righteousness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:24',
     book:'Ephesians',
     category:'defense',
@@ -5537,6 +6722,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_9',
     text:'And, ye masters, do the same things unto them, forbearing threatening: knowing that your Master',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:9',
     book:'Ephesians',
     category:'defense',
@@ -5551,6 +6739,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_7',
     text:'But unto every one of us is given grace according to the measure of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:7',
     book:'Ephesians',
     category:'defense',
@@ -5565,6 +6756,9 @@ const BIBLE_VERSES = [
   {
     id:'eph2_22',
     text:'In whom ye also are builded together for an habitation of God through the Spirit',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 2:22',
     book:'Ephesians',
     category:'defense',
@@ -5579,6 +6773,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_23',
     text:'And be renewed in the spirit of your mind',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:23',
     book:'Ephesians',
     category:'defense',
@@ -5593,6 +6790,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_19',
     text:'Speaking to yourselves in psalms and hymns and spiritual songs, singing and making melody in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:19',
     book:'Ephesians',
     category:'defense',
@@ -5607,6 +6807,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_5',
     text:'One Lord, one faith, one baptism',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:5',
     book:'Ephesians',
     category:'defense',
@@ -5621,6 +6824,9 @@ const BIBLE_VERSES = [
   {
     id:'eph2_21',
     text:'In whom all the building fitly framed together groweth unto an holy temple in the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 2:21',
     book:'Ephesians',
     category:'defense',
@@ -5635,6 +6841,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_25',
     text:'Husbands, love your wives, even as Christ also loved the church, and gave himself for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:25',
     book:'Ephesians',
     category:'defense',
@@ -5649,6 +6858,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_17',
     text:'That Christ may dwell in your hearts by faith; that ye, being rooted and grounded',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:17',
     book:'Ephesians',
     category:'defense',
@@ -5663,6 +6875,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_7',
     text:'In whom we have redemption through his blood, the forgiveness of sins, according to the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:7',
     book:'Ephesians',
     category:'defense',
@@ -5677,6 +6892,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_22',
     text:'Whom I have sent unto you for the same purpose, that ye might know our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:22',
     book:'Ephesians',
     category:'defense',
@@ -5691,6 +6909,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_9',
     text:'Having made known unto us the mystery of his will, according to his good pleasure',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:9',
     book:'Ephesians',
     category:'defense',
@@ -5705,6 +6926,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_15',
     text:'But speaking the truth in love, may grow up into him in all things, which',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:15',
     book:'Ephesians',
     category:'defense',
@@ -5719,6 +6943,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_7',
     text:'Whereof I was made a minister, according to the gift of the grace of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:7',
     book:'Ephesians',
     category:'defense',
@@ -5733,6 +6960,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_7',
     text:'With good will doing service, as to the Lord, and not to men',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:7',
     book:'Ephesians',
     category:'defense',
@@ -5747,6 +6977,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_14',
     text:'That we henceforth be no more children, tossed to and fro, and carried about with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:14',
     book:'Ephesians',
     category:'defense',
@@ -5761,6 +6994,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_21',
     text:'But that ye also may know my affairs, and how I do, Tychicus, a beloved',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:21',
     book:'Ephesians',
     category:'defense',
@@ -5775,6 +7011,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_15',
     text:'And your feet shod with the preparation of the gospel of peace',
+    nkjv: "and having shod your feet with the preparation of the gospel of peace;",
+    niv: "and with your feet fitted with the readiness that comes from the gospel of peace.",
+    nlt: "For shoes, put on the peace that comes from the Good News so that you will be fully prepared.",
     reference:'Ephesians 6:15',
     book:'Ephesians',
     category:'defense',
@@ -5789,6 +7028,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_2',
     text:'If ye have heard of the dispensation of the grace of God which is given',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:2',
     book:'Ephesians',
     category:'defense',
@@ -5803,6 +7045,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_1',
     text:'Children, obey your parents in the Lord: for this is right',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:1',
     book:'Ephesians',
     category:'defense',
@@ -5817,6 +7062,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_28',
     text:'So ought men to love their wives as their own bodies. He that loveth his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:28',
     book:'Ephesians',
     category:'defense',
@@ -5831,6 +7079,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_17',
     text:'This I say therefore, and testify in the Lord, that ye henceforth walk not as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:17',
     book:'Ephesians',
     category:'defense',
@@ -5845,6 +7096,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_6',
     text:'One God and Father of all, who is above all, and through all, and in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:6',
     book:'Ephesians',
     category:'defense',
@@ -5859,6 +7113,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_6',
     text:'That the Gentiles should be fellowheirs, and of the same body, and partakers of his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:6',
     book:'Ephesians',
     category:'defense',
@@ -5873,6 +7130,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_1',
     text:'Paul, an apostle of Jesus Christ by the will of God, to the saints which',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:1',
     book:'Ephesians',
     category:'defense',
@@ -5887,6 +7147,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_19',
     text:'And what is the exceeding greatness of his power to us-ward who believe, according to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:19',
     book:'Ephesians',
     category:'defense',
@@ -5901,6 +7164,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_3',
     text:'Blessed be the God and Father of our Lord Jesus Christ, who hath blessed us',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:3',
     book:'Ephesians',
     category:'defense',
@@ -5915,6 +7181,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_6',
     text:'Not with eyeservice, as menpleasers; but as the servants of Christ, doing the will of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:6',
     book:'Ephesians',
     category:'defense',
@@ -5929,6 +7198,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_12',
     text:'For it is a shame even to speak of those things which are done of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:12',
     book:'Ephesians',
     category:'defense',
@@ -5943,6 +7215,9 @@ const BIBLE_VERSES = [
   {
     id:'eph2_1',
     text:'And you hath he quickened, who were dead in trespasses and sins',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 2:1',
     book:'Ephesians',
     category:'defense',
@@ -5957,6 +7232,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_8',
     text:'Unto me, who am less than the least of all saints, is this grace given',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:8',
     book:'Ephesians',
     category:'defense',
@@ -5971,6 +7249,9 @@ const BIBLE_VERSES = [
   {
     id:'ps74_20',
     text:'Have respect unto the covenant: for the dark places of the earth are full of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 74:20',
     book:'Psalms',
     category:'defense',
@@ -5985,6 +7266,9 @@ const BIBLE_VERSES = [
   {
     id:'ps120_4',
     text:'Sharp arrows of the mighty, with coals of juniper',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 120:4',
     book:'Psalms',
     category:'defense',
@@ -5999,6 +7283,9 @@ const BIBLE_VERSES = [
   {
     id:'ps108_5',
     text:'Be thou exalted, O God, above the heavens: and thy glory above all the earth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 108:5',
     book:'Psalms',
     category:'defense',
@@ -6013,6 +7300,9 @@ const BIBLE_VERSES = [
   {
     id:'ps19_11',
     text:'Moreover by them is thy servant warned: and in keeping of them there is great',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 19:11',
     book:'Psalms',
     category:'defense',
@@ -6027,6 +7317,9 @@ const BIBLE_VERSES = [
   {
     id:'ps16_1',
     text:'Michtam of David. Preserve me, O God: for in thee do I put my trust',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 16:1',
     book:'Psalms',
     category:'defense',
@@ -6041,6 +7334,9 @@ const BIBLE_VERSES = [
   {
     id:'ps104_35',
     text:'Let the sinners be consumed out of the earth, and let the wicked be no',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 104:35',
     book:'Psalms',
     category:'defense',
@@ -6055,6 +7351,9 @@ const BIBLE_VERSES = [
   {
     id:'ps2_2',
     text:'The kings of the earth set themselves, and the rulers take counsel together, against the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 2:2',
     book:'Psalms',
     category:'defense',
@@ -6069,6 +7368,9 @@ const BIBLE_VERSES = [
   {
     id:'ps143_11',
     text:'Quicken me, O Lord, for thy name’s sake: for thy righteousness’ sake bring my soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 143:11',
     book:'Psalms',
     category:'defense',
@@ -6083,6 +7385,9 @@ const BIBLE_VERSES = [
   {
     id:'ps91_5',
     text:'Thou shalt not be afraid for the terror by night; nor for the arrow that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 91:5',
     book:'Psalms',
     category:'defense',
@@ -6097,6 +7402,9 @@ const BIBLE_VERSES = [
   {
     id:'ps78_16',
     text:'He brought streams also out of the rock, and caused waters to run down like',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 78:16',
     book:'Psalms',
     category:'defense',
@@ -6111,6 +7419,9 @@ const BIBLE_VERSES = [
   {
     id:'ps2_4',
     text:'He that sitteth in the heavens shall laugh: the Lord shall have them in derision',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 2:4',
     book:'Psalms',
     category:'defense',
@@ -6125,6 +7436,9 @@ const BIBLE_VERSES = [
   {
     id:'ps77_9',
     text:'Hath God forgotten to be gracious? hath he in anger shut up his tender mercies?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 77:9',
     book:'Psalms',
     category:'defense',
@@ -6139,6 +7453,9 @@ const BIBLE_VERSES = [
   {
     id:'ps7_7',
     text:'So shall the congregation of the people compass thee about: for their sakes therefore return',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 7:7',
     book:'Psalms',
     category:'defense',
@@ -6153,6 +7470,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_123',
     text:'Mine eyes fail for thy salvation, and for the word of thy righteousness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:123',
     book:'Psalms',
     category:'defense',
@@ -6167,6 +7487,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_18',
     text:'The Lord knoweth the days of the upright: and their inheritance shall be for ever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:18',
     book:'Psalms',
     category:'defense',
@@ -6181,6 +7504,9 @@ const BIBLE_VERSES = [
   {
     id:'ps81_12',
     text:'So I gave them up unto their own hearts’ lust: and they walked in their',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 81:12',
     book:'Psalms',
     category:'defense',
@@ -6195,6 +7521,9 @@ const BIBLE_VERSES = [
   {
     id:'ps29_6',
     text:'He maketh them also to skip like a calf; Lebanon and Sirion like a young',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 29:6',
     book:'Psalms',
     category:'defense',
@@ -6209,6 +7538,9 @@ const BIBLE_VERSES = [
   {
     id:'ps95_10',
     text:'Forty years long was I grieved with this generation, and said, It is a people',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 95:10',
     book:'Psalms',
     category:'defense',
@@ -6223,6 +7555,9 @@ const BIBLE_VERSES = [
   {
     id:'ps90_14',
     text:'O satisfy us early with thy mercy; that we may rejoice and be glad all',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 90:14',
     book:'Psalms',
     category:'defense',
@@ -6237,6 +7572,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_8',
     text:'The earth shook, the heavens also dropped at the presence of God: even Sinai itself',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:8',
     book:'Psalms',
     category:'defense',
@@ -6251,6 +7589,9 @@ const BIBLE_VERSES = [
   {
     id:'ps41_5',
     text:'Mine enemies speak evil of me, When shall he die, and his name perish?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 41:5',
     book:'Psalms',
     category:'defense',
@@ -6265,6 +7606,9 @@ const BIBLE_VERSES = [
   {
     id:'ps85_1',
     text:'To the chief Musician, A Psalm for the sons of Korah. Lord, thou hast been',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 85:1',
     book:'Psalms',
     category:'defense',
@@ -6279,6 +7623,9 @@ const BIBLE_VERSES = [
   {
     id:'ps21_7',
     text:'For the king trusteth in the Lord, and through the mercy of the most High',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 21:7',
     book:'Psalms',
     category:'defense',
@@ -6293,6 +7640,9 @@ const BIBLE_VERSES = [
   {
     id:'ps102_19',
     text:'For he hath looked down from the height of his sanctuary; from heaven did the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 102:19',
     book:'Psalms',
     category:'defense',
@@ -6307,6 +7657,9 @@ const BIBLE_VERSES = [
   {
     id:'ps44_17',
     text:'All this is come upon us; yet have we not forgotten thee, neither have we',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 44:17',
     book:'Psalms',
     category:'defense',
@@ -6321,6 +7674,9 @@ const BIBLE_VERSES = [
   {
     id:'ps94_23',
     text:'And he shall bring upon them their own iniquity, and shall cut them off in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 94:23',
     book:'Psalms',
     category:'defense',
@@ -6335,6 +7691,9 @@ const BIBLE_VERSES = [
   {
     id:'ps21_13',
     text:'Be thou exalted, Lord, in thine own strength: so will we sing and praise thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 21:13',
     book:'Psalms',
     category:'defense',
@@ -6349,6 +7708,9 @@ const BIBLE_VERSES = [
   {
     id:'ps132_8',
     text:'Arise, O Lord, into thy rest; thou, and the ark of thy strength',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 132:8',
     book:'Psalms',
     category:'defense',
@@ -6363,6 +7725,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_13',
     text:'The Lord shall laugh at him: for he seeth that his day is coming',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:13',
     book:'Psalms',
     category:'defense',
@@ -6377,6 +7742,9 @@ const BIBLE_VERSES = [
   {
     id:'ps114_7',
     text:'Tremble, thou earth, at the presence of the Lord, at the presence of the God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 114:7',
     book:'Psalms',
     category:'defense',
@@ -6391,6 +7759,9 @@ const BIBLE_VERSES = [
   {
     id:'ps118_18',
     text:'The Lord hath chastened me sore: but he hath not given me over unto death',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 118:18',
     book:'Psalms',
     category:'defense',
@@ -6405,6 +7776,9 @@ const BIBLE_VERSES = [
   {
     id:'ps76_5',
     text:'The stouthearted are spoiled, they have slept their sleep: and none of the men of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 76:5',
     book:'Psalms',
     category:'defense',
@@ -6419,6 +7793,9 @@ const BIBLE_VERSES = [
   {
     id:'ps44_23',
     text:'Awake, why sleepest thou, O Lord? arise, cast us not off for ever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 44:23',
     book:'Psalms',
     category:'defense',
@@ -6433,6 +7810,9 @@ const BIBLE_VERSES = [
   {
     id:'ps55_21',
     text:'The words of his mouth were smoother than butter, but war was in his heart',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 55:21',
     book:'Psalms',
     category:'defense',
@@ -6447,6 +7827,9 @@ const BIBLE_VERSES = [
   {
     id:'ps18_31',
     text:'For who is God save the Lord? or who is a rock save our God?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 18:31',
     book:'Psalms',
     category:'defense',
@@ -6461,6 +7844,9 @@ const BIBLE_VERSES = [
   {
     id:'ps109_28',
     text:'Let them curse, but bless thou: when they arise, let them be ashamed; but let',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 109:28',
     book:'Psalms',
     category:'defense',
@@ -6475,6 +7861,9 @@ const BIBLE_VERSES = [
   {
     id:'ps53_5',
     text:'There were they in great fear, where no fear was: for God hath scattered the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 53:5',
     book:'Psalms',
     category:'defense',
@@ -6489,6 +7878,9 @@ const BIBLE_VERSES = [
   {
     id:'ps86_1',
     text:'A Prayer of David. Bow down thine ear, O Lord, hear me: for I am',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 86:1',
     book:'Psalms',
     category:'defense',
@@ -6503,6 +7895,9 @@ const BIBLE_VERSES = [
   {
     id:'ps58_3',
     text:'The wicked are estranged from the womb: they go astray as soon as they be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 58:3',
     book:'Psalms',
     category:'defense',
@@ -6517,6 +7912,9 @@ const BIBLE_VERSES = [
   {
     id:'ps78_26',
     text:'He caused an east wind to blow in the heaven: and by his power he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 78:26',
     book:'Psalms',
     category:'defense',
@@ -6531,6 +7929,9 @@ const BIBLE_VERSES = [
   {
     id:'ps26_4',
     text:'I have not sat with vain persons, neither will I go in with dissemblers',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 26:4',
     book:'Psalms',
     category:'defense',
@@ -6545,6 +7946,9 @@ const BIBLE_VERSES = [
   {
     id:'ps80_5',
     text:'Thou feedest them with the bread of tears; and givest them tears to drink in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 80:5',
     book:'Psalms',
     category:'defense',
@@ -6559,6 +7963,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_134',
     text:'Deliver me from the oppression of man: so will I keep thy precepts',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:134',
     book:'Psalms',
     category:'defense',
@@ -6573,6 +7980,9 @@ const BIBLE_VERSES = [
   {
     id:'ps60_9',
     text:'Who will bring me into the strong city? who will lead me into Edom?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 60:9',
     book:'Psalms',
     category:'defense',
@@ -6587,6 +7997,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_12',
     text:'Blessed art thou, O Lord: teach me thy statutes',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:12',
     book:'Psalms',
     category:'defense',
@@ -6601,6 +8014,9 @@ const BIBLE_VERSES = [
   {
     id:'ps78_32',
     text:'For all this they sinned still, and believed not for his wondrous works',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 78:32',
     book:'Psalms',
     category:'defense',
@@ -6615,6 +8031,9 @@ const BIBLE_VERSES = [
   {
     id:'ps38_5',
     text:'My wounds stink and are corrupt because of my foolishness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 38:5',
     book:'Psalms',
     category:'defense',
@@ -6629,6 +8048,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_47',
     text:'And I will delight myself in thy commandments, which I have loved',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:47',
     book:'Psalms',
     category:'defense',
@@ -6643,6 +8065,9 @@ const BIBLE_VERSES = [
   {
     id:'ps78_44',
     text:'And had turned their rivers into blood; and their floods, that they could not drink',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 78:44',
     book:'Psalms',
     category:'defense',
@@ -6657,6 +8082,9 @@ const BIBLE_VERSES = [
   {
     id:'ps132_14',
     text:'This is my rest for ever: here will I dwell; for I have desired it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 132:14',
     book:'Psalms',
     category:'defense',
@@ -6671,6 +8099,9 @@ const BIBLE_VERSES = [
   {
     id:'ps87_4',
     text:'I will make mention of Rahab and Babylon to them that know me: behold Philistia',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 87:4',
     book:'Psalms',
     category:'defense',
@@ -6685,6 +8116,9 @@ const BIBLE_VERSES = [
   {
     id:'ps73_17',
     text:'Until I went into the sanctuary of God; then understood I their end',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 73:17',
     book:'Psalms',
     category:'defense',
@@ -6699,6 +8133,9 @@ const BIBLE_VERSES = [
   {
     id:'ps81_16',
     text:'He should have fed them also with the finest of the wheat: and with honey',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 81:16',
     book:'Psalms',
     category:'defense',
@@ -6713,6 +8150,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_6',
     text:'And he shall bring forth thy righteousness as the light, and thy judgment as the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:6',
     book:'Psalms',
     category:'defense',
@@ -6727,6 +8167,9 @@ const BIBLE_VERSES = [
   {
     id:'ps68_21',
     text:'But God shall wound the head of his enemies, and the hairy scalp of such',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 68:21',
     book:'Psalms',
     category:'defense',
@@ -6741,6 +8184,9 @@ const BIBLE_VERSES = [
   {
     id:'ps33_11',
     text:'The counsel of the Lord standeth for ever, the thoughts of his heart to all',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 33:11',
     book:'Psalms',
     category:'defense',
@@ -6755,6 +8201,9 @@ const BIBLE_VERSES = [
   {
     id:'ps44_9',
     text:'But thou hast cast off, and put us to shame; and goest not forth with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 44:9',
     book:'Psalms',
     category:'defense',
@@ -6769,6 +8218,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_133',
     text:'Order my steps in thy word: and let not any iniquity have dominion over me',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:133',
     book:'Psalms',
     category:'defense',
@@ -6783,6 +8235,9 @@ const BIBLE_VERSES = [
   {
     id:'ps144_9',
     text:'I will sing a new song unto thee, O God: upon a psaltery and an',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 144:9',
     book:'Psalms',
     category:'defense',
@@ -6797,6 +8252,9 @@ const BIBLE_VERSES = [
   {
     id:'ps58_9',
     text:'Before your pots can feel the thorns, he shall take them away as with a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 58:9',
     book:'Psalms',
     category:'defense',
@@ -6811,6 +8269,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_166',
     text:'Lord, I have hoped for thy salvation, and done thy commandments',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:166',
     book:'Psalms',
     category:'defense',
@@ -6825,6 +8286,9 @@ const BIBLE_VERSES = [
   {
     id:'ps107_33',
     text:'He turneth rivers into a wilderness, and the watersprings into dry ground',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 107:33',
     book:'Psalms',
     category:'defense',
@@ -6839,6 +8303,9 @@ const BIBLE_VERSES = [
   {
     id:'ps138_2',
     text:'I will worship toward thy holy temple, and praise thy name for thy lovingkindness and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 138:2',
     book:'Psalms',
     category:'defense',
@@ -6853,6 +8320,9 @@ const BIBLE_VERSES = [
   {
     id:'ps54_5',
     text:'He shall reward evil unto mine enemies: cut them off in thy truth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 54:5',
     book:'Psalms',
     category:'defense',
@@ -6867,6 +8337,9 @@ const BIBLE_VERSES = [
   {
     id:'ps94_9',
     text:'He that planted the ear, shall he not hear? he that formed the eye, shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 94:9',
     book:'Psalms',
     category:'defense',
@@ -6881,6 +8354,9 @@ const BIBLE_VERSES = [
   {
     id:'ps38_12',
     text:'They also that seek after my life lay snares for me: and they that seek',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 38:12',
     book:'Psalms',
     category:'defense',
@@ -6895,6 +8371,9 @@ const BIBLE_VERSES = [
   {
     id:'ps11_5',
     text:'The Lord trieth the righteous: but the wicked and him that loveth violence his soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 11:5',
     book:'Psalms',
     category:'defense',
@@ -6909,6 +8388,9 @@ const BIBLE_VERSES = [
   {
     id:'ps82_5',
     text:'They know not, neither will they understand; they walk on in darkness: all the foundations',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 82:5',
     book:'Psalms',
     category:'defense',
@@ -6923,6 +8405,9 @@ const BIBLE_VERSES = [
   {
     id:'ps82_7',
     text:'But ye shall die like men, and fall like one of the princes',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 82:7',
     book:'Psalms',
     category:'defense',
@@ -6937,6 +8422,9 @@ const BIBLE_VERSES = [
   {
     id:'ps43_3',
     text:'O send out thy light and thy truth: let them lead me; let them bring',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 43:3',
     book:'Psalms',
     category:'defense',
@@ -6951,6 +8439,9 @@ const BIBLE_VERSES = [
   {
     id:'ps76_11',
     text:'Vow, and pay unto the Lord your God: let all that be round about him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 76:11',
     book:'Psalms',
     category:'defense',
@@ -6965,6 +8456,9 @@ const BIBLE_VERSES = [
   {
     id:'ps32_8',
     text:'I will instruct thee and teach thee in the way which thou shalt go: I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 32:8',
     book:'Psalms',
     category:'defense',
@@ -6979,6 +8473,9 @@ const BIBLE_VERSES = [
   {
     id:'ps138_4',
     text:'All the kings of the earth shall praise thee, O Lord, when they hear the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 138:4',
     book:'Psalms',
     category:'defense',
@@ -6993,6 +8490,9 @@ const BIBLE_VERSES = [
   {
     id:'ps113_7',
     text:'He raiseth up the poor out of the dust, and lifteth the needy out of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 113:7',
     book:'Psalms',
     category:'defense',
@@ -7007,6 +8507,9 @@ const BIBLE_VERSES = [
   {
     id:'ps140_10',
     text:'Let burning coals fall upon them: let them be cast into the fire; into deep',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 140:10',
     book:'Psalms',
     category:'defense',
@@ -7021,6 +8524,9 @@ const BIBLE_VERSES = [
   {
     id:'ps78_11',
     text:'And forgat his works, and his wonders that he had shewed them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 78:11',
     book:'Psalms',
     category:'defense',
@@ -7035,6 +8541,9 @@ const BIBLE_VERSES = [
   {
     id:'ps25_12',
     text:'What man is he that feareth the Lord? him shall he teach in the way',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 25:12',
     book:'Psalms',
     category:'defense',
@@ -7049,6 +8558,9 @@ const BIBLE_VERSES = [
   {
     id:'ps24_7',
     text:'Lift up your heads, O ye gates; and be ye lift up, ye everlasting doors',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 24:7',
     book:'Psalms',
     category:'defense',
@@ -7063,6 +8575,9 @@ const BIBLE_VERSES = [
   {
     id:'ps37_7',
     text:'Rest in the Lord, and wait patiently for him: fret not thyself because of him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 37:7',
     book:'Psalms',
     category:'defense',
@@ -7077,6 +8592,9 @@ const BIBLE_VERSES = [
   {
     id:'ps86_5',
     text:'For thou, Lord, art good, and ready to forgive; and plenteous in mercy unto all',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 86:5',
     book:'Psalms',
     category:'defense',
@@ -7091,6 +8609,9 @@ const BIBLE_VERSES = [
   {
     id:'pro21_20',
     text:'There is treasure to be desired and oil in the dwelling of the wise; but',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 21:20',
     book:'Proverbs',
     category:'defense',
@@ -7105,6 +8626,9 @@ const BIBLE_VERSES = [
   {
     id:'pro11_3',
     text:'The integrity of the upright shall guide them: but the perverseness of transgressors shall destroy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 11:3',
     book:'Proverbs',
     category:'defense',
@@ -7119,6 +8643,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_36',
     text:'But he that sinneth against me wrongeth his own soul: all they that hate me',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:36',
     book:'Proverbs',
     category:'defense',
@@ -7133,6 +8660,9 @@ const BIBLE_VERSES = [
   {
     id:'pro11_25',
     text:'The liberal soul shall be made fat: and he that watereth shall be watered also',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 11:25',
     book:'Proverbs',
     category:'defense',
@@ -7147,6 +8677,9 @@ const BIBLE_VERSES = [
   {
     id:'pro31_13',
     text:'She seeketh wool, and flax, and worketh willingly with her hands',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 31:13',
     book:'Proverbs',
     category:'defense',
@@ -7161,6 +8694,9 @@ const BIBLE_VERSES = [
   {
     id:'pro24_29',
     text:'Say not, I will do so to him as he hath done to me: I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 24:29',
     book:'Proverbs',
     category:'defense',
@@ -7175,6 +8711,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_8',
     text:'Better is a little with righteousness than great revenues without right',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:8',
     book:'Proverbs',
     category:'defense',
@@ -7189,6 +8728,9 @@ const BIBLE_VERSES = [
   {
     id:'pro7_16',
     text:'I have decked my bed with coverings of tapestry, with carved works, with fine linen',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 7:16',
     book:'Proverbs',
     category:'defense',
@@ -7203,6 +8745,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_12',
     text:'A naughty person, a wicked man, walketh with a froward mouth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:12',
     book:'Proverbs',
     category:'defense',
@@ -7217,6 +8762,9 @@ const BIBLE_VERSES = [
   {
     id:'pro25_2',
     text:'It is the glory of God to conceal a thing: but the honour of kings',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 25:2',
     book:'Proverbs',
     category:'defense',
@@ -7231,6 +8779,9 @@ const BIBLE_VERSES = [
   {
     id:'pro19_24',
     text:'A slothful man hideth his hand in his bosom, and will not so much as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 19:24',
     book:'Proverbs',
     category:'defense',
@@ -7245,6 +8796,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_28',
     text:'The hope of the righteous shall be gladness: but the expectation of the wicked shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:28',
     book:'Proverbs',
     category:'defense',
@@ -7259,6 +8813,9 @@ const BIBLE_VERSES = [
   {
     id:'pro22_19',
     text:'That thy trust may be in the Lord, I have made known to thee this',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 22:19',
     book:'Proverbs',
     category:'defense',
@@ -7273,6 +8830,9 @@ const BIBLE_VERSES = [
   {
     id:'pro5_21',
     text:'For the ways of man are before the eyes of the Lord, and he pondereth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 5:21',
     book:'Proverbs',
     category:'defense',
@@ -7287,6 +8847,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_17',
     text:'Better is a dinner of herbs where love is, than a stalled ox and hatred',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:17',
     book:'Proverbs',
     category:'defense',
@@ -7301,6 +8864,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_35',
     text:'For whoso findeth me findeth life, and shall obtain favour of the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:35',
     book:'Proverbs',
     category:'defense',
@@ -7315,6 +8881,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_15',
     text:'The rod and reproof give wisdom: but a child left to himself bringeth his mother',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:15',
     book:'Proverbs',
     category:'defense',
@@ -7329,6 +8898,9 @@ const BIBLE_VERSES = [
   {
     id:'pro25_26',
     text:'A righteous man falling down before the wicked is as a troubled fountain, and a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 25:26',
     book:'Proverbs',
     category:'defense',
@@ -7343,6 +8915,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_12',
     text:'Hatred stirreth up strifes: but love covereth all sins',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:12',
     book:'Proverbs',
     category:'defense',
@@ -7357,6 +8932,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_29',
     text:'So he that goeth in to his neighbour’s wife; whosoever toucheth her shall not be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:29',
     book:'Proverbs',
     category:'defense',
@@ -7371,6 +8949,9 @@ const BIBLE_VERSES = [
   {
     id:'pro1_32',
     text:'For the turning away of the simple shall slay them, and the prosperity of fools',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 1:32',
     book:'Proverbs',
     category:'defense',
@@ -7385,6 +8966,9 @@ const BIBLE_VERSES = [
   {
     id:'pro23_24',
     text:'The father of the righteous shall greatly rejoice: and he that begetteth a wise child',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 23:24',
     book:'Proverbs',
     category:'defense',
@@ -7399,6 +8983,9 @@ const BIBLE_VERSES = [
   {
     id:'pro1_22',
     text:'How long, ye simple ones, will ye love simplicity? and the scorners delight in their',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 1:22',
     book:'Proverbs',
     category:'defense',
@@ -7413,6 +9000,9 @@ const BIBLE_VERSES = [
   {
     id:'pro5_5',
     text:'Her feet go down to death; her steps take hold on hell',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 5:5',
     book:'Proverbs',
     category:'defense',
@@ -7427,6 +9017,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_23',
     text:'The poor useth intreaties; but the rich answereth roughly',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:23',
     book:'Proverbs',
     category:'defense',
@@ -7441,6 +9034,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_7',
     text:'A fool’s mouth is his destruction, and his lips are the snare of his soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:7',
     book:'Proverbs',
     category:'defense',
@@ -7455,6 +9051,9 @@ const BIBLE_VERSES = [
   {
     id:'pro3_21',
     text:'My son, let not them depart from thine eyes: keep sound wisdom and discretion',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 3:21',
     book:'Proverbs',
     category:'defense',
@@ -7469,6 +9068,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_15',
     text:'A continual dropping in a very rainy day and a contentious woman are alike',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:15',
     book:'Proverbs',
     category:'defense',
@@ -7483,6 +9085,9 @@ const BIBLE_VERSES = [
   {
     id:'pro7_15',
     text:'Therefore came I forth to meet thee, diligently to seek thy face, and I have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 7:15',
     book:'Proverbs',
     category:'defense',
@@ -7497,6 +9102,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_15',
     text:'By me kings reign, and princes decree justice',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:15',
     book:'Proverbs',
     category:'defense',
@@ -7511,6 +9119,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_3',
     text:'He that keepeth his mouth keepeth his life: but he that openeth wide his lips',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:3',
     book:'Proverbs',
     category:'defense',
@@ -7525,6 +9136,9 @@ const BIBLE_VERSES = [
   {
     id:'pro30_24',
     text:'There be four things which are little upon the earth, but they are exceeding wise',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 30:24',
     book:'Proverbs',
     category:'defense',
@@ -7539,6 +9153,9 @@ const BIBLE_VERSES = [
   {
     id:'pro3_11',
     text:'My son, despise not the chastening of the Lord; neither be weary of his correction',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 3:11',
     book:'Proverbs',
     category:'defense',
@@ -7553,6 +9170,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_11',
     text:'Hell and destruction are before the Lord: how much more then the hearts of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:11',
     book:'Proverbs',
     category:'defense',
@@ -7567,6 +9187,9 @@ const BIBLE_VERSES = [
   {
     id:'pro12_9',
     text:'He that is despised, and hath a servant, is better than he that honoureth himself',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 12:9',
     book:'Proverbs',
     category:'defense',
@@ -7581,6 +9204,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_17',
     text:'A wicked messenger falleth into mischief: but a faithful ambassador is health',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:17',
     book:'Proverbs',
     category:'defense',
@@ -7595,6 +9221,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_5',
     text:'A man that flattereth his neighbour spreadeth a net for his feet',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:5',
     book:'Proverbs',
     category:'defense',
@@ -7609,6 +9238,9 @@ const BIBLE_VERSES = [
   {
     id:'pro26_15',
     text:'The slothful hideth his hand in his bosom; it grieveth him to bring it again',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 26:15',
     book:'Proverbs',
     category:'defense',
@@ -7623,6 +9255,9 @@ const BIBLE_VERSES = [
   {
     id:'pro9_14',
     text:'For she sitteth at the door of her house, on a seat in the high',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 9:14',
     book:'Proverbs',
     category:'defense',
@@ -7637,6 +9272,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_15',
     text:'The rich man’s wealth is his strong city: the destruction of the poor is their',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:15',
     book:'Proverbs',
     category:'defense',
@@ -7651,6 +9289,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe3_15',
     text:'But sanctify the Lord God in your hearts: and be ready always to give an',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 3:15',
     book:'1 Peter',
     category:'defense',
@@ -7665,6 +9306,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe4_16',
     text:'Yet if any man suffer as a Christian, let him not be ashamed; but let',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 4:16',
     book:'1 Peter',
     category:'defense',
@@ -7679,6 +9323,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe1_19',
     text:'But with the precious blood of Christ, as of a lamb without blemish and without',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 1:19',
     book:'1 Peter',
     category:'defense',
@@ -7693,6 +9340,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe2_1',
     text:'Wherefore laying aside all malice, and all guile, and hypocrisies, and envies, and all evil',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 2:1',
     book:'1 Peter',
     category:'defense',
@@ -7707,6 +9357,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe2_19',
     text:'For this is thankworthy, if a man for conscience toward God endure grief, suffering wrongfully',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 2:19',
     book:'1 Peter',
     category:'defense',
@@ -7721,6 +9374,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe2_7',
     text:'Unto you therefore which believe he is precious: but unto them which be disobedient, the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 2:7',
     book:'1 Peter',
     category:'defense',
@@ -7735,6 +9391,9 @@ const BIBLE_VERSES = [
   {
     id:'2pe3_2',
     text:'That ye may be mindful of the words which were spoken before by the holy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Peter 3:2',
     book:'2 Peter',
     category:'defense',
@@ -7749,6 +9408,9 @@ const BIBLE_VERSES = [
   {
     id:'2pe2_13',
     text:'And shall receive the reward of unrighteousness, as they that count it pleasure to riot',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Peter 2:13',
     book:'2 Peter',
     category:'defense',
@@ -7763,6 +9425,9 @@ const BIBLE_VERSES = [
   {
     id:'2pe2_15',
     text:'Which have forsaken the right way, and are gone astray, following the way of Balaam',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Peter 2:15',
     book:'2 Peter',
     category:'defense',
@@ -7777,6 +9442,9 @@ const BIBLE_VERSES = [
   {
     id:'2pe1_17',
     text:'For he received from God the Father honour and glory, when there came such a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Peter 1:17',
     book:'2 Peter',
     category:'defense',
@@ -7791,6 +9459,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti5_13',
     text:'And withal they learn to be idle, wandering about from house to house; and not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 5:13',
     book:'1 Timothy',
     category:'defense',
@@ -7805,6 +9476,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti6_8',
     text:'And having food and raiment let us be therewith content',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 6:8',
     book:'1 Timothy',
     category:'defense',
@@ -7819,6 +9493,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti3_2',
     text:'A bishop then must be blameless, the husband of one wife, vigilant, sober, of good',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 3:2',
     book:'1 Timothy',
     category:'defense',
@@ -7833,6 +9510,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti6_1',
     text:'Let as many servants as are under the yoke count their own masters worthy of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 6:1',
     book:'1 Timothy',
     category:'defense',
@@ -7847,6 +9527,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti1_5',
     text:'Now the end of the commandment is charity out of a pure heart, and of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 1:5',
     book:'1 Timothy',
     category:'defense',
@@ -7861,6 +9544,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti3_3',
     text:'Not given to wine, no striker, not greedy of filthy lucre; but patient, not a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 3:3',
     book:'1 Timothy',
     category:'defense',
@@ -7875,6 +9561,9 @@ const BIBLE_VERSES = [
   {
     id:'2ti3_4',
     text:'Traitors, heady, highminded, lovers of pleasures more than lovers of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Timothy 3:4',
     book:'2 Timothy',
     category:'defense',
@@ -7889,6 +9578,9 @@ const BIBLE_VERSES = [
   {
     id:'2ti2_21',
     text:'If a man therefore purge himself from these, he shall be a vessel unto honour',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Timothy 2:21',
     book:'2 Timothy',
     category:'defense',
@@ -7903,6 +9595,9 @@ const BIBLE_VERSES = [
   {
     id:'2ti3_17',
     text:'That the man of God may be perfect, throughly furnished unto all good works',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Timothy 3:17',
     book:'2 Timothy',
     category:'defense',
@@ -7917,6 +9612,9 @@ const BIBLE_VERSES = [
   {
     id:'2ti4_13',
     text:'The cloke that I left at Troas with Carpus, when thou comest, bring with thee',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Timothy 4:13',
     book:'2 Timothy',
     category:'defense',
@@ -7931,6 +9629,9 @@ const BIBLE_VERSES = [
   {
     id:'jam1_26',
     text:'If any man among you seem to be religious, and bridleth not his tongue, but',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 1:26',
     book:'James',
     category:'defense',
@@ -7945,6 +9646,9 @@ const BIBLE_VERSES = [
   {
     id:'jam5_10',
     text:'Take, my brethren, the prophets, who have spoken in the name of the Lord, for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 5:10',
     book:'James',
     category:'defense',
@@ -7959,6 +9663,9 @@ const BIBLE_VERSES = [
   {
     id:'jam4_5',
     text:'Do ye think that the scripture saith in vain, The spirit that dwelleth in us',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 4:5',
     book:'James',
     category:'defense',
@@ -7973,6 +9680,9 @@ const BIBLE_VERSES = [
   {
     id:'jam4_2',
     text:'Ye lust, and have not: ye kill, and desire to have, and cannot obtain: ye',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 4:2',
     book:'James',
     category:'defense',
@@ -7987,6 +9697,9 @@ const BIBLE_VERSES = [
   {
     id:'pro3_5',
     text:'Trust in the Lord with all thine heart; and lean not unto thine own understanding',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 3:5',
     book:'Proverbs',
     category:'buff',
@@ -8001,6 +9714,9 @@ const BIBLE_VERSES = [
   {
     id:'pro1_7',
     text:'The fear of the Lord is the beginning of knowledge: but fools despise wisdom and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 1:7',
     book:'Proverbs',
     category:'buff',
@@ -8015,6 +9731,9 @@ const BIBLE_VERSES = [
   {
     id:'pro2_6',
     text:'For the Lord giveth wisdom: out of his mouth cometh knowledge and understanding',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 2:6',
     book:'Proverbs',
     category:'buff',
@@ -8029,6 +9748,9 @@ const BIBLE_VERSES = [
   {
     id:'pro4_7',
     text:'Wisdom is the principal thing; therefore get wisdom: and with all thy getting get understanding',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 4:7',
     book:'Proverbs',
     category:'buff',
@@ -8043,6 +9765,9 @@ const BIBLE_VERSES = [
   {
     id:'pro9_10',
     text:'The fear of the Lord is the beginning of wisdom: and the knowledge of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 9:10',
     book:'Proverbs',
     category:'buff',
@@ -8057,6 +9782,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_3',
     text:'Commit thy works unto the Lord, and thy thoughts shall be established',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:3',
     book:'Proverbs',
     category:'buff',
@@ -8071,6 +9799,9 @@ const BIBLE_VERSES = [
   {
     id:'phi4_13',
     text:'I can do all things through Christ which strengtheneth me',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 4:13',
     book:'Philippians',
     category:'buff',
@@ -8085,6 +9816,9 @@ const BIBLE_VERSES = [
   {
     id:'phi4_7',
     text:'And the peace of God, which passeth all understanding, shall keep your hearts and minds',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 4:7',
     book:'Philippians',
     category:'buff',
@@ -8099,6 +9833,9 @@ const BIBLE_VERSES = [
   {
     id:'phi4_19',
     text:'But my God shall supply all your need according to his riches in glory by',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 4:19',
     book:'Philippians',
     category:'buff',
@@ -8113,6 +9850,9 @@ const BIBLE_VERSES = [
   {
     id:'rom12_2',
     text:'And be not conformed to this world: but be ye transformed by the renewing of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 12:2',
     book:'Romans',
     category:'buff',
@@ -8127,6 +9867,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_28',
     text:'And we know that all things work together for good to them that love God',
+    nkjv: "And we know that all things work together for good to those who love God, to those who are the called according to His purpose.",
+    niv: "And we know that in all things God works for the good of those who love him, who have been called according to his purpose.",
+    nlt: "And we know that God causes everything to work together for the good of those who love God and are called according to his purpose for them.",
     reference:'Romans 8:28',
     book:'Romans',
     category:'buff',
@@ -8141,6 +9884,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_13',
     text:'Now the God of hope fill you with all joy and peace in believing, that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:13',
     book:'Romans',
     category:'buff',
@@ -8155,6 +9901,9 @@ const BIBLE_VERSES = [
   {
     id:'rom5_5',
     text:'And hope maketh not ashamed; because the love of God is shed abroad in our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 5:5',
     book:'Romans',
     category:'buff',
@@ -8169,6 +9918,9 @@ const BIBLE_VERSES = [
   {
     id:'1co16_13',
     text:'Watch ye, stand fast in the faith, quit you like men, be strong',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 16:13',
     book:'1 Corinthians',
     category:'buff',
@@ -8183,6 +9935,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_9',
     text:'And he said unto me, My grace is sufficient for thee: for my strength is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:9',
     book:'2 Corinthians',
     category:'buff',
@@ -8197,6 +9952,9 @@ const BIBLE_VERSES = [
   {
     id:'2co3_17',
     text:'Now the Lord is that Spirit: and where the Spirit of the Lord is, there',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 3:17',
     book:'2 Corinthians',
     category:'buff',
@@ -8211,6 +9969,9 @@ const BIBLE_VERSES = [
   {
     id:'gal5_22',
     text:'But the fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith',
+    nkjv: "But the fruit of the Spirit is love, joy, peace, longsuffering, kindness, goodness, faithfulness,",
+    niv: "But the fruit of the Spirit is love, joy, peace, forbearance, kindness, goodness, faithfulness,",
+    nlt: "But the Holy Spirit produces this kind of fruit in our lives: love, joy, peace, patience, kindness, goodness, faithfulness,",
     reference:'Galatians 5:22',
     book:'Galatians',
     category:'buff',
@@ -8225,6 +9986,9 @@ const BIBLE_VERSES = [
   {
     id:'gal2_20',
     text:'I am crucified with Christ: nevertheless I live; yet not I, but Christ liveth in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Galatians 2:20',
     book:'Galatians',
     category:'buff',
@@ -8239,6 +10003,9 @@ const BIBLE_VERSES = [
   {
     id:'col3_16',
     text:'Let the word of Christ dwell in you richly in all wisdom; teaching and admonishing',
+    nkjv: "Let the word of Christ dwell in you richly in all wisdom, teaching and admonishing one another in psalms and hymns and spiritual songs, singing with grace in your hearts to the Lord.",
+    niv: "Let the message of Christ dwell among you richly as you teach and admonish one another with all wisdom through psalms, hymns, and songs from the Spirit, singing to God with gratitude in your hearts.",
+    nlt: "Let the message about Christ, in all its richness, fill your lives. Teach and counsel each other with all the wisdom he gives. Sing psalms and hymns and spiritual songs to God with thankful hearts.",
     reference:'Colossians 3:16',
     book:'Colossians',
     category:'buff',
@@ -8253,6 +10020,9 @@ const BIBLE_VERSES = [
   {
     id:'col2_10',
     text:'And ye are complete in him, which is the head of all principality and power',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Colossians 2:10',
     book:'Colossians',
     category:'buff',
@@ -8267,6 +10037,9 @@ const BIBLE_VERSES = [
   {
     id:'1th5_16',
     text:'Rejoice evermore',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Thessalonians 5:16',
     book:'1 Thessalonians',
     category:'buff',
@@ -8281,6 +10054,9 @@ const BIBLE_VERSES = [
   {
     id:'1th5_18',
     text:'In every thing give thanks: for this is the will of God in Christ Jesus',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Thessalonians 5:18',
     book:'1 Thessalonians',
     category:'buff',
@@ -8295,6 +10071,9 @@ const BIBLE_VERSES = [
   {
     id:'ps119_105',
     text:'נ NUN. Thy word is a lamp unto my feet, and a light unto my',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 119:105',
     book:'Psalms',
     category:'buff',
@@ -8309,6 +10088,9 @@ const BIBLE_VERSES = [
   {
     id:'ps1_1',
     text:'Blessed is the man that walketh not in the counsel of the ungodly, nor standeth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 1:1',
     book:'Psalms',
     category:'buff',
@@ -8323,6 +10105,9 @@ const BIBLE_VERSES = [
   {
     id:'ps16_11',
     text:'Thou wilt shew me the path of life: in thy presence is fulness of joy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Psalm 16:11',
     book:'Psalms',
     category:'buff',
@@ -8337,6 +10122,9 @@ const BIBLE_VERSES = [
   {
     id:'pro23_6',
     text:'Eat thou not the bread of him that hath an evil eye, neither desire thou',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 23:6',
     book:'Proverbs',
     category:'buff',
@@ -8351,6 +10139,9 @@ const BIBLE_VERSES = [
   {
     id:'pro19_20',
     text:'Hear counsel, and receive instruction, that thou mayest be wise in thy latter end',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 19:20',
     book:'Proverbs',
     category:'buff',
@@ -8365,6 +10156,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_1',
     text:'My son, if thou be surety for thy friend, if thou hast stricken thy hand',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:1',
     book:'Proverbs',
     category:'buff',
@@ -8379,6 +10173,9 @@ const BIBLE_VERSES = [
   {
     id:'pro19_22',
     text:'The desire of a man is his kindness: and a poor man is better than',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 19:22',
     book:'Proverbs',
     category:'buff',
@@ -8393,6 +10190,9 @@ const BIBLE_VERSES = [
   {
     id:'pro11_16',
     text:'A gracious woman retaineth honour: and strong men retain riches',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 11:16',
     book:'Proverbs',
     category:'buff',
@@ -8407,6 +10207,9 @@ const BIBLE_VERSES = [
   {
     id:'pro19_4',
     text:'Wealth maketh many friends; but the poor is separated from his neighbour',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 19:4',
     book:'Proverbs',
     category:'buff',
@@ -8421,6 +10224,9 @@ const BIBLE_VERSES = [
   {
     id:'pro21_22',
     text:'A wise man scaleth the city of the mighty, and casteth down the strength of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 21:22',
     book:'Proverbs',
     category:'buff',
@@ -8435,6 +10241,9 @@ const BIBLE_VERSES = [
   {
     id:'pro5_16',
     text:'Let thy fountains be dispersed abroad, and rivers of waters in the streets',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 5:16',
     book:'Proverbs',
     category:'buff',
@@ -8449,6 +10258,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_27',
     text:'Can a man take fire in his bosom, and his clothes not be burned?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:27',
     book:'Proverbs',
     category:'buff',
@@ -8463,6 +10275,9 @@ const BIBLE_VERSES = [
   {
     id:'pro17_27',
     text:'He that hath knowledge spareth his words: and a man of understanding is of an',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 17:27',
     book:'Proverbs',
     category:'buff',
@@ -8477,6 +10292,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_14',
     text:'Frowardness is in his heart, he deviseth mischief continually; he soweth discord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:14',
     book:'Proverbs',
     category:'buff',
@@ -8491,6 +10309,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_17',
     text:'Correct thy son, and he shall give thee rest; yea, he shall give delight unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:17',
     book:'Proverbs',
     category:'buff',
@@ -8505,6 +10326,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_21',
     text:'Evil pursueth sinners: but to the righteous good shall be repayed',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:21',
     book:'Proverbs',
     category:'buff',
@@ -8519,6 +10343,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_13',
     text:'Take his garment that is surety for a stranger, and take a pledge of him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:13',
     book:'Proverbs',
     category:'buff',
@@ -8533,6 +10360,9 @@ const BIBLE_VERSES = [
   {
     id:'pro21_26',
     text:'He coveteth greedily all the day long: but the righteous giveth and spareth not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 21:26',
     book:'Proverbs',
     category:'buff',
@@ -8547,6 +10377,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_2',
     text:'She standeth in the top of high places, by the way in the places of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:2',
     book:'Proverbs',
     category:'buff',
@@ -8561,6 +10394,9 @@ const BIBLE_VERSES = [
   {
     id:'pro5_1',
     text:'My son, attend unto my wisdom, and bow thine ear to my understanding',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 5:1',
     book:'Proverbs',
     category:'buff',
@@ -8575,6 +10411,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_9',
     text:'If a wise man contendeth with a foolish man, whether he rage or laugh, there',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:9',
     book:'Proverbs',
     category:'buff',
@@ -8589,6 +10428,9 @@ const BIBLE_VERSES = [
   {
     id:'pro30_26',
     text:'The conies are but a feeble folk, yet make they their houses in the rocks',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 30:26',
     book:'Proverbs',
     category:'buff',
@@ -8603,6 +10445,9 @@ const BIBLE_VERSES = [
   {
     id:'pro14_17',
     text:'He that is soon angry dealeth foolishly: and a man of wicked devices is hated',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 14:17',
     book:'Proverbs',
     category:'buff',
@@ -8617,6 +10462,9 @@ const BIBLE_VERSES = [
   {
     id:'pro1_10',
     text:'My son, if sinners entice thee, consent thou not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 1:10',
     book:'Proverbs',
     category:'buff',
@@ -8631,6 +10479,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_18',
     text:'A wrathful man stirreth up strife: but he that is slow to anger appeaseth strife',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:18',
     book:'Proverbs',
     category:'buff',
@@ -8645,6 +10496,9 @@ const BIBLE_VERSES = [
   {
     id:'pro25_14',
     text:'Whoso boasteth himself of a false gift is like clouds and wind without rain',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 25:14',
     book:'Proverbs',
     category:'buff',
@@ -8659,6 +10513,9 @@ const BIBLE_VERSES = [
   {
     id:'pro28_5',
     text:'Evil men understand not judgment: but they that seek the Lord understand all things',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 28:5',
     book:'Proverbs',
     category:'buff',
@@ -8673,6 +10530,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_24',
     text:'For riches are not for ever: and doth the crown endure to every generation?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:24',
     book:'Proverbs',
     category:'buff',
@@ -8687,6 +10547,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_8',
     text:'The ransom of a man’s life are his riches: but the poor heareth not rebuke',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:8',
     book:'Proverbs',
     category:'buff',
@@ -8701,6 +10564,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_13',
     text:'The fear of the Lord is to hate evil: pride, and arrogancy, and the evil',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:13',
     book:'Proverbs',
     category:'buff',
@@ -8715,6 +10581,9 @@ const BIBLE_VERSES = [
   {
     id:'pro14_14',
     text:'The backslider in heart shall be filled with his own ways: and a good man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 14:14',
     book:'Proverbs',
     category:'buff',
@@ -8729,6 +10598,9 @@ const BIBLE_VERSES = [
   {
     id:'pro28_2',
     text:'For the transgression of a land many are the princes thereof: but by a man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 28:2',
     book:'Proverbs',
     category:'buff',
@@ -8743,6 +10615,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_27',
     text:'An unjust man is an abomination to the just: and he that is upright in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:27',
     book:'Proverbs',
     category:'buff',
@@ -8757,6 +10632,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_18',
     text:'Poverty and shame shall be to him that refuseth instruction: but he that regardeth reproof',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:18',
     book:'Proverbs',
     category:'buff',
@@ -8771,6 +10649,9 @@ const BIBLE_VERSES = [
   {
     id:'pro24_8',
     text:'He that deviseth to do evil shall be called a mischievous person',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 24:8',
     book:'Proverbs',
     category:'buff',
@@ -8785,6 +10666,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_20',
     text:'Hell and destruction are never full; so the eyes of man are never satisfied',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:20',
     book:'Proverbs',
     category:'buff',
@@ -8799,6 +10683,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_15',
     text:'Good understanding giveth favour: but the way of transgressors is hard',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:15',
     book:'Proverbs',
     category:'buff',
@@ -8813,6 +10700,9 @@ const BIBLE_VERSES = [
   {
     id:'pro1_29',
     text:'For that they hated knowledge, and did not choose the fear of the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 1:29',
     book:'Proverbs',
     category:'buff',
@@ -8827,6 +10717,9 @@ const BIBLE_VERSES = [
   {
     id:'pro25_3',
     text:'The heaven for height, and the earth for depth, and the heart of kings is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 25:3',
     book:'Proverbs',
     category:'buff',
@@ -8841,6 +10734,9 @@ const BIBLE_VERSES = [
   {
     id:'pro7_26',
     text:'For she hath cast down many wounded: yea, many strong men have been slain by',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 7:26',
     book:'Proverbs',
     category:'buff',
@@ -8855,6 +10751,9 @@ const BIBLE_VERSES = [
   {
     id:'pro30_15',
     text:'The horseleach hath two daughters, crying, Give, give. There are three things that are never',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 30:15',
     book:'Proverbs',
     category:'buff',
@@ -8869,6 +10768,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_4',
     text:'The words of a man’s mouth are as deep waters, and the wellspring of wisdom',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:4',
     book:'Proverbs',
     category:'buff',
@@ -8883,6 +10785,9 @@ const BIBLE_VERSES = [
   {
     id:'pro31_14',
     text:'She is like the merchants’ ships; she bringeth her food from afar',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 31:14',
     book:'Proverbs',
     category:'buff',
@@ -8897,6 +10802,9 @@ const BIBLE_VERSES = [
   {
     id:'pro26_8',
     text:'As he that bindeth a stone in a sling, so is he that giveth honour',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 26:8',
     book:'Proverbs',
     category:'buff',
@@ -8911,6 +10819,9 @@ const BIBLE_VERSES = [
   {
     id:'pro24_31',
     text:'And, lo, it was all grown over with thorns, and nettles had covered the face',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 24:31',
     book:'Proverbs',
     category:'buff',
@@ -8925,6 +10836,9 @@ const BIBLE_VERSES = [
   {
     id:'pro11_9',
     text:'An hypocrite with his mouth destroyeth his neighbour: but through knowledge shall the just be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 11:9',
     book:'Proverbs',
     category:'buff',
@@ -8939,6 +10853,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_14',
     text:'The spirit of a man will sustain his infirmity; but a wounded spirit who can',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:14',
     book:'Proverbs',
     category:'buff',
@@ -8953,6 +10870,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_10',
     text:'The bloodthirsty hate the upright: but the just seek his soul',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:10',
     book:'Proverbs',
     category:'buff',
@@ -8967,6 +10887,9 @@ const BIBLE_VERSES = [
   {
     id:'pro25_16',
     text:'Hast thou found honey? eat so much as is sufficient for thee, lest thou be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 25:16',
     book:'Proverbs',
     category:'buff',
@@ -8981,6 +10904,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_21',
     text:'As the fining pot for silver, and the furnace for gold; so is a man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:21',
     book:'Proverbs',
     category:'buff',
@@ -8995,6 +10921,9 @@ const BIBLE_VERSES = [
   {
     id:'pro22_6',
     text:'Train up a child in the way he should go: and when he is old',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 22:6',
     book:'Proverbs',
     category:'buff',
@@ -9009,6 +10938,9 @@ const BIBLE_VERSES = [
   {
     id:'pro4_16',
     text:'For they sleep not, except they have done mischief; and their sleep is taken away',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 4:16',
     book:'Proverbs',
     category:'buff',
@@ -9023,6 +10955,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_15',
     text:'In the light of the king’s countenance is life; and his favour is as a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:15',
     book:'Proverbs',
     category:'buff',
@@ -9037,6 +10972,9 @@ const BIBLE_VERSES = [
   {
     id:'pro4_23',
     text:'Keep thy heart with all diligence; for out of it are the issues of life',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 4:23',
     book:'Proverbs',
     category:'buff',
@@ -9051,6 +10989,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_11',
     text:'The rich man’s wealth is his strong city, and as an high wall in his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:11',
     book:'Proverbs',
     category:'buff',
@@ -9065,6 +11006,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_13',
     text:'Whoso despiseth the word shall be destroyed: but he that feareth the commandment shall be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:13',
     book:'Proverbs',
     category:'buff',
@@ -9079,6 +11023,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_9',
     text:'A man’s heart deviseth his way: but the Lord directeth his steps',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:9',
     book:'Proverbs',
     category:'buff',
@@ -9093,6 +11040,9 @@ const BIBLE_VERSES = [
   {
     id:'pro30_28',
     text:'The spider taketh hold with her hands, and is in kings’ palaces',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 30:28',
     book:'Proverbs',
     category:'buff',
@@ -9107,6 +11057,9 @@ const BIBLE_VERSES = [
   {
     id:'pro7_14',
     text:'I have peace offerings with me; this day have I payed my vows',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 7:14',
     book:'Proverbs',
     category:'buff',
@@ -9121,6 +11074,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_16',
     text:'How much better is it to get wisdom than gold! and to get understanding rather',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:16',
     book:'Proverbs',
     category:'buff',
@@ -9135,6 +11091,9 @@ const BIBLE_VERSES = [
   {
     id:'pro28_27',
     text:'He that giveth unto the poor shall not lack: but he that hideth his eyes',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 28:27',
     book:'Proverbs',
     category:'buff',
@@ -9149,6 +11108,9 @@ const BIBLE_VERSES = [
   {
     id:'pro9_18',
     text:'But he knoweth not that the dead are there; and that her guests are in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 9:18',
     book:'Proverbs',
     category:'buff',
@@ -9163,6 +11125,9 @@ const BIBLE_VERSES = [
   {
     id:'pro3_6',
     text:'In all thy ways acknowledge him, and he shall direct thy paths',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 3:6',
     book:'Proverbs',
     category:'buff',
@@ -9177,6 +11142,9 @@ const BIBLE_VERSES = [
   {
     id:'pro17_21',
     text:'He that begetteth a fool doeth it to his sorrow: and the father of a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 17:21',
     book:'Proverbs',
     category:'buff',
@@ -9191,6 +11159,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_9',
     text:'Ointment and perfume rejoice the heart: so doth the sweetness of a man’s friend by',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:9',
     book:'Proverbs',
     category:'buff',
@@ -9205,6 +11176,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_16',
     text:'By me princes rule, and nobles, even all the judges of the earth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:16',
     book:'Proverbs',
     category:'buff',
@@ -9219,6 +11193,9 @@ const BIBLE_VERSES = [
   {
     id:'pro22_27',
     text:'If thou hast nothing to pay, why should he take away thy bed from under',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 22:27',
     book:'Proverbs',
     category:'buff',
@@ -9233,6 +11210,9 @@ const BIBLE_VERSES = [
   {
     id:'pro3_9',
     text:'Honour the Lord with thy substance, and with the firstfruits of all thine increase',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 3:9',
     book:'Proverbs',
     category:'buff',
@@ -9247,6 +11227,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_6',
     text:'Righteousness keepeth him that is upright in the way: but wickedness overthroweth the sinner',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:6',
     book:'Proverbs',
     category:'buff',
@@ -9261,6 +11244,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_6',
     text:'A fool’s lips enter into contention, and his mouth calleth for strokes',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:6',
     book:'Proverbs',
     category:'buff',
@@ -9275,6 +11261,9 @@ const BIBLE_VERSES = [
   {
     id:'pro9_2',
     text:'She hath killed her beasts; she hath mingled her wine; she hath also furnished her',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 9:2',
     book:'Proverbs',
     category:'buff',
@@ -9289,6 +11278,9 @@ const BIBLE_VERSES = [
   {
     id:'pro14_16',
     text:'A wise man feareth, and departeth from evil: but the fool rageth, and is confident',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 14:16',
     book:'Proverbs',
     category:'buff',
@@ -9303,6 +11295,9 @@ const BIBLE_VERSES = [
   {
     id:'pro23_30',
     text:'They that tarry long at the wine; they that go to seek mixed wine',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 23:30',
     book:'Proverbs',
     category:'buff',
@@ -9317,6 +11312,9 @@ const BIBLE_VERSES = [
   {
     id:'pro31_26',
     text:'She openeth her mouth with wisdom; and in her tongue is the law of kindness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 31:26',
     book:'Proverbs',
     category:'buff',
@@ -9331,6 +11329,9 @@ const BIBLE_VERSES = [
   {
     id:'pro14_20',
     text:'The poor is hated even of his own neighbour: but the rich hath many friends',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 14:20',
     book:'Proverbs',
     category:'buff',
@@ -9345,6 +11346,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_26',
     text:'As vinegar to the teeth, and as smoke to the eyes, so is the sluggard',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:26',
     book:'Proverbs',
     category:'buff',
@@ -9359,6 +11363,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_13',
     text:'In the lips of him that hath understanding wisdom is found: but a rod is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:13',
     book:'Proverbs',
     category:'buff',
@@ -9373,6 +11380,9 @@ const BIBLE_VERSES = [
   {
     id:'pro20_28',
     text:'Mercy and truth preserve the king: and his throne is upholden by mercy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 20:28',
     book:'Proverbs',
     category:'buff',
@@ -9387,6 +11397,9 @@ const BIBLE_VERSES = [
   {
     id:'pro21_4',
     text:'An high look, and a proud heart, and the plowing of the wicked, is sin',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 21:4',
     book:'Proverbs',
     category:'buff',
@@ -9401,6 +11414,9 @@ const BIBLE_VERSES = [
   {
     id:'pro19_12',
     text:'The king’s wrath is as the roaring of a lion; but his favour is as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 19:12',
     book:'Proverbs',
     category:'buff',
@@ -9415,6 +11431,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_1',
     text:'He, that being often reproved hardeneth his neck, shall suddenly be destroyed, and that without',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:1',
     book:'Proverbs',
     category:'buff',
@@ -9429,6 +11448,9 @@ const BIBLE_VERSES = [
   {
     id:'pro11_30',
     text:'The fruit of the righteous is a tree of life; and he that winneth souls',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 11:30',
     book:'Proverbs',
     category:'buff',
@@ -9443,6 +11465,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_30',
     text:'Men do not despise a thief, if he steal to satisfy his soul when he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:30',
     book:'Proverbs',
     category:'buff',
@@ -9457,6 +11482,9 @@ const BIBLE_VERSES = [
   {
     id:'pro28_15',
     text:'As a roaring lion, and a ranging bear; so is a wicked ruler over the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 28:15',
     book:'Proverbs',
     category:'buff',
@@ -9471,6 +11499,9 @@ const BIBLE_VERSES = [
   {
     id:'pro21_5',
     text:'The thoughts of the diligent tend only to plenteousness; but of every one that is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 21:5',
     book:'Proverbs',
     category:'buff',
@@ -9485,6 +11516,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_12',
     text:'Before destruction the heart of man is haughty, and before honour is humility',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:12',
     book:'Proverbs',
     category:'buff',
@@ -9499,6 +11533,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_23',
     text:'Be thou diligent to know the state of thy flocks, and look well to thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:23',
     book:'Proverbs',
     category:'buff',
@@ -9513,6 +11550,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_6',
     text:'Faithful are the wounds of a friend; but the kisses of an enemy are deceitful',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:6',
     book:'Proverbs',
     category:'buff',
@@ -9527,6 +11567,9 @@ const BIBLE_VERSES = [
   {
     id:'pro14_4',
     text:'Where no oxen are, the crib is clean: but much increase is by the strength',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 14:4',
     book:'Proverbs',
     category:'buff',
@@ -9541,6 +11584,9 @@ const BIBLE_VERSES = [
   {
     id:'pro21_7',
     text:'The robbery of the wicked shall destroy them; because they refuse to do judgment',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 21:7',
     book:'Proverbs',
     category:'buff',
@@ -9555,6 +11601,9 @@ const BIBLE_VERSES = [
   {
     id:'pro7_6',
     text:'For at the window of my house I looked through my casement',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 7:6',
     book:'Proverbs',
     category:'buff',
@@ -9569,6 +11618,9 @@ const BIBLE_VERSES = [
   {
     id:'pro18_5',
     text:'It is not good to accept the person of the wicked, to overthrow the righteous',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 18:5',
     book:'Proverbs',
     category:'buff',
@@ -9583,6 +11635,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_24',
     text:'The fear of the wicked, it shall come upon him: but the desire of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:24',
     book:'Proverbs',
     category:'buff',
@@ -9597,6 +11652,9 @@ const BIBLE_VERSES = [
   {
     id:'phi1_2',
     text:'Grace be unto you, and peace, from God our Father, and from the Lord Jesus',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 1:2',
     book:'Philippians',
     category:'buff',
@@ -9611,6 +11669,9 @@ const BIBLE_VERSES = [
   {
     id:'phi1_16',
     text:'The one preach Christ of contention, not sincerely, supposing to add affliction to my bonds',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 1:16',
     book:'Philippians',
     category:'buff',
@@ -9625,6 +11686,9 @@ const BIBLE_VERSES = [
   {
     id:'phi4_10',
     text:'But I rejoiced in the Lord greatly, that now at the last your care of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 4:10',
     book:'Philippians',
     category:'buff',
@@ -9639,6 +11703,9 @@ const BIBLE_VERSES = [
   {
     id:'phi3_8',
     text:'Yea doubtless, and I count all things but loss for the excellency of the knowledge',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 3:8',
     book:'Philippians',
     category:'buff',
@@ -9653,6 +11720,9 @@ const BIBLE_VERSES = [
   {
     id:'phi2_6',
     text:'Who, being in the form of God, thought it not robbery to be equal with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 2:6',
     book:'Philippians',
     category:'buff',
@@ -9667,6 +11737,9 @@ const BIBLE_VERSES = [
   {
     id:'phi1_10',
     text:'That ye may approve things that are excellent; that ye may be sincere and without',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 1:10',
     book:'Philippians',
     category:'buff',
@@ -9681,6 +11754,9 @@ const BIBLE_VERSES = [
   {
     id:'phi3_12',
     text:'Not as though I had already attained, either were already perfect: but I follow after',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 3:12',
     book:'Philippians',
     category:'buff',
@@ -9695,6 +11771,9 @@ const BIBLE_VERSES = [
   {
     id:'phi3_7',
     text:'But what things were gain to me, those I counted loss for Christ',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 3:7',
     book:'Philippians',
     category:'buff',
@@ -9709,6 +11788,9 @@ const BIBLE_VERSES = [
   {
     id:'phi2_11',
     text:'And that every tongue should confess that Jesus Christ is Lord, to the glory of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 2:11',
     book:'Philippians',
     category:'buff',
@@ -9723,6 +11805,9 @@ const BIBLE_VERSES = [
   {
     id:'phi1_22',
     text:'But if I live in the flesh, this is the fruit of my labour: yet',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Philippians 1:22',
     book:'Philippians',
     category:'buff',
@@ -9737,6 +11822,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_20',
     text:'For the creature was made subject to vanity, not willingly, but by reason of him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 8:20',
     book:'Romans',
     category:'buff',
@@ -9751,6 +11839,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_31',
     text:'That I may be delivered from them that do not believe in Judea; and that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:31',
     book:'Romans',
     category:'buff',
@@ -9765,6 +11856,9 @@ const BIBLE_VERSES = [
   {
     id:'rom2_26',
     text:'Therefore if the uncircumcision keep the righteousness of the law, shall not his uncircumcision be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 2:26',
     book:'Romans',
     category:'buff',
@@ -9779,6 +11873,9 @@ const BIBLE_VERSES = [
   {
     id:'rom11_1',
     text:'I say then, Hath God cast away his people? God forbid. For I also am',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 11:1',
     book:'Romans',
     category:'buff',
@@ -9793,6 +11890,9 @@ const BIBLE_VERSES = [
   {
     id:'rom4_18',
     text:'Who against hope believed in hope, that he might become the father of many nations',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 4:18',
     book:'Romans',
     category:'buff',
@@ -9807,6 +11907,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_9',
     text:'But ye are not in the flesh, but in the Spirit, if so be that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 8:9',
     book:'Romans',
     category:'buff',
@@ -9821,6 +11924,9 @@ const BIBLE_VERSES = [
   {
     id:'rom16_2',
     text:'That ye receive her in the Lord, as becometh saints, and that ye assist her',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 16:2',
     book:'Romans',
     category:'buff',
@@ -9835,6 +11941,9 @@ const BIBLE_VERSES = [
   {
     id:'rom7_4',
     text:'Wherefore, my brethren, ye also are become dead to the law by the body of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 7:4',
     book:'Romans',
     category:'buff',
@@ -9849,6 +11958,9 @@ const BIBLE_VERSES = [
   {
     id:'rom14_4',
     text:'Who art thou that judgest another man’s servant? to his own master he standeth or',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 14:4',
     book:'Romans',
     category:'buff',
@@ -9863,6 +11975,9 @@ const BIBLE_VERSES = [
   {
     id:'rom14_20',
     text:'For meat destroy not the work of God. All things indeed are pure; but it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 14:20',
     book:'Romans',
     category:'buff',
@@ -9877,6 +11992,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_8',
     text:'So then they that are in the flesh cannot please God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 8:8',
     book:'Romans',
     category:'buff',
@@ -9891,6 +12009,9 @@ const BIBLE_VERSES = [
   {
     id:'rom9_27',
     text:'Esaias also crieth concerning Israel, Though the number of the children of Israel be as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 9:27',
     book:'Romans',
     category:'buff',
@@ -9905,6 +12026,9 @@ const BIBLE_VERSES = [
   {
     id:'rom10_19',
     text:'But I say, Did not Israel know? First Moses saith, I will provoke you to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 10:19',
     book:'Romans',
     category:'buff',
@@ -9919,6 +12043,9 @@ const BIBLE_VERSES = [
   {
     id:'rom9_13',
     text:'As it is written, Jacob have I loved, but Esau have I hated',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 9:13',
     book:'Romans',
     category:'buff',
@@ -9933,6 +12060,9 @@ const BIBLE_VERSES = [
   {
     id:'rom3_10',
     text:'As it is written, There is none righteous, no, not one',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 3:10',
     book:'Romans',
     category:'buff',
@@ -9947,6 +12077,9 @@ const BIBLE_VERSES = [
   {
     id:'rom16_20',
     text:'And the God of peace shall bruise Satan under your feet shortly. The grace of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 16:20',
     book:'Romans',
     category:'buff',
@@ -9961,6 +12094,9 @@ const BIBLE_VERSES = [
   {
     id:'rom12_14',
     text:'Bless them which persecute you: bless, and curse not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 12:14',
     book:'Romans',
     category:'buff',
@@ -9975,6 +12111,9 @@ const BIBLE_VERSES = [
   {
     id:'rom3_17',
     text:'And the way of peace have they not known',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 3:17',
     book:'Romans',
     category:'buff',
@@ -9989,6 +12128,9 @@ const BIBLE_VERSES = [
   {
     id:'rom14_17',
     text:'For the kingdom of God is not meat and drink; but righteousness, and peace, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 14:17',
     book:'Romans',
     category:'buff',
@@ -10003,6 +12145,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_5',
     text:'Now the God of patience and consolation grant you to be likeminded one toward another',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:5',
     book:'Romans',
     category:'buff',
@@ -10017,6 +12162,9 @@ const BIBLE_VERSES = [
   {
     id:'rom12_8',
     text:'Or he that exhorteth, on exhortation: he that giveth, let him do it with simplicity',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 12:8',
     book:'Romans',
     category:'buff',
@@ -10031,6 +12179,9 @@ const BIBLE_VERSES = [
   {
     id:'rom6_15',
     text:'What then? shall we sin, because we are not under the law, but under grace?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 6:15',
     book:'Romans',
     category:'buff',
@@ -10045,6 +12196,9 @@ const BIBLE_VERSES = [
   {
     id:'rom14_19',
     text:'Let us therefore follow after the things which make for peace, and things wherewith one',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 14:19',
     book:'Romans',
     category:'buff',
@@ -10059,6 +12213,9 @@ const BIBLE_VERSES = [
   {
     id:'rom10_21',
     text:'But to Israel he saith, All day long I have stretched forth my hands unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 10:21',
     book:'Romans',
     category:'buff',
@@ -10073,6 +12230,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_19',
     text:'Through mighty signs and wonders, by the power of the Spirit of God; so that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:19',
     book:'Romans',
     category:'buff',
@@ -10087,6 +12247,9 @@ const BIBLE_VERSES = [
   {
     id:'rom5_9',
     text:'Much more then, being now justified by his blood, we shall be saved from wrath',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 5:9',
     book:'Romans',
     category:'buff',
@@ -10101,6 +12264,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_29',
     text:'And I am sure that, when I come unto you, I shall come in the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:29',
     book:'Romans',
     category:'buff',
@@ -10115,6 +12281,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_4',
     text:'For whatsoever things were written aforetime were written for our learning, that we through patience',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:4',
     book:'Romans',
     category:'buff',
@@ -10129,6 +12298,9 @@ const BIBLE_VERSES = [
   {
     id:'rom7_7',
     text:'What shall we say then? Is the law sin? God forbid. Nay, I had not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 7:7',
     book:'Romans',
     category:'buff',
@@ -10143,6 +12315,9 @@ const BIBLE_VERSES = [
   {
     id:'rom6_17',
     text:'But God be thanked, that ye were the servants of sin, but ye have obeyed',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 6:17',
     book:'Romans',
     category:'buff',
@@ -10157,6 +12332,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_26',
     text:'For it hath pleased them of Macedonia and Achaia to make a certain contribution for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:26',
     book:'Romans',
     category:'buff',
@@ -10171,6 +12349,9 @@ const BIBLE_VERSES = [
   {
     id:'rom3_1',
     text:'What advantage then hath the Jew? or what profit is there of circumcision?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 3:1',
     book:'Romans',
     category:'buff',
@@ -10185,6 +12366,9 @@ const BIBLE_VERSES = [
   {
     id:'rom11_31',
     text:'Even so have these also now not believed, that through your mercy they also may',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 11:31',
     book:'Romans',
     category:'buff',
@@ -10199,6 +12383,9 @@ const BIBLE_VERSES = [
   {
     id:'rom10_6',
     text:'But the righteousness which is of faith speaketh on this wise, Say not in thine',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 10:6',
     book:'Romans',
     category:'buff',
@@ -10213,6 +12400,9 @@ const BIBLE_VERSES = [
   {
     id:'rom5_6',
     text:'For when we were yet without strength, in due time Christ died for the ungodly',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 5:6',
     book:'Romans',
     category:'buff',
@@ -10227,6 +12417,9 @@ const BIBLE_VERSES = [
   {
     id:'rom14_18',
     text:'For he that in these things serveth Christ is acceptable to God, and approved of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 14:18',
     book:'Romans',
     category:'buff',
@@ -10241,6 +12434,9 @@ const BIBLE_VERSES = [
   {
     id:'rom1_8',
     text:'First, I thank my God through Jesus Christ for you all, that your faith is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 1:8',
     book:'Romans',
     category:'buff',
@@ -10255,6 +12451,9 @@ const BIBLE_VERSES = [
   {
     id:'rom4_11',
     text:'And he received the sign of circumcision, a seal of the righteousness of the faith',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 4:11',
     book:'Romans',
     category:'buff',
@@ -10269,6 +12468,9 @@ const BIBLE_VERSES = [
   {
     id:'rom1_6',
     text:'Among whom are ye also the called of Jesus Christ',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 1:6',
     book:'Romans',
     category:'buff',
@@ -10283,6 +12485,9 @@ const BIBLE_VERSES = [
   {
     id:'rom1_26',
     text:'For this cause God gave them up unto vile affections: for even their women did',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 1:26',
     book:'Romans',
     category:'buff',
@@ -10297,6 +12502,9 @@ const BIBLE_VERSES = [
   {
     id:'rom11_13',
     text:'For I speak to you Gentiles, inasmuch as I am the apostle of the Gentiles',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 11:13',
     book:'Romans',
     category:'buff',
@@ -10311,6 +12519,9 @@ const BIBLE_VERSES = [
   {
     id:'rom3_3',
     text:'For what if some did not believe? shall their unbelief make the faith of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 3:3',
     book:'Romans',
     category:'buff',
@@ -10325,6 +12536,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_28',
     text:'When therefore I have performed this, and have sealed to them this fruit, I will',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:28',
     book:'Romans',
     category:'buff',
@@ -10339,6 +12553,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_27',
     text:'And he that searcheth the hearts knoweth what is the mind of the Spirit, because',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 8:27',
     book:'Romans',
     category:'buff',
@@ -10353,6 +12570,9 @@ const BIBLE_VERSES = [
   {
     id:'rom11_22',
     text:'Behold therefore the goodness and severity of God: on them which fell, severity; but toward',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 11:22',
     book:'Romans',
     category:'buff',
@@ -10367,6 +12587,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_2',
     text:'Let every one of us please his neighbour for his good to edification',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:2',
     book:'Romans',
     category:'buff',
@@ -10381,6 +12604,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_24',
     text:'For we are saved by hope: but hope that is seen is not hope: for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 8:24',
     book:'Romans',
     category:'buff',
@@ -10395,6 +12621,9 @@ const BIBLE_VERSES = [
   {
     id:'rom10_15',
     text:'And how shall they preach, except they be sent? as it is written, How beautiful',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 10:15',
     book:'Romans',
     category:'buff',
@@ -10409,6 +12638,9 @@ const BIBLE_VERSES = [
   {
     id:'rom3_8',
     text:'And not rather, (as we be slanderously reported, and as some affirm that we say,)',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 3:8',
     book:'Romans',
     category:'buff',
@@ -10423,6 +12655,9 @@ const BIBLE_VERSES = [
   {
     id:'rom15_10',
     text:'And again he saith, Rejoice, ye Gentiles, with his people',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Romans 15:10',
     book:'Romans',
     category:'buff',
@@ -10437,6 +12672,9 @@ const BIBLE_VERSES = [
   {
     id:'1co9_26',
     text:'I therefore so run, not as uncertainly; so fight I, not as one that beateth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 9:26',
     book:'1 Corinthians',
     category:'buff',
@@ -10451,6 +12689,9 @@ const BIBLE_VERSES = [
   {
     id:'1co12_19',
     text:'And if they were all one member, where were the body?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 12:19',
     book:'1 Corinthians',
     category:'buff',
@@ -10465,6 +12706,9 @@ const BIBLE_VERSES = [
   {
     id:'1co6_15',
     text:'Know ye not that your bodies are the members of Christ? shall I then take',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 6:15',
     book:'1 Corinthians',
     category:'buff',
@@ -10479,6 +12723,9 @@ const BIBLE_VERSES = [
   {
     id:'1co12_12',
     text:'For as the body is one, and hath many members, and all the members of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 12:12',
     book:'1 Corinthians',
     category:'buff',
@@ -10493,6 +12740,9 @@ const BIBLE_VERSES = [
   {
     id:'1co16_24',
     text:'My love be with you all in Christ Jesus. Amen. The first epistle to the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 16:24',
     book:'1 Corinthians',
     category:'buff',
@@ -10507,6 +12757,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_43',
     text:'It is sown in dishonour; it is raised in glory: it is sown in weakness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:43',
     book:'1 Corinthians',
     category:'buff',
@@ -10521,6 +12774,9 @@ const BIBLE_VERSES = [
   {
     id:'1co7_19',
     text:'Circumcision is nothing, and uncircumcision is nothing, but the keeping of the commandments of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 7:19',
     book:'1 Corinthians',
     category:'buff',
@@ -10535,6 +12791,9 @@ const BIBLE_VERSES = [
   {
     id:'1co5_10',
     text:'Yet not altogether with the fornicators of this world, or with the covetous, or extortioners',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 5:10',
     book:'1 Corinthians',
     category:'buff',
@@ -10549,6 +12808,9 @@ const BIBLE_VERSES = [
   {
     id:'1co11_19',
     text:'For there must be also heresies among you, that they which are approved may be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 11:19',
     book:'1 Corinthians',
     category:'buff',
@@ -10563,6 +12825,9 @@ const BIBLE_VERSES = [
   {
     id:'1co2_6',
     text:'Howbeit we speak wisdom among them that are perfect: yet not the wisdom of this',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 2:6',
     book:'1 Corinthians',
     category:'buff',
@@ -10577,6 +12842,9 @@ const BIBLE_VERSES = [
   {
     id:'1co1_20',
     text:'Where is the wise? where is the scribe? where is the disputer of this world?',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 1:20',
     book:'1 Corinthians',
     category:'buff',
@@ -10591,6 +12859,9 @@ const BIBLE_VERSES = [
   {
     id:'1co12_17',
     text:'If the whole body were an eye, where were the hearing? If the whole were',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 12:17',
     book:'1 Corinthians',
     category:'buff',
@@ -10605,6 +12876,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_40',
     text:'There are also celestial bodies, and bodies terrestrial: but the glory of the celestial is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:40',
     book:'1 Corinthians',
     category:'buff',
@@ -10619,6 +12893,9 @@ const BIBLE_VERSES = [
   {
     id:'1co6_11',
     text:'And such were some of you: but ye are washed, but ye are sanctified, but',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 6:11',
     book:'1 Corinthians',
     category:'buff',
@@ -10633,6 +12910,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_6',
     text:'After that, he was seen of above five hundred brethren at once; of whom the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:6',
     book:'1 Corinthians',
     category:'buff',
@@ -10647,6 +12927,9 @@ const BIBLE_VERSES = [
   {
     id:'1co2_15',
     text:'But he that is spiritual judgeth all things, yet he himself is judged of no',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 2:15',
     book:'1 Corinthians',
     category:'buff',
@@ -10661,6 +12944,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_21',
     text:'For since by man came death, by man came also the resurrection of the dead',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:21',
     book:'1 Corinthians',
     category:'buff',
@@ -10675,6 +12961,9 @@ const BIBLE_VERSES = [
   {
     id:'1co2_16',
     text:'For who hath known the mind of the Lord, that he may instruct him? But',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 2:16',
     book:'1 Corinthians',
     category:'buff',
@@ -10689,6 +12978,9 @@ const BIBLE_VERSES = [
   {
     id:'1co11_26',
     text:'For as often as ye eat this bread, and drink this cup, ye do shew',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 11:26',
     book:'1 Corinthians',
     category:'buff',
@@ -10703,6 +12995,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_52',
     text:'In a moment, in the twinkling of an eye, at the last trump: for the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:52',
     book:'1 Corinthians',
     category:'buff',
@@ -10717,6 +13012,9 @@ const BIBLE_VERSES = [
   {
     id:'1co10_18',
     text:'Behold Israel after the flesh: are not they which eat of the sacrifices partakers of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 10:18',
     book:'1 Corinthians',
     category:'buff',
@@ -10731,6 +13029,9 @@ const BIBLE_VERSES = [
   {
     id:'1co10_11',
     text:'Now all these things happened unto them for ensamples: and they are written for our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 10:11',
     book:'1 Corinthians',
     category:'buff',
@@ -10745,6 +13046,9 @@ const BIBLE_VERSES = [
   {
     id:'1co9_15',
     text:'But I have used none of these things: neither have I written these things, that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 9:15',
     book:'1 Corinthians',
     category:'buff',
@@ -10759,6 +13063,9 @@ const BIBLE_VERSES = [
   {
     id:'1co4_18',
     text:'Now some are puffed up, as though I would not come to you',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 4:18',
     book:'1 Corinthians',
     category:'buff',
@@ -10773,6 +13080,9 @@ const BIBLE_VERSES = [
   {
     id:'1co10_25',
     text:'Whatsoever is sold in the shambles, that eat, asking no question for conscience sake',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 10:25',
     book:'1 Corinthians',
     category:'buff',
@@ -10787,6 +13097,9 @@ const BIBLE_VERSES = [
   {
     id:'1co7_11',
     text:'But and if she depart, let her remain unmarried, or be reconciled to her husband',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 7:11',
     book:'1 Corinthians',
     category:'buff',
@@ -10801,6 +13114,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_49',
     text:'And as we have borne the image of the earthy, we shall also bear the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:49',
     book:'1 Corinthians',
     category:'buff',
@@ -10815,6 +13131,9 @@ const BIBLE_VERSES = [
   {
     id:'1co7_36',
     text:'But if any man think that he behaveth himself uncomely toward his virgin, if she',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 7:36',
     book:'1 Corinthians',
     category:'buff',
@@ -10829,6 +13148,9 @@ const BIBLE_VERSES = [
   {
     id:'1co15_36',
     text:'Thou fool, that which thou sowest is not quickened, except it die',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 15:36',
     book:'1 Corinthians',
     category:'buff',
@@ -10843,6 +13165,9 @@ const BIBLE_VERSES = [
   {
     id:'1co12_28',
     text:'And God hath set some in the church, first apostles, secondarily prophets, thirdly teachers, after',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 12:28',
     book:'1 Corinthians',
     category:'buff',
@@ -10857,6 +13182,9 @@ const BIBLE_VERSES = [
   {
     id:'2co2_1',
     text:'But I determined this with myself, that I would not come again to you in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 2:1',
     book:'2 Corinthians',
     category:'buff',
@@ -10871,6 +13199,9 @@ const BIBLE_VERSES = [
   {
     id:'2co13_7',
     text:'Now I pray to God that ye do no evil; not that we should appear',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 13:7',
     book:'2 Corinthians',
     category:'buff',
@@ -10885,6 +13216,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_1',
     text:'It is not expedient for me doubtless to glory. I will come to visions and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:1',
     book:'2 Corinthians',
     category:'buff',
@@ -10899,6 +13233,9 @@ const BIBLE_VERSES = [
   {
     id:'2co5_6',
     text:'Therefore we are always confident, knowing that, whilst we are at home in the body',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 5:6',
     book:'2 Corinthians',
     category:'buff',
@@ -10913,6 +13250,9 @@ const BIBLE_VERSES = [
   {
     id:'2co11_9',
     text:'And when I was present with you, and wanted, I was chargeable to no man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 11:9',
     book:'2 Corinthians',
     category:'buff',
@@ -10927,6 +13267,9 @@ const BIBLE_VERSES = [
   {
     id:'heb4_12',
     text:'For the word of God is quick, and powerful, and sharper than any twoedged sword',
+    nkjv: "For the word of God is living and powerful, and sharper than any two-edged sword, piercing even to the division of soul and spirit, and of joints and marrow, and is a discerner of the thoughts and intents of the heart.",
+    niv: "For the word of God is alive and active. Sharper than any double-edged sword, it penetrates even to dividing soul and spirit, joints and marrow; it judges the thoughts and attitudes of the heart.",
+    nlt: "For the word of God is alive and powerful. It is sharper than the sharpest two-edged sword, cutting between soul and spirit, between joint and marrow. It exposes our innermost thoughts and desires.",
     reference:'Hebrews 4:12',
     book:'Hebrews',
     category:'debuff',
@@ -10941,6 +13284,9 @@ const BIBLE_VERSES = [
   {
     id:'jam4_7',
     text:'Submit yourselves therefore to God. Resist the devil, and he will flee from you',
+    nkjv: "Therefore submit to God. Resist the devil and he will flee from you.",
+    niv: "Submit yourselves, then, to God. Resist the devil, and he will flee from you.",
+    nlt: "So humble yourselves before God. Resist the devil, and he will flee from you.",
     reference:'James 4:7',
     book:'James',
     category:'debuff',
@@ -10955,6 +13301,9 @@ const BIBLE_VERSES = [
   {
     id:'jam1_21',
     text:'Wherefore lay apart all filthiness and superfluity of naughtiness, and receive with meekness the engrafted',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 1:21',
     book:'James',
     category:'debuff',
@@ -10969,6 +13318,9 @@ const BIBLE_VERSES = [
   {
     id:'2co10_4',
     text:'(For the weapons of our warfare are not carnal, but mighty through God to the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 10:4',
     book:'2 Corinthians',
     category:'debuff',
@@ -10983,6 +13335,9 @@ const BIBLE_VERSES = [
   {
     id:'2co10_5',
     text:'Casting down imaginations, and every high thing that exalteth itself against the knowledge of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 10:5',
     book:'2 Corinthians',
     category:'debuff',
@@ -10997,6 +13352,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_11',
     text:'And have no fellowship with the unfruitful works of darkness, but rather reprove them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:11',
     book:'Ephesians',
     category:'debuff',
@@ -11011,6 +13369,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_12',
     text:'For we wrestle not against flesh and blood, but against principalities, against powers, against the',
+    nkjv: "For we do not wrestle against flesh and blood, but against principalities, against powers, against the rulers of the darkness of this age, against spiritual hosts of wickedness in the heavenly places.",
+    niv: "For our struggle is not against flesh and blood, but against the rulers, against the authorities, against the powers of this dark world and against the spiritual forces of evil in the heavenly realms.",
+    nlt: "For we are not fighting against flesh-and-blood enemies, but against evil rulers and authorities of the unseen world, against mighty powers in this dark world, and against evil spirits in the heavenly places.",
     reference:'Ephesians 6:12',
     book:'Ephesians',
     category:'debuff',
@@ -11025,6 +13386,9 @@ const BIBLE_VERSES = [
   {
     id:'pro26_5',
     text:'Answer a fool according to his folly, lest he be wise in his own conceit',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 26:5',
     book:'Proverbs',
     category:'debuff',
@@ -11039,6 +13403,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_1',
     text:'A soft answer turneth away wrath: but grievous words stir up anger',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:1',
     book:'Proverbs',
     category:'debuff',
@@ -11053,6 +13420,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_1',
     text:'Beloved, believe not every spirit, but try the spirits whether they are of God: because',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 4:1',
     book:'1 John',
     category:'debuff',
@@ -11067,6 +13437,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_8',
     text:'He that committeth sin is of the devil; for the devil sinneth from the beginning',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:8',
     book:'1 John',
     category:'debuff',
@@ -11081,6 +13454,9 @@ const BIBLE_VERSES = [
   {
     id:'jud1_9',
     text:'Yet Michael the archangel, when contending with the devil he disputed about the body of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jude 1:9',
     book:'Jude',
     category:'debuff',
@@ -11095,6 +13471,9 @@ const BIBLE_VERSES = [
   {
     id:'1co2_14',
     text:'But the natural man receiveth not the things of the Spirit of God: for they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Corinthians 2:14',
     book:'1 Corinthians',
     category:'debuff',
@@ -11109,6 +13488,9 @@ const BIBLE_VERSES = [
   {
     id:'2pe2_9',
     text:'The Lord knoweth how to deliver the godly out of temptations, and to reserve the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Peter 2:9',
     book:'2 Peter',
     category:'debuff',
@@ -11123,6 +13505,9 @@ const BIBLE_VERSES = [
   {
     id:'1ti1_18',
     text:'This charge I commit unto thee, son Timothy, according to the prophecies which went before',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Timothy 1:18',
     book:'1 Timothy',
     category:'debuff',
@@ -11137,6 +13522,9 @@ const BIBLE_VERSES = [
   {
     id:'pro12_19',
     text:'The lip of truth shall be established for ever: but a lying tongue is but',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 12:19',
     book:'Proverbs',
     category:'debuff',
@@ -11151,6 +13539,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_18',
     text:'Pride goeth before destruction, and an haughty spirit before a fall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:18',
     book:'Proverbs',
     category:'debuff',
@@ -11165,6 +13556,9 @@ const BIBLE_VERSES = [
   {
     id:'pro19_21',
     text:'There are many devices in a man’s heart; nevertheless the counsel of the Lord, that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 19:21',
     book:'Proverbs',
     category:'debuff',
@@ -11179,6 +13573,9 @@ const BIBLE_VERSES = [
   {
     id:'1pe2_15',
     text:'For so is the will of God, that with well doing ye may put to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 Peter 2:15',
     book:'1 Peter',
     category:'debuff',
@@ -11193,6 +13590,9 @@ const BIBLE_VERSES = [
   {
     id:'jam4_4',
     text:'Ye adulterers and adulteresses, know ye not that the friendship of the world is enmity',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 4:4',
     book:'James',
     category:'debuff',
@@ -11207,6 +13607,9 @@ const BIBLE_VERSES = [
   {
     id:'heb13_17',
     text:'Obey them that have the rule over you, and submit yourselves: for they watch for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 13:17',
     book:'Hebrews',
     category:'debuff',
@@ -11221,6 +13624,9 @@ const BIBLE_VERSES = [
   {
     id:'heb2_8',
     text:'Thou hast put all things in subjection under his feet. For in that he put',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 2:8',
     book:'Hebrews',
     category:'debuff',
@@ -11235,6 +13641,9 @@ const BIBLE_VERSES = [
   {
     id:'heb4_3',
     text:'For we which have believed do enter into rest, as he said, As I have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 4:3',
     book:'Hebrews',
     category:'debuff',
@@ -11249,6 +13658,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_17',
     text:'And their sins and iniquities will I remember no more',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:17',
     book:'Hebrews',
     category:'debuff',
@@ -11263,6 +13675,9 @@ const BIBLE_VERSES = [
   {
     id:'heb7_5',
     text:'And verily they that are of the sons of Levi, who receive the office of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 7:5',
     book:'Hebrews',
     category:'debuff',
@@ -11277,6 +13692,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_14',
     text:'For they that say such things declare plainly that they seek a country',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:14',
     book:'Hebrews',
     category:'debuff',
@@ -11291,6 +13709,9 @@ const BIBLE_VERSES = [
   {
     id:'heb7_9',
     text:'And as I may so say, Levi also, who receiveth tithes, payed tithes in Abraham',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 7:9',
     book:'Hebrews',
     category:'debuff',
@@ -11305,6 +13726,9 @@ const BIBLE_VERSES = [
   {
     id:'heb13_19',
     text:'But I beseech you the rather to do this, that I may be restored to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 13:19',
     book:'Hebrews',
     category:'debuff',
@@ -11319,6 +13743,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_29',
     text:'By faith they passed through the Red sea as by dry land: which the Egyptians',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:29',
     book:'Hebrews',
     category:'debuff',
@@ -11333,6 +13760,9 @@ const BIBLE_VERSES = [
   {
     id:'heb8_5',
     text:'Who serve unto the example and shadow of heavenly things, as Moses was admonished of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 8:5',
     book:'Hebrews',
     category:'debuff',
@@ -11347,6 +13777,9 @@ const BIBLE_VERSES = [
   {
     id:'heb6_1',
     text:'Therefore leaving the principles of the doctrine of Christ, let us go on unto perfection',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 6:1',
     book:'Hebrews',
     category:'debuff',
@@ -11361,6 +13794,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_4',
     text:'For it is not possible that the blood of bulls and of goats should take',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:4',
     book:'Hebrews',
     category:'debuff',
@@ -11375,6 +13811,9 @@ const BIBLE_VERSES = [
   {
     id:'heb12_22',
     text:'But ye are come unto mount Sion, and unto the city of the living God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 12:22',
     book:'Hebrews',
     category:'debuff',
@@ -11389,6 +13828,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_3',
     text:'But in those sacrifices there is a remembrance again made of sins every year',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:3',
     book:'Hebrews',
     category:'debuff',
@@ -11403,6 +13845,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_25',
     text:'Choosing rather to suffer affliction with the people of God, than to enjoy the pleasures',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:25',
     book:'Hebrews',
     category:'debuff',
@@ -11417,6 +13862,9 @@ const BIBLE_VERSES = [
   {
     id:'heb12_29',
     text:'For our God is a consuming fire',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 12:29',
     book:'Hebrews',
     category:'debuff',
@@ -11431,6 +13879,9 @@ const BIBLE_VERSES = [
   {
     id:'heb2_1',
     text:'Therefore we ought to give the more earnest heed to the things which we have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 2:1',
     book:'Hebrews',
     category:'debuff',
@@ -11445,6 +13896,9 @@ const BIBLE_VERSES = [
   {
     id:'heb13_8',
     text:'Jesus Christ the same yesterday, and to day, and for ever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 13:8',
     book:'Hebrews',
     category:'debuff',
@@ -11459,6 +13913,9 @@ const BIBLE_VERSES = [
   {
     id:'heb9_20',
     text:'Saying, This is the blood of the testament which God hath enjoined unto you',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 9:20',
     book:'Hebrews',
     category:'debuff',
@@ -11473,6 +13930,9 @@ const BIBLE_VERSES = [
   {
     id:'heb7_10',
     text:'For he was yet in the loins of his father, when Melchisedec met him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 7:10',
     book:'Hebrews',
     category:'debuff',
@@ -11487,6 +13947,9 @@ const BIBLE_VERSES = [
   {
     id:'heb5_9',
     text:'And being made perfect, he became the author of eternal salvation unto all them that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 5:9',
     book:'Hebrews',
     category:'debuff',
@@ -11501,6 +13964,9 @@ const BIBLE_VERSES = [
   {
     id:'heb3_13',
     text:'But exhort one another daily, while it is called To day; lest any of you',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 3:13',
     book:'Hebrews',
     category:'debuff',
@@ -11515,6 +13981,9 @@ const BIBLE_VERSES = [
   {
     id:'heb9_5',
     text:'And over it the cherubims of glory shadowing the mercyseat; of which we cannot now',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 9:5',
     book:'Hebrews',
     category:'debuff',
@@ -11529,6 +13998,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_37',
     text:'They were stoned, they were sawn asunder, were tempted, were slain with the sword: they',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:37',
     book:'Hebrews',
     category:'debuff',
@@ -11543,6 +14015,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_34',
     text:'For ye had compassion of me in my bonds, and took joyfully the spoiling of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:34',
     book:'Hebrews',
     category:'debuff',
@@ -11557,6 +14032,9 @@ const BIBLE_VERSES = [
   {
     id:'heb1_3',
     text:'Who being the brightness of his glory, and the express image of his person, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 1:3',
     book:'Hebrews',
     category:'debuff',
@@ -11571,6 +14049,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_20',
     text:'By a new and living way, which he hath consecrated for us, through the veil',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:20',
     book:'Hebrews',
     category:'debuff',
@@ -11585,6 +14066,9 @@ const BIBLE_VERSES = [
   {
     id:'heb7_8',
     text:'And here men that die receive tithes; but there he receiveth them, of whom it',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 7:8',
     book:'Hebrews',
     category:'debuff',
@@ -11599,6 +14083,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_24',
     text:'By faith Moses, when he was come to years, refused to be called the son',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:24',
     book:'Hebrews',
     category:'debuff',
@@ -11613,6 +14100,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_16',
     text:'This is the covenant that I will make with them after those days, saith the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:16',
     book:'Hebrews',
     category:'debuff',
@@ -11627,6 +14117,9 @@ const BIBLE_VERSES = [
   {
     id:'heb13_11',
     text:'For the bodies of those beasts, whose blood is brought into the sanctuary by the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 13:11',
     book:'Hebrews',
     category:'debuff',
@@ -11641,6 +14134,9 @@ const BIBLE_VERSES = [
   {
     id:'heb9_22',
     text:'And almost all things are by the law purged with blood; and without shedding of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 9:22',
     book:'Hebrews',
     category:'debuff',
@@ -11655,6 +14151,9 @@ const BIBLE_VERSES = [
   {
     id:'heb9_9',
     text:'Which was a figure for the time then present, in which were offered both gifts',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 9:9',
     book:'Hebrews',
     category:'debuff',
@@ -11669,6 +14168,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_22',
     text:'Let us draw near with a true heart in full assurance of faith, having our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:22',
     book:'Hebrews',
     category:'debuff',
@@ -11683,6 +14185,9 @@ const BIBLE_VERSES = [
   {
     id:'heb9_15',
     text:'And for this cause he is the mediator of the new testament, that by means',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 9:15',
     book:'Hebrews',
     category:'debuff',
@@ -11697,6 +14202,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_1',
     text:'Now faith is the substance of things hoped for, the evidence of things not seen',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:1',
     book:'Hebrews',
     category:'debuff',
@@ -11711,6 +14219,9 @@ const BIBLE_VERSES = [
   {
     id:'heb10_18',
     text:'Now where remission of these is, there is no more offering for sin',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 10:18',
     book:'Hebrews',
     category:'debuff',
@@ -11725,6 +14236,9 @@ const BIBLE_VERSES = [
   {
     id:'heb2_16',
     text:'For verily he took not on him the nature of angels; but he took on',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 2:16',
     book:'Hebrews',
     category:'debuff',
@@ -11739,6 +14253,9 @@ const BIBLE_VERSES = [
   {
     id:'heb7_1',
     text:'For this Melchisedec, king of Salem, priest of the most high God, who met Abraham',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 7:1',
     book:'Hebrews',
     category:'debuff',
@@ -11753,6 +14270,9 @@ const BIBLE_VERSES = [
   {
     id:'heb11_2',
     text:'For by it the elders obtained a good report',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Hebrews 11:2',
     book:'Hebrews',
     category:'debuff',
@@ -11767,6 +14287,9 @@ const BIBLE_VERSES = [
   {
     id:'jam2_18',
     text:'Yea, a man may say, Thou hast faith, and I have works: shew me thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 2:18',
     book:'James',
     category:'debuff',
@@ -11781,6 +14304,9 @@ const BIBLE_VERSES = [
   {
     id:'jam1_5',
     text:'If any of you lack wisdom, let him ask of God, that giveth to all',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 1:5',
     book:'James',
     category:'debuff',
@@ -11795,6 +14321,9 @@ const BIBLE_VERSES = [
   {
     id:'jam2_1',
     text:'My brethren, have not the faith of our Lord Jesus Christ, the Lord of glory',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 2:1',
     book:'James',
     category:'debuff',
@@ -11809,6 +14338,9 @@ const BIBLE_VERSES = [
   {
     id:'jam1_10',
     text:'But the rich, in that he is made low: because as the flower of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 1:10',
     book:'James',
     category:'debuff',
@@ -11823,6 +14355,9 @@ const BIBLE_VERSES = [
   {
     id:'jam2_2',
     text:'For if there come unto your assembly a man with a gold ring, in goodly',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 2:2',
     book:'James',
     category:'debuff',
@@ -11837,6 +14372,9 @@ const BIBLE_VERSES = [
   {
     id:'jam5_1',
     text:'Go to now, ye rich men, weep and howl for your miseries that shall come',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 5:1',
     book:'James',
     category:'debuff',
@@ -11851,6 +14389,9 @@ const BIBLE_VERSES = [
   {
     id:'jam5_20',
     text:'Let him know, that he which converteth the sinner from the error of his way',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 5:20',
     book:'James',
     category:'debuff',
@@ -11865,6 +14406,9 @@ const BIBLE_VERSES = [
   {
     id:'jam1_20',
     text:'For the wrath of man worketh not the righteousness of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 1:20',
     book:'James',
     category:'debuff',
@@ -11879,6 +14423,9 @@ const BIBLE_VERSES = [
   {
     id:'jam4_13',
     text:'Go to now, ye that say, To day or to morrow we will go into',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 4:13',
     book:'James',
     category:'debuff',
@@ -11893,6 +14440,9 @@ const BIBLE_VERSES = [
   {
     id:'jam2_17',
     text:'Even so faith, if it hath not works, is dead, being alone',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'James 2:17',
     book:'James',
     category:'debuff',
@@ -11907,6 +14457,9 @@ const BIBLE_VERSES = [
   {
     id:'2co8_6',
     text:'Insomuch that we desired Titus, that as he had begun, so he would also finish',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 8:6',
     book:'2 Corinthians',
     category:'debuff',
@@ -11921,6 +14474,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_17',
     text:'Did I make a gain of you by any of them whom I sent unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:17',
     book:'2 Corinthians',
     category:'debuff',
@@ -11935,6 +14491,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_6',
     text:'For though I would desire to glory, I shall not be a fool; for I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:6',
     book:'2 Corinthians',
     category:'debuff',
@@ -11949,6 +14508,9 @@ const BIBLE_VERSES = [
   {
     id:'2co7_9',
     text:'Now I rejoice, not that ye were made sorry, but that ye sorrowed to repentance',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 7:9',
     book:'2 Corinthians',
     category:'debuff',
@@ -11963,6 +14525,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_18',
     text:'I desired Titus, and with him I sent a brother. Did Titus make a gain',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:18',
     book:'2 Corinthians',
     category:'debuff',
@@ -11977,6 +14542,9 @@ const BIBLE_VERSES = [
   {
     id:'2co5_1',
     text:'For we know that if our earthly house of this tabernacle were dissolved, we have',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 5:1',
     book:'2 Corinthians',
     category:'debuff',
@@ -11991,6 +14559,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_20',
     text:'For I fear, lest, when I come, I shall not find you such as I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:20',
     book:'2 Corinthians',
     category:'debuff',
@@ -12005,6 +14576,9 @@ const BIBLE_VERSES = [
   {
     id:'2co6_11',
     text:'O ye Corinthians, our mouth is open unto you, our heart is enlarged',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 6:11',
     book:'2 Corinthians',
     category:'debuff',
@@ -12019,6 +14593,9 @@ const BIBLE_VERSES = [
   {
     id:'2co2_8',
     text:'Wherefore I beseech you that ye would confirm your love toward him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 2:8',
     book:'2 Corinthians',
     category:'debuff',
@@ -12033,6 +14610,9 @@ const BIBLE_VERSES = [
   {
     id:'2co4_2',
     text:'But have renounced the hidden things of dishonesty, not walking in craftiness, nor handling the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 4:2',
     book:'2 Corinthians',
     category:'debuff',
@@ -12047,6 +14627,9 @@ const BIBLE_VERSES = [
   {
     id:'2co4_6',
     text:'For God, who commanded the light to shine out of darkness, hath shined in our',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 4:6',
     book:'2 Corinthians',
     category:'debuff',
@@ -12061,6 +14644,9 @@ const BIBLE_VERSES = [
   {
     id:'2co5_21',
     text:'For he hath made him to be sin for us, who knew no sin; that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 5:21',
     book:'2 Corinthians',
     category:'debuff',
@@ -12075,6 +14661,9 @@ const BIBLE_VERSES = [
   {
     id:'2co6_4',
     text:'But in all things approving ourselves as the ministers of God, in much patience, in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 6:4',
     book:'2 Corinthians',
     category:'debuff',
@@ -12089,6 +14678,9 @@ const BIBLE_VERSES = [
   {
     id:'2co11_18',
     text:'Seeing that many glory after the flesh, I will glory also',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 11:18',
     book:'2 Corinthians',
     category:'debuff',
@@ -12103,6 +14695,9 @@ const BIBLE_VERSES = [
   {
     id:'2co12_21',
     text:'And lest, when I come again, my God will humble me among you, and that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 12:21',
     book:'2 Corinthians',
     category:'debuff',
@@ -12117,6 +14712,9 @@ const BIBLE_VERSES = [
   {
     id:'2co11_19',
     text:'For ye suffer fools gladly, seeing ye yourselves are wise',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 11:19',
     book:'2 Corinthians',
     category:'debuff',
@@ -12131,6 +14729,9 @@ const BIBLE_VERSES = [
   {
     id:'2co7_14',
     text:'For if I have boasted any thing to him of you, I am not ashamed',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 7:14',
     book:'2 Corinthians',
     category:'debuff',
@@ -12145,6 +14746,9 @@ const BIBLE_VERSES = [
   {
     id:'2co9_3',
     text:'Yet have I sent the brethren, lest our boasting of you should be in vain',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 9:3',
     book:'2 Corinthians',
     category:'debuff',
@@ -12159,6 +14763,9 @@ const BIBLE_VERSES = [
   {
     id:'2co4_5',
     text:'For we preach not ourselves, but Christ Jesus the Lord; and ourselves your servants for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 4:5',
     book:'2 Corinthians',
     category:'debuff',
@@ -12173,6 +14780,9 @@ const BIBLE_VERSES = [
   {
     id:'2co7_2',
     text:'Receive us; we have wronged no man, we have corrupted no man, we have defrauded',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Corinthians 7:2',
     book:'2 Corinthians',
     category:'debuff',
@@ -12187,6 +14797,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_15',
     text:'See then that ye walk circumspectly, not as fools, but as wise',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:15',
     book:'Ephesians',
     category:'debuff',
@@ -12201,6 +14814,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_14',
     text:'Which is the earnest of our inheritance until the redemption of the purchased possession, unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:14',
     book:'Ephesians',
     category:'debuff',
@@ -12215,6 +14831,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_23',
     text:'Peace be to the brethren, and love with faith, from God the Father and the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:23',
     book:'Ephesians',
     category:'debuff',
@@ -12229,6 +14848,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_20',
     text:'For which I am an ambassador in bonds: that therein I may speak boldly, as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:20',
     book:'Ephesians',
     category:'debuff',
@@ -12243,6 +14865,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_32',
     text:'And be ye kind one to another, tenderhearted, forgiving one another, even as God for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:32',
     book:'Ephesians',
     category:'debuff',
@@ -12257,6 +14882,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_8',
     text:'For ye were sometimes darkness, but now are ye light in the Lord: walk as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:8',
     book:'Ephesians',
     category:'debuff',
@@ -12271,6 +14899,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_3',
     text:'That it may be well with thee, and thou mayest live long on the earth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 6:3',
     book:'Ephesians',
     category:'debuff',
@@ -12285,6 +14916,9 @@ const BIBLE_VERSES = [
   {
     id:'eph2_3',
     text:'Among whom also we all had our conversation in times past in the lusts of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 2:3',
     book:'Ephesians',
     category:'debuff',
@@ -12299,6 +14933,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_6',
     text:'Let no man deceive you with vain words: for because of these things cometh the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:6',
     book:'Ephesians',
     category:'debuff',
@@ -12313,6 +14950,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_26',
     text:'Be ye angry, and sin not: let not the sun go down upon your wrath',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:26',
     book:'Ephesians',
     category:'debuff',
@@ -12327,6 +14967,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_12',
     text:'That we should be to the praise of his glory, who first trusted in Christ',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:12',
     book:'Ephesians',
     category:'debuff',
@@ -12341,6 +14984,9 @@ const BIBLE_VERSES = [
   {
     id:'eph4_13',
     text:'Till we all come in the unity of the faith, and of the knowledge of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 4:13',
     book:'Ephesians',
     category:'debuff',
@@ -12355,6 +15001,9 @@ const BIBLE_VERSES = [
   {
     id:'eph5_17',
     text:'Wherefore be ye not unwise, but understanding what the will of the Lord is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 5:17',
     book:'Ephesians',
     category:'debuff',
@@ -12369,6 +15018,9 @@ const BIBLE_VERSES = [
   {
     id:'eph1_4',
     text:'According as he hath chosen us in him before the foundation of the world, that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 1:4',
     book:'Ephesians',
     category:'debuff',
@@ -12383,6 +15035,9 @@ const BIBLE_VERSES = [
   {
     id:'eph3_18',
     text:'May be able to comprehend with all saints what is the breadth, and length, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Ephesians 3:18',
     book:'Ephesians',
     category:'debuff',
@@ -12397,6 +15052,9 @@ const BIBLE_VERSES = [
   {
     id:'pro17_13',
     text:'Whoso rewardeth evil for good, evil shall not depart from his house',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 17:13',
     book:'Proverbs',
     category:'debuff',
@@ -12411,6 +15069,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_5',
     text:'Deliver thyself as a roe from the hand of the hunter, and as a bird',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:5',
     book:'Proverbs',
     category:'debuff',
@@ -12425,6 +15086,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_7',
     text:'Which having no guide, overseer, or ruler',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:7',
     book:'Proverbs',
     category:'debuff',
@@ -12439,6 +15103,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_19',
     text:'A false witness that speaketh lies, and he that soweth discord among brethren',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:19',
     book:'Proverbs',
     category:'debuff',
@@ -12453,6 +15120,9 @@ const BIBLE_VERSES = [
   {
     id:'pro7_19',
     text:'For the goodman is not at home, he is gone a long journey',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 7:19',
     book:'Proverbs',
     category:'debuff',
@@ -12467,6 +15137,9 @@ const BIBLE_VERSES = [
   {
     id:'pro24_7',
     text:'Wisdom is too high for a fool: he openeth not his mouth in the gate',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 24:7',
     book:'Proverbs',
     category:'debuff',
@@ -12481,6 +15154,9 @@ const BIBLE_VERSES = [
   {
     id:'pro16_1',
     text:'The preparations of the heart in man, and the answer of the tongue, is from',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 16:1',
     book:'Proverbs',
     category:'debuff',
@@ -12495,6 +15171,9 @@ const BIBLE_VERSES = [
   {
     id:'pro26_20',
     text:'Where no wood is, there the fire goeth out: so where there is no talebearer',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 26:20',
     book:'Proverbs',
     category:'debuff',
@@ -12509,6 +15188,9 @@ const BIBLE_VERSES = [
   {
     id:'pro14_30',
     text:'A sound heart is the life of the flesh: but envy the rottenness of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 14:30',
     book:'Proverbs',
     category:'debuff',
@@ -12523,6 +15205,9 @@ const BIBLE_VERSES = [
   {
     id:'pro11_19',
     text:'As righteousness tendeth to life: so he that pursueth evil pursueth it to his own',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 11:19',
     book:'Proverbs',
     category:'debuff',
@@ -12537,6 +15222,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_28',
     text:'The heart of the righteous studieth to answer: but the mouth of the wicked poureth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:28',
     book:'Proverbs',
     category:'debuff',
@@ -12551,6 +15239,9 @@ const BIBLE_VERSES = [
   {
     id:'pro8_18',
     text:'Riches and honour are with me; yea, durable riches and righteousness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 8:18',
     book:'Proverbs',
     category:'debuff',
@@ -12565,6 +15256,9 @@ const BIBLE_VERSES = [
   {
     id:'pro22_16',
     text:'He that oppresseth the poor to increase his riches, and he that giveth to the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 22:16',
     book:'Proverbs',
     category:'debuff',
@@ -12579,6 +15273,9 @@ const BIBLE_VERSES = [
   {
     id:'pro12_27',
     text:'The slothful man roasteth not that which he took in hunting: but the substance of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 12:27',
     book:'Proverbs',
     category:'debuff',
@@ -12593,6 +15290,9 @@ const BIBLE_VERSES = [
   {
     id:'pro26_26',
     text:'Whose hatred is covered by deceit, his wickedness shall be shewed before the whole congregation',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 26:26',
     book:'Proverbs',
     category:'debuff',
@@ -12607,6 +15307,9 @@ const BIBLE_VERSES = [
   {
     id:'pro30_2',
     text:'Surely I am more brutish than any man, and have not the understanding of a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 30:2',
     book:'Proverbs',
     category:'debuff',
@@ -12621,6 +15324,9 @@ const BIBLE_VERSES = [
   {
     id:'pro10_27',
     text:'The fear of the Lord prolongeth days: but the years of the wicked shall be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 10:27',
     book:'Proverbs',
     category:'debuff',
@@ -12635,6 +15341,9 @@ const BIBLE_VERSES = [
   {
     id:'pro2_13',
     text:'Who leave the paths of uprightness, to walk in the ways of darkness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 2:13',
     book:'Proverbs',
     category:'debuff',
@@ -12649,6 +15358,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_13',
     text:'He winketh with his eyes, he speaketh with his feet, he teacheth with his fingers',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:13',
     book:'Proverbs',
     category:'debuff',
@@ -12663,6 +15375,9 @@ const BIBLE_VERSES = [
   {
     id:'pro20_26',
     text:'A wise king scattereth the wicked, and bringeth the wheel over them',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 20:26',
     book:'Proverbs',
     category:'debuff',
@@ -12677,6 +15392,9 @@ const BIBLE_VERSES = [
   {
     id:'pro22_20',
     text:'Have not I written to thee excellent things in counsels and knowledge',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 22:20',
     book:'Proverbs',
     category:'debuff',
@@ -12691,6 +15409,9 @@ const BIBLE_VERSES = [
   {
     id:'pro13_25',
     text:'The righteous eateth to the satisfying of his soul: but the belly of the wicked',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 13:25',
     book:'Proverbs',
     category:'debuff',
@@ -12705,6 +15426,9 @@ const BIBLE_VERSES = [
   {
     id:'pro6_2',
     text:'Thou art snared with the words of thy mouth, thou art taken with the words',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 6:2',
     book:'Proverbs',
     category:'debuff',
@@ -12719,6 +15443,9 @@ const BIBLE_VERSES = [
   {
     id:'pro17_4',
     text:'A wicked doer giveth heed to false lips; and a liar giveth ear to a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 17:4',
     book:'Proverbs',
     category:'debuff',
@@ -12733,6 +15460,9 @@ const BIBLE_VERSES = [
   {
     id:'pro31_1',
     text:'The words of king Lemuel, the prophecy that his mother taught him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 31:1',
     book:'Proverbs',
     category:'debuff',
@@ -12747,6 +15477,9 @@ const BIBLE_VERSES = [
   {
     id:'pro17_5',
     text:'Whoso mocketh the poor reproacheth his Maker: and he that is glad at calamities shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 17:5',
     book:'Proverbs',
     category:'debuff',
@@ -12761,6 +15494,9 @@ const BIBLE_VERSES = [
   {
     id:'pro4_25',
     text:'Let thine eyes look right on, and let thine eyelids look straight before thee',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 4:25',
     book:'Proverbs',
     category:'debuff',
@@ -12775,6 +15511,9 @@ const BIBLE_VERSES = [
   {
     id:'pro2_5',
     text:'Then shalt thou understand the fear of the Lord, and find the knowledge of God',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 2:5',
     book:'Proverbs',
     category:'debuff',
@@ -12789,6 +15528,9 @@ const BIBLE_VERSES = [
   {
     id:'pro24_34',
     text:'So shall thy poverty come as one that travelleth; and thy want as an armed',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 24:34',
     book:'Proverbs',
     category:'debuff',
@@ -12803,6 +15545,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_23',
     text:'A man hath joy by the answer of his mouth: and a word spoken in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:23',
     book:'Proverbs',
     category:'debuff',
@@ -12817,6 +15562,9 @@ const BIBLE_VERSES = [
   {
     id:'pro29_3',
     text:'Whoso loveth wisdom rejoiceth his father: but he that keepeth company with harlots spendeth his',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 29:3',
     book:'Proverbs',
     category:'debuff',
@@ -12831,6 +15579,9 @@ const BIBLE_VERSES = [
   {
     id:'pro28_4',
     text:'They that forsake the law praise the wicked: but such as keep the law contend',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 28:4',
     book:'Proverbs',
     category:'debuff',
@@ -12845,6 +15596,9 @@ const BIBLE_VERSES = [
   {
     id:'pro15_20',
     text:'A wise son maketh a glad father: but a foolish man despiseth his mother',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 15:20',
     book:'Proverbs',
     category:'debuff',
@@ -12859,6 +15613,9 @@ const BIBLE_VERSES = [
   {
     id:'pro27_16',
     text:'Whosoever hideth her hideth the wind, and the ointment of his right hand, which bewrayeth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 27:16',
     book:'Proverbs',
     category:'debuff',
@@ -12873,6 +15630,9 @@ const BIBLE_VERSES = [
   {
     id:'pro28_16',
     text:'The prince that wanteth understanding is also a great oppressor: but he that hateth covetousness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Proverbs 28:16',
     book:'Proverbs',
     category:'debuff',
@@ -12887,6 +15647,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn1_2',
     text:'(For the life was manifested, and we have seen it, and bear witness, and shew',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 1:2',
     book:'1 John',
     category:'debuff',
@@ -12901,6 +15664,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_13',
     text:'Marvel not, my brethren, if the world hate you',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:13',
     book:'1 John',
     category:'debuff',
@@ -12915,6 +15681,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_11',
     text:'Beloved, if God so loved us, we ought also to love one another',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 4:11',
     book:'1 John',
     category:'debuff',
@@ -12929,6 +15698,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn2_26',
     text:'These things have I written unto you concerning them that seduce you',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 2:26',
     book:'1 John',
     category:'debuff',
@@ -12943,6 +15715,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn2_18',
     text:'Little children, it is the last time: and as ye have heard that antichrist shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 2:18',
     book:'1 John',
     category:'debuff',
@@ -12957,6 +15732,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn2_6',
     text:'He that saith he abideth in him ought himself also so to walk, even as',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 2:6',
     book:'1 John',
     category:'debuff',
@@ -12971,6 +15749,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn2_11',
     text:'But he that hateth his brother is in darkness, and walketh in darkness, and knoweth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 2:11',
     book:'1 John',
     category:'debuff',
@@ -12985,6 +15766,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_4',
     text:'Whosoever committeth sin transgresseth also the law: for sin is the transgression of the law',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:4',
     book:'1 John',
     category:'debuff',
@@ -12999,6 +15783,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_10',
     text:'In this the children of God are manifest, and the children of the devil: whosoever',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:10',
     book:'1 John',
     category:'debuff',
@@ -13013,6 +15800,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn2_4',
     text:'He that saith, I know him, and keepeth not his commandments, is a liar, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 2:4',
     book:'1 John',
     category:'debuff',
@@ -13027,6 +15817,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_14',
     text:'And we have seen and do testify that the Father sent the Son to be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 4:14',
     book:'1 John',
     category:'debuff',
@@ -13041,6 +15834,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn1_8',
     text:'If we say that we have no sin, we deceive ourselves, and the truth is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 1:8',
     book:'1 John',
     category:'debuff',
@@ -13055,6 +15851,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn5_19',
     text:'And we know that we are of God, and the whole world lieth in wickedness',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 5:19',
     book:'1 John',
     category:'debuff',
@@ -13069,6 +15868,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_9',
     text:'Whosoever is born of God doth not commit sin; for his seed remaineth in him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:9',
     book:'1 John',
     category:'debuff',
@@ -13083,6 +15885,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_6',
     text:'We are of God: he that knoweth God heareth us; he that is not of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 4:6',
     book:'1 John',
     category:'debuff',
@@ -13097,6 +15902,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_23',
     text:'And this is his commandment, That we should believe on the name of his Son',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:23',
     book:'1 John',
     category:'debuff',
@@ -13111,6 +15919,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_15',
     text:'Whosoever shall confess that Jesus is the Son of God, God dwelleth in him, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 4:15',
     book:'1 John',
     category:'debuff',
@@ -13125,6 +15936,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_13',
     text:'Hereby know we that we dwell in him, and he in us, because he hath',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 4:13',
     book:'1 John',
     category:'debuff',
@@ -13139,6 +15953,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn2_15',
     text:'Love not the world, neither the things that are in the world. If any man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 2:15',
     book:'1 John',
     category:'debuff',
@@ -13153,6 +15970,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn3_14',
     text:'We know that we have passed from death unto life, because we love the brethren',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 3:14',
     book:'1 John',
     category:'debuff',
@@ -13167,6 +15987,9 @@ const BIBLE_VERSES = [
   {
     id:'gen1_1',
     text:'In the beginning God created the heaven and the earth',
+    nkjv: "In the beginning God created the heavens and the earth.",
+    niv: "In the beginning God created the heavens and the earth.",
+    nlt: "In the beginning God created the heavens and the earth.",
     reference:'Genesis 1:1',
     book:'Genesis',
     category:'ultimate',
@@ -13181,6 +16004,9 @@ const BIBLE_VERSES = [
   {
     id:'gen15_1',
     text:'After these things the word of the Lord came unto Abram in a vision, saying',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 15:1',
     book:'Genesis',
     category:'ultimate',
@@ -13195,6 +16021,9 @@ const BIBLE_VERSES = [
   {
     id:'gen28_15',
     text:'And, behold, I am with thee, and will keep thee in all places whither thou',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 28:15',
     book:'Genesis',
     category:'ultimate',
@@ -13209,6 +16038,9 @@ const BIBLE_VERSES = [
   {
     id:'exo3_14',
     text:'And God said unto Moses, I AM THAT I AM: and he said, Thus shalt',
+    nkjv: "And God said to Moses, 'I AM WHO I AM.' And He said, 'Thus you shall say to the children of Israel, 'I AM has sent me to you.''",
+    niv: "God said to Moses, 'I AM WHO I AM. This is what you are to say to the Israelites: 'I AM has sent me to you.''",
+    nlt: "God replied to Moses, 'I AM WHO I AM. Say this to the people of Israel: I AM has sent me to you.'",
     reference:'Exodus 3:14',
     book:'Exodus',
     category:'ultimate',
@@ -13223,6 +16055,9 @@ const BIBLE_VERSES = [
   {
     id:'exo14_14',
     text:'The Lord shall fight for you, and ye shall hold your peace',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 14:14',
     book:'Exodus',
     category:'ultimate',
@@ -13237,6 +16072,9 @@ const BIBLE_VERSES = [
   {
     id:'exo15_3',
     text:'The Lord is a man of war: the Lord is his name',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 15:3',
     book:'Exodus',
     category:'ultimate',
@@ -13251,6 +16089,9 @@ const BIBLE_VERSES = [
   {
     id:'num6_24',
     text:'The Lord bless thee, and keep thee',
+    nkjv: "The LORD bless you and keep you;",
+    niv: "The LORD bless you and keep you;",
+    nlt: "May the LORD bless you and protect you.",
     reference:'Numbers 6:24',
     book:'Numbers',
     category:'ultimate',
@@ -13265,6 +16106,9 @@ const BIBLE_VERSES = [
   {
     id:'num23_8',
     text:'How shall I curse, whom God hath not cursed? or how shall I defy, whom',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 23:8',
     book:'Numbers',
     category:'ultimate',
@@ -13279,6 +16123,9 @@ const BIBLE_VERSES = [
   {
     id:'deu28_13',
     text:'And the Lord shall make thee the head, and not the tail; and thou shalt',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Deuteronomy 28:13',
     book:'Deuteronomy',
     category:'ultimate',
@@ -13293,6 +16140,9 @@ const BIBLE_VERSES = [
   {
     id:'deu28_7',
     text:'The Lord shall cause thine enemies that rise up against thee to be smitten before',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Deuteronomy 28:7',
     book:'Deuteronomy',
     category:'ultimate',
@@ -13307,6 +16157,9 @@ const BIBLE_VERSES = [
   {
     id:'deu31_6',
     text:'Be strong and of a good courage, fear not, nor be afraid of them: for',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Deuteronomy 31:6',
     book:'Deuteronomy',
     category:'ultimate',
@@ -13321,6 +16174,9 @@ const BIBLE_VERSES = [
   {
     id:'deu33_27',
     text:'The eternal God is thy refuge, and underneath are the everlasting arms: and he shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Deuteronomy 33:27',
     book:'Deuteronomy',
     category:'ultimate',
@@ -13335,6 +16191,9 @@ const BIBLE_VERSES = [
   {
     id:'isa41_10',
     text:'Fear thou not; for I am with thee: be not dismayed; for I am thy',
+    nkjv: "Fear not, for I am with you; Be not dismayed, for I am your God. I will strengthen you, Yes, I will help you, I will uphold you with My righteous right hand.",
+    niv: "So do not fear, for I am with you; do not be dismayed, for I am your God. I will strengthen you and help you; I will uphold you with my righteous right hand.",
+    nlt: "Don't be afraid, for I am with you. Don't be discouraged, for I am your God. I will strengthen you and help you. I will hold you up with my victorious right hand.",
     reference:'Isaiah 41:10',
     book:'Isaiah',
     category:'ultimate',
@@ -13349,6 +16208,9 @@ const BIBLE_VERSES = [
   {
     id:'isa43_2',
     text:'When thou passest through the waters, I will be with thee; and through the rivers',
+    nkjv: "When you pass through the waters, I will be with you; And through the rivers, they shall not overflow you. When you walk through the fire, you shall not be burned, Nor shall the flame scorch you.",
+    niv: "When you pass through the waters, I will be with you; and when you pass through the rivers, they will not sweep over you. When you walk through the fire, you will not be burned; the flames will not set you ablaze.",
+    nlt: "When you go through deep waters, I will be with you. When you go through rivers of difficulty, you will not drown. When you walk through the fire of oppression, you will not be burned up; the flames will not consume you.",
     reference:'Isaiah 43:2',
     book:'Isaiah',
     category:'ultimate',
@@ -13363,6 +16225,9 @@ const BIBLE_VERSES = [
   {
     id:'isa43_10',
     text:'Ye are my witnesses, saith the Lord, and my servant whom I have chosen: that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 43:10',
     book:'Isaiah',
     category:'ultimate',
@@ -13377,6 +16242,9 @@ const BIBLE_VERSES = [
   {
     id:'isa44_6',
     text:'Thus saith the Lord the King of Israel, and his redeemer the Lord of hosts',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 44:6',
     book:'Isaiah',
     category:'ultimate',
@@ -13391,6 +16259,9 @@ const BIBLE_VERSES = [
   {
     id:'isa45_22',
     text:'Look unto me, and be ye saved, all the ends of the earth: for I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 45:22',
     book:'Isaiah',
     category:'ultimate',
@@ -13405,6 +16276,9 @@ const BIBLE_VERSES = [
   {
     id:'isa54_17',
     text:'No weapon that is formed against thee shall prosper; and every tongue that shall rise',
+    nkjv: "No weapon formed against you shall prosper, And every tongue which rises against you in judgment You shall condemn. This is the heritage of the servants of the LORD, And their righteousness is from Me, Says the LORD.",
+    niv: "No weapon forged against you will prevail, and you will refute every tongue that accuses you. This is the heritage of the servants of the LORD, and this is their vindication from me, declares the LORD.",
+    nlt: "But in that coming day no weapon turned against you will succeed. You will silence every voice raised up to accuse you. These benefits are enjoyed by the servants of the LORD; their vindication will come from me. I, the LORD, have spoken!",
     reference:'Isaiah 54:17',
     book:'Isaiah',
     category:'ultimate',
@@ -13419,6 +16293,9 @@ const BIBLE_VERSES = [
   {
     id:'isa55_11',
     text:'So shall my word be that goeth forth out of my mouth: it shall not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 55:11',
     book:'Isaiah',
     category:'ultimate',
@@ -13433,6 +16310,9 @@ const BIBLE_VERSES = [
   {
     id:'isa60_1',
     text:'Arise, shine; for thy light is come, and the glory of the Lord is risen',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Isaiah 60:1',
     book:'Isaiah',
     category:'ultimate',
@@ -13447,6 +16327,9 @@ const BIBLE_VERSES = [
   {
     id:'jer32_27',
     text:'Behold, I am the Lord, the God of all flesh: is there any thing too',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Jeremiah 32:27',
     book:'Jeremiah',
     category:'ultimate',
@@ -13461,6 +16344,9 @@ const BIBLE_VERSES = [
   {
     id:'dan3_17',
     text:'If it be so, our God whom we serve is able to deliver us from',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Daniel 3:17',
     book:'Daniel',
     category:'ultimate',
@@ -13475,6 +16361,9 @@ const BIBLE_VERSES = [
   {
     id:'mic7_8',
     text:'Rejoice not against me, O mine enemy: when I fall, I shall arise; when I',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Micah 7:8',
     book:'Micah',
     category:'ultimate',
@@ -13489,6 +16378,9 @@ const BIBLE_VERSES = [
   {
     id:'mat28_18',
     text:'And Jesus came and spake unto them, saying, All power is given unto me in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Matthew 28:18',
     book:'Matthew',
     category:'ultimate',
@@ -13503,6 +16395,9 @@ const BIBLE_VERSES = [
   {
     id:'joh1_1',
     text:'In the beginning was the Word, and the Word was with God, and the Word',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'John 1:1',
     book:'John',
     category:'ultimate',
@@ -13517,6 +16412,9 @@ const BIBLE_VERSES = [
   {
     id:'joh1_5',
     text:'And the light shineth in darkness; and the darkness comprehended it not',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'John 1:5',
     book:'John',
     category:'ultimate',
@@ -13531,6 +16429,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_31',
     text:'What shall we then say to these things? If God be for us, who can',
+    nkjv: "What then shall we say to these things? If God is for us, who can be against us?",
+    niv: "What, then, shall we say in response to these things? If God is for us, who can be against us?",
+    nlt: "What shall we say about such wonderful things as these? If God is for us, who can ever be against us?",
     reference:'Romans 8:31',
     book:'Romans',
     category:'ultimate',
@@ -13545,6 +16446,9 @@ const BIBLE_VERSES = [
   {
     id:'rom8_37',
     text:'Nay, in all these things we are more than conquerors through him that loved us',
+    nkjv: "Yet in all these things we are more than conquerors through Him who loved us.",
+    niv: "No, in all these things we are more than conquerors through him who loved us.",
+    nlt: "No, despite all these things, overwhelming victory is ours through Christ, who loved us.",
     reference:'Romans 8:37',
     book:'Romans',
     category:'ultimate',
@@ -13559,6 +16463,9 @@ const BIBLE_VERSES = [
   {
     id:'eph6_10',
     text:'Finally, my brethren, be strong in the Lord, and in the power of his might',
+    nkjv: "Finally, my brethren, be strong in the Lord and in the power of His might.",
+    niv: "Finally, be strong in the Lord and in his mighty power.",
+    nlt: "A final word: Be strong in the Lord and in his mighty power.",
     reference:'Ephesians 6:10',
     book:'Ephesians',
     category:'ultimate',
@@ -13573,6 +16480,9 @@ const BIBLE_VERSES = [
   {
     id:'rev5_5',
     text:'And one of the elders saith unto me, Weep not: behold, the Lion of the',
+    nkjv: "But one of the elders said to me, 'Do not weep. Behold, the Lion of the tribe of Judah, the Root of David, has prevailed to open the scroll and to loose its seven seals.'",
+    niv: "Then one of the elders said to me, 'Do not weep! See, the Lion of the tribe of Judah, the Root of David, has triumphed. He is able to open the scroll and its seven seals.'",
+    nlt: "But one of the twenty-four elders said to me, 'Stop weeping! Look, the Lion of the tribe of Judah, the heir to David's throne, has won the victory. He is worthy to open the scroll and its seven seals.'",
     reference:'Revelation 5:5',
     book:'Revelation',
     category:'ultimate',
@@ -13587,6 +16497,9 @@ const BIBLE_VERSES = [
   {
     id:'rev12_11',
     text:'And they overcame him by the blood of the Lamb, and by the word of',
+    nkjv: "And they overcame him by the blood of the Lamb and by the word of their testimony, and they did not love their lives to the death.",
+    niv: "They triumphed over him by the blood of the Lamb and by the word of their testimony; they did not love their lives so much as to shrink from death.",
+    nlt: "And they have defeated him by the blood of the Lamb and by their testimony. And they did not love their lives so much that they were afraid to die.",
     reference:'Revelation 12:11',
     book:'Revelation',
     category:'ultimate',
@@ -13601,6 +16514,9 @@ const BIBLE_VERSES = [
   {
     id:'rev19_11',
     text:'And I saw heaven opened, and behold a white horse; and he that sat upon',
+    nkjv: "Now I saw heaven opened, and behold a white horse. And He who sat on him was called Faithful and True, and in righteousness He judges and makes war.",
+    niv: "I saw heaven standing open and there before me was a white horse, whose rider is called Faithful and True. With justice he judges and wages war.",
+    nlt: "Then I saw heaven opened, and a white horse was standing there. Its rider was named Faithful and True, for he judges fairly and wages a righteous war.",
     reference:'Revelation 19:11',
     book:'Revelation',
     category:'ultimate',
@@ -13615,6 +16531,9 @@ const BIBLE_VERSES = [
   {
     id:'rev22_13',
     text:'I am Alpha and Omega, the beginning and the end, the first and the last',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Revelation 22:13',
     book:'Revelation',
     category:'ultimate',
@@ -13629,6 +16548,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn4_4',
     text:'Ye are of God, little children, and have overcome them: because greater is he that',
+    nkjv: "You are of God, little children, and have overcome them, because He who is in you is greater than he who is in the world.",
+    niv: "You, dear children, are from God and have overcome them, because the one who is in you is greater than the one who is in the world.",
+    nlt: "But you belong to God, my dear children. You have already won a victory over those people, because the Spirit who lives in you is greater than the spirit who lives in the world.",
     reference:'1 John 4:4',
     book:'1 John',
     category:'ultimate',
@@ -13643,6 +16565,9 @@ const BIBLE_VERSES = [
   {
     id:'1jn5_4',
     text:'For whatsoever is born of God overcometh the world: and this is the victory that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'1 John 5:4',
     book:'1 John',
     category:'ultimate',
@@ -13657,6 +16582,9 @@ const BIBLE_VERSES = [
   {
     id:'jos1_9',
     text:'Have not I commanded thee? Be strong and of a good courage; be not afraid',
+    nkjv: "Have I not commanded you? Be strong and of good courage; do not be afraid, nor be dismayed, for the LORD your God is with you wherever you go.",
+    niv: "Have I not commanded you? Be strong and courageous. Do not be afraid; do not be discouraged, for the LORD your God will be with you wherever you go.",
+    nlt: "This is my command—be strong and courageous! Do not be afraid or discouraged. For the LORD your God is with you wherever you go.",
     reference:'Joshua 1:9',
     book:'Joshua',
     category:'ultimate',
@@ -13671,6 +16599,9 @@ const BIBLE_VERSES = [
   {
     id:'2sa22_2',
     text:'And he said, The Lord is my rock, and my fortress, and my deliverer',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'2 Samuel 22:2',
     book:'2 Samuel',
     category:'ultimate',
@@ -13685,6 +16616,9 @@ const BIBLE_VERSES = [
   {
     id:'gen3_11',
     text:'And he said, Who told thee that thou wast naked? Hast thou eaten of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 3:11',
     book:'Genesis',
     category:'ultimate',
@@ -13699,6 +16633,9 @@ const BIBLE_VERSES = [
   {
     id:'gen4_4',
     text:'And Abel, he also brought of the firstlings of his flock and of the fat',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 4:4',
     book:'Genesis',
     category:'ultimate',
@@ -13713,6 +16650,9 @@ const BIBLE_VERSES = [
   {
     id:'gen24_23',
     text:'And said, Whose daughter art thou? tell me, I pray thee: is there room in',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 24:23',
     book:'Genesis',
     category:'ultimate',
@@ -13727,6 +16667,9 @@ const BIBLE_VERSES = [
   {
     id:'gen36_25',
     text:'And the children of Anah were these; Dishon, and Aholibamah the daughter of Anah',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 36:25',
     book:'Genesis',
     category:'ultimate',
@@ -13741,6 +16684,9 @@ const BIBLE_VERSES = [
   {
     id:'gen27_1',
     text:'And it came to pass, that when Isaac was old, and his eyes were dim',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 27:1',
     book:'Genesis',
     category:'ultimate',
@@ -13755,6 +16701,9 @@ const BIBLE_VERSES = [
   {
     id:'gen43_6',
     text:'And Israel said, Wherefore dealt ye so ill with me, as to tell the man',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 43:6',
     book:'Genesis',
     category:'ultimate',
@@ -13769,6 +16718,9 @@ const BIBLE_VERSES = [
   {
     id:'gen48_14',
     text:'And Israel stretched out his right hand, and laid it upon Ephraim’s head, who was',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 48:14',
     book:'Genesis',
     category:'ultimate',
@@ -13783,6 +16735,9 @@ const BIBLE_VERSES = [
   {
     id:'gen49_26',
     text:'The blessings of thy father have prevailed above the blessings of my progenitors unto the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 49:26',
     book:'Genesis',
     category:'ultimate',
@@ -13797,6 +16752,9 @@ const BIBLE_VERSES = [
   {
     id:'gen27_3',
     text:'Now therefore take, I pray thee, thy weapons, thy quiver and thy bow, and go',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 27:3',
     book:'Genesis',
     category:'ultimate',
@@ -13811,6 +16769,9 @@ const BIBLE_VERSES = [
   {
     id:'gen4_25',
     text:'And Adam knew his wife again; and she bare a son, and called his name',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 4:25',
     book:'Genesis',
     category:'ultimate',
@@ -13825,6 +16786,9 @@ const BIBLE_VERSES = [
   {
     id:'gen26_26',
     text:'Then Abimelech went to him from Gerar, and Ahuzzath one of his friends, and Phichol',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 26:26',
     book:'Genesis',
     category:'ultimate',
@@ -13839,6 +16803,9 @@ const BIBLE_VERSES = [
   {
     id:'gen17_20',
     text:'And as for Ishmael, I have heard thee: Behold, I have blessed him, and will',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 17:20',
     book:'Genesis',
     category:'ultimate',
@@ -13853,6 +16820,9 @@ const BIBLE_VERSES = [
   {
     id:'gen34_23',
     text:'Shall not their cattle and their substance and every beast of theirs be ours? only',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 34:23',
     book:'Genesis',
     category:'ultimate',
@@ -13867,6 +16837,9 @@ const BIBLE_VERSES = [
   {
     id:'gen24_37',
     text:'And my master made me swear, saying, Thou shalt not take a wife to my',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 24:37',
     book:'Genesis',
     category:'ultimate',
@@ -13881,6 +16854,9 @@ const BIBLE_VERSES = [
   {
     id:'gen25_20',
     text:'And Isaac was forty years old when he took Rebekah to wife, the daughter of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 25:20',
     book:'Genesis',
     category:'ultimate',
@@ -13895,6 +16871,9 @@ const BIBLE_VERSES = [
   {
     id:'gen46_3',
     text:'And he said, I am God, the God of thy father: fear not to go',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 46:3',
     book:'Genesis',
     category:'ultimate',
@@ -13909,6 +16888,9 @@ const BIBLE_VERSES = [
   {
     id:'gen18_2',
     text:'And he lift up his eyes and looked, and, lo, three men stood by him',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 18:2',
     book:'Genesis',
     category:'ultimate',
@@ -13923,6 +16905,9 @@ const BIBLE_VERSES = [
   {
     id:'gen44_11',
     text:'Then they speedily took down every man his sack to the ground, and opened every',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 44:11',
     book:'Genesis',
     category:'ultimate',
@@ -13937,6 +16922,9 @@ const BIBLE_VERSES = [
   {
     id:'gen31_52',
     text:'This heap be witness, and this pillar be witness, that I will not pass over',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 31:52',
     book:'Genesis',
     category:'ultimate',
@@ -13951,6 +16939,9 @@ const BIBLE_VERSES = [
   {
     id:'gen15_4',
     text:'And, behold, the word of the Lord came unto him, saying, This shall not be',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 15:4',
     book:'Genesis',
     category:'ultimate',
@@ -13965,6 +16956,9 @@ const BIBLE_VERSES = [
   {
     id:'gen30_34',
     text:'And Laban said, Behold, I would it might be according to thy word',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 30:34',
     book:'Genesis',
     category:'ultimate',
@@ -13979,6 +16973,9 @@ const BIBLE_VERSES = [
   {
     id:'gen42_24',
     text:'And he turned himself about from them, and wept; and returned to them again, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 42:24',
     book:'Genesis',
     category:'ultimate',
@@ -13993,6 +16990,9 @@ const BIBLE_VERSES = [
   {
     id:'gen21_14',
     text:'And Abraham rose up early in the morning, and took bread, and a bottle of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 21:14',
     book:'Genesis',
     category:'ultimate',
@@ -14007,6 +17007,9 @@ const BIBLE_VERSES = [
   {
     id:'gen5_30',
     text:'And Lamech lived after he begat Noah five hundred ninety and five years, and begat',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 5:30',
     book:'Genesis',
     category:'ultimate',
@@ -14021,6 +17024,9 @@ const BIBLE_VERSES = [
   {
     id:'gen10_31',
     text:'These are the sons of Shem, after their families, after their tongues, in their lands',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 10:31',
     book:'Genesis',
     category:'ultimate',
@@ -14035,6 +17041,9 @@ const BIBLE_VERSES = [
   {
     id:'gen26_33',
     text:'And he called it Shebah: therefore the name of the city is Beer–sheba unto this',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 26:33',
     book:'Genesis',
     category:'ultimate',
@@ -14049,6 +17058,9 @@ const BIBLE_VERSES = [
   {
     id:'gen50_17',
     text:'So shall ye say unto Joseph, Forgive, I pray thee now, the trespass of thy',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 50:17',
     book:'Genesis',
     category:'ultimate',
@@ -14063,6 +17075,9 @@ const BIBLE_VERSES = [
   {
     id:'gen34_16',
     text:'Then will we give our daughters unto you, and we will take your daughters to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 34:16',
     book:'Genesis',
     category:'ultimate',
@@ -14077,6 +17092,9 @@ const BIBLE_VERSES = [
   {
     id:'gen47_3',
     text:'And Pharaoh said unto his brethren, What is your occupation? And they said unto Pharaoh',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 47:3',
     book:'Genesis',
     category:'ultimate',
@@ -14091,6 +17109,9 @@ const BIBLE_VERSES = [
   {
     id:'gen31_3',
     text:'And the Lord said unto Jacob, Return unto the land of thy fathers, and to',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Genesis 31:3',
     book:'Genesis',
     category:'ultimate',
@@ -14105,6 +17126,9 @@ const BIBLE_VERSES = [
   {
     id:'exo39_23',
     text:'And there was an hole in the midst of the robe, as the hole of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 39:23',
     book:'Exodus',
     category:'ultimate',
@@ -14119,6 +17143,9 @@ const BIBLE_VERSES = [
   {
     id:'exo32_15',
     text:'And Moses turned, and went down from the mount, and the two tables of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 32:15',
     book:'Exodus',
     category:'ultimate',
@@ -14133,6 +17160,9 @@ const BIBLE_VERSES = [
   {
     id:'exo40_22',
     text:'And he put the table in the tent of the congregation, upon the side of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 40:22',
     book:'Exodus',
     category:'ultimate',
@@ -14147,6 +17177,9 @@ const BIBLE_VERSES = [
   {
     id:'exo28_21',
     text:'And the stones shall be with the names of the children of Israel, twelve, according',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 28:21',
     book:'Exodus',
     category:'ultimate',
@@ -14161,6 +17194,9 @@ const BIBLE_VERSES = [
   {
     id:'exo37_3',
     text:'And he cast for it four rings of gold, to be set by the four',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 37:3',
     book:'Exodus',
     category:'ultimate',
@@ -14175,6 +17211,9 @@ const BIBLE_VERSES = [
   {
     id:'exo16_26',
     text:'Six days ye shall gather it; but on the seventh day, which is the sabbath',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 16:26',
     book:'Exodus',
     category:'ultimate',
@@ -14189,6 +17228,9 @@ const BIBLE_VERSES = [
   {
     id:'exo26_3',
     text:'The five curtains shall be coupled together one to another; and other five curtains shall',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 26:3',
     book:'Exodus',
     category:'ultimate',
@@ -14203,6 +17245,9 @@ const BIBLE_VERSES = [
   {
     id:'exo14_3',
     text:'For Pharaoh will say of the children of Israel, They are entangled in the land',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 14:3',
     book:'Exodus',
     category:'ultimate',
@@ -14217,6 +17262,9 @@ const BIBLE_VERSES = [
   {
     id:'exo38_24',
     text:'All the gold that was occupied for the work in all the work of the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 38:24',
     book:'Exodus',
     category:'ultimate',
@@ -14231,6 +17279,9 @@ const BIBLE_VERSES = [
   {
     id:'exo7_4',
     text:'But Pharaoh shall not hearken unto you, that I may lay my hand upon Egypt',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 7:4',
     book:'Exodus',
     category:'ultimate',
@@ -14245,6 +17296,9 @@ const BIBLE_VERSES = [
   {
     id:'exo16_15',
     text:'And when the children of Israel saw it, they said one to another, It is',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 16:15',
     book:'Exodus',
     category:'ultimate',
@@ -14259,6 +17313,9 @@ const BIBLE_VERSES = [
   {
     id:'exo21_20',
     text:'And if a man smite his servant, or his maid, with a rod, and he',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 21:20',
     book:'Exodus',
     category:'ultimate',
@@ -14273,6 +17330,9 @@ const BIBLE_VERSES = [
   {
     id:'exo23_32',
     text:'Thou shalt make no covenant with them, nor with their gods',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 23:32',
     book:'Exodus',
     category:'ultimate',
@@ -14287,6 +17347,9 @@ const BIBLE_VERSES = [
   {
     id:'exo28_25',
     text:'And the other two ends of the two wreathen chains thou shalt fasten in the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 28:25',
     book:'Exodus',
     category:'ultimate',
@@ -14301,6 +17364,9 @@ const BIBLE_VERSES = [
   {
     id:'exo30_4',
     text:'And two golden rings shalt thou make to it under the crown of it, by',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 30:4',
     book:'Exodus',
     category:'ultimate',
@@ -14315,6 +17381,9 @@ const BIBLE_VERSES = [
   {
     id:'exo6_16',
     text:'And these are the names of the sons of Levi according to their generations; Gershon',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 6:16',
     book:'Exodus',
     category:'ultimate',
@@ -14329,6 +17398,9 @@ const BIBLE_VERSES = [
   {
     id:'exo37_21',
     text:'And a knop under two branches of the same, and a knop under two branches',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 37:21',
     book:'Exodus',
     category:'ultimate',
@@ -14343,6 +17415,9 @@ const BIBLE_VERSES = [
   {
     id:'exo29_35',
     text:'And thus shalt thou do unto Aaron, and to his sons, according to all things',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 29:35',
     book:'Exodus',
     category:'ultimate',
@@ -14357,6 +17432,9 @@ const BIBLE_VERSES = [
   {
     id:'exo34_2',
     text:'And be ready in the morning, and come up in the morning unto mount Sinai',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 34:2',
     book:'Exodus',
     category:'ultimate',
@@ -14371,6 +17449,9 @@ const BIBLE_VERSES = [
   {
     id:'exo34_5',
     text:'And the Lord descended in the cloud, and stood with him there, and proclaimed the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 34:5',
     book:'Exodus',
     category:'ultimate',
@@ -14385,6 +17466,9 @@ const BIBLE_VERSES = [
   {
     id:'exo26_12',
     text:'And the remnant that remaineth of the curtains of the tent, the half curtain that',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 26:12',
     book:'Exodus',
     category:'ultimate',
@@ -14399,6 +17483,9 @@ const BIBLE_VERSES = [
   {
     id:'exo8_30',
     text:'And Moses went out from Pharaoh, and intreated the Lord',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 8:30',
     book:'Exodus',
     category:'ultimate',
@@ -14413,6 +17500,9 @@ const BIBLE_VERSES = [
   {
     id:'exo19_24',
     text:'And the Lord said unto him, Away, get thee down, and thou shalt come up',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 19:24',
     book:'Exodus',
     category:'ultimate',
@@ -14427,6 +17517,9 @@ const BIBLE_VERSES = [
   {
     id:'exo16_35',
     text:'And the children of Israel did eat manna forty years, until they came to a',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 16:35',
     book:'Exodus',
     category:'ultimate',
@@ -14441,6 +17534,9 @@ const BIBLE_VERSES = [
   {
     id:'exo36_13',
     text:'And he made fifty taches of gold, and coupled the curtains one unto another with',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 36:13',
     book:'Exodus',
     category:'ultimate',
@@ -14455,6 +17551,9 @@ const BIBLE_VERSES = [
   {
     id:'exo12_23',
     text:'For the Lord will pass through to smite the Egyptians; and when he seeth the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 12:23',
     book:'Exodus',
     category:'ultimate',
@@ -14469,6 +17568,9 @@ const BIBLE_VERSES = [
   {
     id:'exo7_2',
     text:'Thou shalt speak all that I command thee: and Aaron thy brother shall speak unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 7:2',
     book:'Exodus',
     category:'ultimate',
@@ -14483,6 +17585,9 @@ const BIBLE_VERSES = [
   {
     id:'exo5_20',
     text:'And they met Moses and Aaron, who stood in the way, as they came forth',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 5:20',
     book:'Exodus',
     category:'ultimate',
@@ -14497,6 +17602,9 @@ const BIBLE_VERSES = [
   {
     id:'exo4_25',
     text:'Then Zipporah took a sharp stone, and cut off the foreskin of her son, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 4:25',
     book:'Exodus',
     category:'ultimate',
@@ -14511,6 +17619,9 @@ const BIBLE_VERSES = [
   {
     id:'exo4_1',
     text:'And Moses answered and said, But, behold, they will not believe me, nor hearken unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Exodus 4:1',
     book:'Exodus',
     category:'ultimate',
@@ -14525,6 +17636,9 @@ const BIBLE_VERSES = [
   {
     id:'num23_6',
     text:'And he returned unto him, and, lo, he stood by his burnt sacrifice, he, and',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 23:6',
     book:'Numbers',
     category:'ultimate',
@@ -14539,6 +17653,9 @@ const BIBLE_VERSES = [
   {
     id:'num23_18',
     text:'And he took up his parable, and said, Rise up, Balak, and hear; hearken unto',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 23:18',
     book:'Numbers',
     category:'ultimate',
@@ -14553,6 +17670,9 @@ const BIBLE_VERSES = [
   {
     id:'num33_32',
     text:'And they removed from Bene–jaakan, and encamped at Hor–hagidgad',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 33:32',
     book:'Numbers',
     category:'ultimate',
@@ -14567,6 +17687,9 @@ const BIBLE_VERSES = [
   {
     id:'num21_23',
     text:'And Sihon would not suffer Israel to pass through his border: but Sihon gathered all',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 21:23',
     book:'Numbers',
     category:'ultimate',
@@ -14581,6 +17704,9 @@ const BIBLE_VERSES = [
   {
     id:'num2_34',
     text:'And the children of Israel did according to all that the Lord commanded Moses: so',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 2:34',
     book:'Numbers',
     category:'ultimate',
@@ -14595,6 +17721,9 @@ const BIBLE_VERSES = [
   {
     id:'num4_16',
     text:'And to the office of Eleazar the son of Aaron the priest pertaineth the oil',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 4:16',
     book:'Numbers',
     category:'ultimate',
@@ -14609,6 +17738,9 @@ const BIBLE_VERSES = [
   {
     id:'num18_25',
     text:'And the Lord spake unto Moses, saying',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 18:25',
     book:'Numbers',
     category:'ultimate',
@@ -14623,6 +17755,9 @@ const BIBLE_VERSES = [
   {
     id:'num18_22',
     text:'Neither must the children of Israel henceforth come nigh the tabernacle of the congregation, lest',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 18:22',
     book:'Numbers',
     category:'ultimate',
@@ -14637,6 +17772,9 @@ const BIBLE_VERSES = [
   {
     id:'num21_32',
     text:'And Moses sent to spy out Jaazer, and they took the villages thereof, and drove',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 21:32',
     book:'Numbers',
     category:'ultimate',
@@ -14651,6 +17789,9 @@ const BIBLE_VERSES = [
   {
     id:'num28_11',
     text:'And in the beginnings of your months ye shall offer a burnt offering unto the',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 28:11',
     book:'Numbers',
     category:'ultimate',
@@ -14665,6 +17806,9 @@ const BIBLE_VERSES = [
   {
     id:'num5_24',
     text:'And he shall cause the woman to drink the bitter water that causeth the curse',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 5:24',
     book:'Numbers',
     category:'ultimate',
@@ -14679,6 +17823,9 @@ const BIBLE_VERSES = [
   {
     id:'num34_25',
     text:'And the prince of the tribe of the children of Zebulun, Elizaphan the son of',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 34:25',
     book:'Numbers',
     category:'ultimate',
@@ -14693,6 +17840,9 @@ const BIBLE_VERSES = [
   {
     id:'num16_38',
     text:'The censers of these sinners against their own souls, let them make them broad plates',
+    nkjv: null,
+    niv: null,
+    nlt: null,
     reference:'Numbers 16:38',
     book:'Numbers',
     category:'ultimate',
@@ -14740,7 +17890,28 @@ function getBibleStats(discoveredIds){
   const total = BIBLE_VERSES.length;
   const discovered = BIBLE_VERSES.filter(v => inSet(v.id)).length;
   const pct = total ? Math.round((discovered/total)*100) : 0;
-  return { total, discovered, pct, byCategory };
+  const withNkjv = BIBLE_VERSES.filter(v => v.nkjv).length;
+  const withNiv  = BIBLE_VERSES.filter(v => v.niv).length;
+  const withNlt  = BIBLE_VERSES.filter(v => v.nlt).length;
+  const translationCoverage = {
+    nkjv: { count: withNkjv, pct: total ? Math.round((withNkjv/total)*100) : 0 },
+    niv:  { count: withNiv,  pct: total ? Math.round((withNiv/total)*100) : 0 },
+    nlt:  { count: withNlt,  pct: total ? Math.round((withNlt/total)*100) : 0 }
+  };
+  return { total, discovered, pct, byCategory, translationCoverage };
+}
+
+// ── Difficulty-based verse text ──────────────────────
+function getVerseText(verse, difficulty){
+  if (!verse) return '';
+  if (difficulty === 1) return verse.nlt || verse.text;          // easy: modern paraphrase
+  if (difficulty === 2) return verse.nkjv || verse.niv || verse.text; // medium: updated formal
+  return verse.text;                                              // hard (3): exact KJV
+}
+function getTranslationName(difficulty){
+  if (difficulty === 1) return 'NLT';
+  if (difficulty === 2) return 'NKJV';
+  return 'KJV';
 }
 
 // Categories + types enumerations (handy for UI)
