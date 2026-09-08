@@ -330,6 +330,30 @@ function verseTypeColor(t){
        : t === 'mercy'  ? C.green : C.white;
 }
 
+// Verse types currently represented by the player's in-progress selection
+function selectedTypes(){
+  if (!combat) return [];
+  const types = [];
+  for (const i of combat.selected){
+    const e = combat.pool[i];
+    if (e && e.v >= 0) types.push(combat.verses[e.v].type);
+  }
+  return types;
+}
+// Which target verse the current selection best matches as a prefix (-1 = none)
+function activeVerseIndex(){
+  if (!combat) return -1;
+  const sel = combat.selected.map(i => combat.pool[i].word);
+  let best = -1, bestLen = -1;
+  for (let vi = 0; vi < combat.verses.length; vi++){
+    const w = combat.verses[vi].words;
+    let k = 0;
+    while (k < sel.length && k < w.length && sel[k] === w[k]) k++;
+    if (k > bestLen){ bestLen = k; best = vi; }
+  }
+  return best;
+}
+
 // ═══════════════════════════════════════════════════════════════
 // KNOWLEDGE / PROGRESSION BOOTSTRAP
 // ═══════════════════════════════════════════════════════════════
@@ -410,6 +434,7 @@ function startCombat(node){
       NemesisSystem.onEncounter();
       game.nemesisDone[game.floor] = true;
       isNemesis = true;
+      if (!game.hintsShown['nemesis']) showHint('nemesis', 'The Stalker returns every 3 floors. It grows stronger.', true);
     } else {
       demon = getDemonForFloor(game.floor);
     }
@@ -478,7 +503,7 @@ function clearSelection(){ if (combat) combat.selected = []; }
 function submitVerse(){
   if (!combat) return;
   const chosen = combat.selected.map(i => combat.pool[i]);
-  const match = checkVerse(chosen, combat.verseQueue);
+  const match = checkVerse(chosen, combat.verses);
   if (!match){
     // Scattered words — the verse slips away
     combat.message = 'SCATTERED! The words dissolve...';
@@ -703,8 +728,10 @@ function enterNode(node){
     case NODE_TYPE.SHOP:
       shopItems = generateShopItems(game.floor);
       shopBought = {};
+      if (!game.hintsShown['shop']) showHint('shop', 'Buy verses and supplies with gold from combat.', true);
       game.state = 'SHOP'; MusicEngine.playTrack('shop'); break;
     case NODE_TYPE.REST:
+      if (!game.hintsShown['shrine']) showHint('shrine', 'Pray at shrines to heal and learn new verses.', true);
       game.state = 'REST'; MusicEngine.playTrack('rest'); break;
     case NODE_TYPE.TREASURE:
       rollTreasure(); break;
@@ -854,6 +881,12 @@ function renderTitle(){ MusicEngine.playTrack('title');
       AdaptiveDifficulty.save();
     }
   }, C.red);
+  // Accessibility: timer toggle (gear ⚙ + label)
+  const timerLabel = '⚙ TIMER: ' + (game.timerEnabled ? 'ON' : 'OFF');
+  button(cx-50, 172 + 16, 100, 12, timerLabel, () => {
+    game.timerEnabled = !game.timerEnabled;
+    localStorage.setItem('seven_falls_timer', game.timerEnabled ? 'true' : 'false');
+  }, game.timerEnabled ? C.green : C.dim);
 }
 
 let introStep = 0;
@@ -1197,8 +1230,6 @@ function renderCombatWin(){
     }
   }, C.gold);
 }
-
-function render(){
 
 // Apply a resolved EventEngine effect object (already from EventEngine.generate)
 function applyEventEffectResult(effect, cost){

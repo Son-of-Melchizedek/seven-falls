@@ -177,78 +177,70 @@ function getVersesForFloor(floor) {
   return VERSES.filter(v => v.difficulty <= maxDiff);
 }
 
-// Build the combat word pool from a QUEUE of verses (array, not a single verse).
-//   verses    : ordered array; verses[0] is the ACTIVE target, the rest sit
-//               queued below it. The UI presents them as one pool.
-//   floor     : current floor depth (for decoy scaling).
-//   usedWords : Set of words already used correctly — excluded so a finished
-//               verse's words leave the pool and the next verse's words replace
-//               them, keeping the visible pool at ~15-20 words.
-// Returns a flat array of word strings (length clamped to [15,20] when possible).
-function getCombatPool(verses, floor, usedWords) {
-  usedWords = usedWords || new Set();
-  if (!verses || verses.length === 0) return [];
-
-  // ── Correct words: every not-yet-used word from the queued verses ──
-  const correct = [];
-  for (const v of verses) {
-    for (const w of v.words) {
-      if (!usedWords.has(w) && !correct.includes(w)) correct.push(w);
+// Pick 2 distinct verses for a combat, preferring ones small enough to fit the
+// on-screen pool (combined word count <= 16). Prefers known verses for comfort.
+function getCombatVersePair(floor) {
+  const pool = getVersesForFloor(floor);
+  let known = pool;
+  if (typeof KnowledgeSystem !== 'undefined' && KnowledgeSystem.store) {
+    const d = KnowledgeSystem.store.discoveredVerses || [];
+    const k = pool.filter(v => d.includes(v.id));
+    if (k.length >= 2) known = k;
+  }
+  const s = known.slice();
+  for (let i = s.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = s[i]; s[i] = s[j]; s[j] = t;
+  }
+  for (let i = 0; i < s.length; i++) {
+    for (let j = i + 1; j < s.length; j++) {
+      if (s[i].words.length + s[j].words.length <= 16) return [s[i], s[j]];
     }
   }
+  return [s[0], s[1] || s[0]];
+}
 
-  // ── Decoys: words from verses NOT in this combat's queue ──
+// Build the combat word pool from a PAIR of verses (2 at a time).
+// Returns an array of tokens { word, v } where `v` is the index of the owning
+// verse in `verses` (or -1 for a decoy). This lets the UI colour each tile by
+// its verse type and support forming ANY of the offered verses — which is what
+// the combo system needs.
+function getCombatPool(verses, floor, usedWords) {
+  usedWords = usedWords || new Set();
+  const correct = [];
+  verses.forEach((v, vi) => {
+    for (const w of v.words) if (!usedWords.has(w)) correct.push({ word: w, v: vi });
+  });
+
+  // Decoys: words from verses NOT in this combat's pair
   const queuedIds = verses.map(v => v.id);
   const other = VERSES.filter(v => !queuedIds.includes(v.id));
-  const uniqueDecoys = [...new Set(other.flatMap(v => v.words))];
-  const shuffledDecoys = uniqueDecoys.sort(() => Math.random() - 0.5);
-
-  // ── Keep ~15-20 visible words ──
-  const TARGET_MIN = 15, TARGET_MAX = 20;
-  const need = Math.max(0, TARGET_MIN - correct.length);
-  let decoys = shuffledDecoys.slice(0, Math.min(need, shuffledDecoys.length));
-  let combined = [...correct, ...decoys].sort(() => Math.random() - 0.5);
-  // If still under target (very short verses), pad with more decoys up to TARGET_MAX
-  if (combined.length < TARGET_MIN) {
-    const extra = shuffledDecoys.slice(decoys.length, TARGET_MAX - correct.length);
-    combined = [...combined, ...extra].sort(() => Math.random() - 0.5);
+  const decoyWords = [...new Set(other.flatMap(v => v.words))];
+  for (let i = decoyWords.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = decoyWords[i]; decoyWords[i] = decoyWords[j]; decoyWords[j] = t;
   }
-  // Hard cap at TARGET_MAX
-  if (combined.length > TARGET_MAX) combined = combined.slice(0, TARGET_MAX);
-  return combined;
+  const numDecoys = Math.min(decoyWords.length, Math.max(3, 5 + floor));
+  const decoys = decoyWords.slice(0, numDecoys).map(w => ({ word: w, v: -1 }));
+
+  const all = [...correct, ...decoys];
+  for (let i = all.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const t = all[i]; all[i] = all[j]; all[j] = t;
+  }
+  return all;
 }
 
-// Returns an ordered queue of 3-4 verses for the current combat.
-//   knownVerseIds : verses the player has already discovered (preferred so the
-//                   combat stays solvable), mixed with fresh floor verses to learn.
-function getNextVerseQueue(knownVerseIds, floor) {
-  knownVerseIds = knownVerseIds || [];
-  const floorVerses = getVersesForFloor(floor);
-  const known = floorVerses.filter(v => knownVerseIds.includes(v.id));
-  const unknown = floorVerses.filter(v => !knownVerseIds.includes(v.id));
-  const shuffle = arr => [...arr].sort(() => Math.random() - 0.5);
-
-  const queue = [];
-  // Lead with known verses (solvable), then fold in new ones to learn.
-  for (const v of shuffle(known)) { if (queue.length >= 2) break; queue.push(v); }
-  for (const v of shuffle(unknown)) { if (queue.length >= 3) break; queue.push(v); }
-  // Top up to at least 3 with anything available.
-  for (const v of shuffle(floorVerses)) {
-    if (queue.length >= 3) break;
-    if (!queue.includes(v)) queue.push(v);
-  }
-  return queue.slice(0, 4);
-}
-
-// Check if selected words form one of the supplied target verses.
-//   selected : array of word strings (the player's current chain)
-//   verses   : array of candidate verse objects (the current queue)
+// Check if the selected tokens form one of the supplied target verses.
+//   selected : array of { word, v } tokens (the player's current chain)
+//   verses   : array of candidate verse objects (the current pair)
 // Returns the matched verse object, or null.
 function checkVerse(selected, verses) {
+  const sel = selected.map(s => s.word === undefined ? s : s.word);
   for (const vObj of verses) {
     const target = vObj.words;
-    if (selected.length !== target.length) continue;
-    if (selected.every((w, i) => w === target[i])) return vObj;
+    if (sel.length !== target.length) continue;
+    if (sel.every((w, i) => w === target[i])) return vObj;
   }
   return null;
 }
