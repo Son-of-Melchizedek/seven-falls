@@ -171,6 +171,12 @@ const VERSES = [
   },
 ];
 
+// Words the player must chain for this verse right now (easy-verse scaling aware).
+// VerseDifficulty.getScaledVersePair sets `playableWords`; fall back to `.words`.
+function verseWords(v) {
+  return (v && v.playableWords && v.playableWords.length) ? v.playableWords : (v.words || []);
+}
+
 // Get verses available at a given floor depth (difficulty scales)
 function ensureWords(v) {
   if (!v.words) {
@@ -205,7 +211,7 @@ function getCombatVersePair(floor) {
   }
   for (let i = 0; i < s.length; i++) {
     for (let j = i + 1; j < s.length; j++) {
-      if (s[i].words.length + s[j].words.length <= 16) return [s[i], s[j]];
+      if (verseWords(s[i]).length + verseWords(s[j]).length <= 16) return [s[i], s[j]];
     }
   }
   return [s[0], s[1] || s[0]];
@@ -220,13 +226,13 @@ function getCombatPool(verses, floor, usedWords) {
   usedWords = usedWords || new Set();
   const correct = [];
   verses.forEach((v, vi) => {
-    for (const w of v.words) if (!usedWords.has(w)) correct.push({ word: w, v: vi });
+    for (const w of verseWords(v)) if (!usedWords.has(w)) correct.push({ word: w, v: vi });
   });
 
   // Decoys: words from verses NOT in this combat's pair
   const queuedIds = verses.map(v => v.id);
   const other = VERSES.filter(v => !queuedIds.includes(v.id));
-  const decoyWords = [...new Set(other.flatMap(v => v.words))];
+  const decoyWords = [...new Set(other.flatMap(v => verseWords(v)))];
   for (let i = decoyWords.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const t = decoyWords[i]; decoyWords[i] = decoyWords[j]; decoyWords[j] = t;
@@ -249,7 +255,7 @@ function getCombatPool(verses, floor, usedWords) {
 function checkVerse(selected, verses) {
   const sel = selected.map(s => s.word === undefined ? s : s.word);
   for (const vObj of verses) {
-    const target = vObj.words;
+    const target = verseWords(vObj);
     if (sel.length !== target.length) continue;
     if (sel.every((w, i) => w === target[i])) return vObj;
   }

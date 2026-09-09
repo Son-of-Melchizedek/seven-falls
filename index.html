@@ -1495,8 +1495,9 @@ function getExpectedWord() {
   if (!combat || !combat.verses || game.verseHighlight < 0) return '';
   let idx = game.verseHighlight;
   for (const v of combat.verses) {
-    if (v.words && idx < v.words.length) return v.words[idx].toLowerCase();
-    if (v.words) idx -= v.words.length;
+    const w = verseWords(v);
+    if (w && idx < w.length) return w[idx].toLowerCase();
+    if (w) idx -= w.length;
   }
   return '';
 }
@@ -1966,7 +1967,7 @@ function loop(now){
       game.verseHighlight++;
       const vs = combat.verses || [];
       let maxIdx = 0;
-      for (const v of vs) if (v.words) maxIdx += v.words.length;
+      for (const v of vs) { const w = verseWords(v); if (w) maxIdx += w.length; }
       if (game.verseHighlight >= maxIdx) game.verseHighlight = -1; // done
     }
   }
