@@ -311,6 +311,33 @@ function spawnSparkles(x, y, n){
     });
   }
 }
+// Verse-type specific particles (colored by verse category)
+function spawnTypedParticles(x, y, n, color){
+  for (let i = 0; i < n; i++){
+    game.particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 40,
+      vy: -Math.random() * 40 - 10,
+      life: 0.8 + Math.random() * 0.6, t: 0,
+      c: color, size: 2 + Math.floor(Math.random() * 2),
+    });
+  }
+}
+// Floating text (damage numbers, heal numbers, etc.)
+function drawFloatingText(){
+  const ft = combat ? combat._floatingText : null;
+  if (!ft) return;
+  ft.t += 1/60;
+  if (ft.t > ft.life) { combat._floatingText = null; return; }
+  const alpha = Math.max(0, 1 - ft.t / ft.life);
+  const yOff = ft.t * -30; // float upward
+  ctx.globalAlpha = alpha;
+  setFont(Math.round(10 * S));
+  ctx.fillStyle = ft.color;
+  ctx.textAlign = 'center';
+  ctx.fillText(ft.text, ft.x, ft.y + yOff);
+  ctx.globalAlpha = 1;
+}
 function updateParticles(dt){
   for (const p of game.particles){ p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 60 * dt; }
   game.particles = game.particles.filter(p => p.t < p.life);
@@ -318,7 +345,8 @@ function updateParticles(dt){
 function drawParticles(){
   for (const p of game.particles){
     ctx.globalAlpha = Math.max(0, 1 - p.t / p.life);
-    rect(p.x - 1, p.y - 1, 2, 2, p.c);
+    const sz = p.size || 2;
+    rect(p.x - sz/2, p.y - sz/2, sz, sz, p.c);
   }
   ctx.globalAlpha = 1;
 }
@@ -740,26 +768,76 @@ function resolveVerse(verse){
   let dmg = verse.damage;
   const mult = getDamageMultiplier(combat.demon.type, verse.type, combat.demon.weakTo);
   if (combat.buffNext > 0){ dmg = Math.floor(dmg * (1 + combat.buffNext)); combat.buffNext = 0; }
-  // Adaptive resistance: reduce damage if the demon learned this verse type
   let resistedNote = '';
   if (CombatTwists.isResisted(verse.type)){
     dmg = Math.floor(dmg * 0.5);
     resistedNote = ' (resisted!)';
   }
-  if (combat.isSwarm){
-    // During swarm, damage scales down per remaining swarm enemy
-    dmg = Math.max(1, Math.floor(dmg * 0.6));
-  }
+  if (combat.isSwarm){ dmg = Math.max(1, Math.floor(dmg * 0.6)); }
   dmg = Math.max(1, Math.floor(dmg * mult));
   if (combat.flatBonus){ dmg += combat.flatBonus; combat.flatBonus = 0; }
   combat.demon.hp -= dmg;
 
-  // Retire this verse's words so they leave the pool; sparkle on success.
+  // ── VERSE-TYPE VISUAL EFFECTS ──
+  const typeColors = { praise:'#ffe066', wisdom:'#aa66ff', warfare:'#4488ff', fire:'#ff4422', mercy:'#44ff88' };
+  const typeNames = { praise:'Praise', wisdom:'Wisdom', warfare:'Warfare', fire:'Fire', mercy:'Mercy' };
+  const vcol = typeColors[verse.type] || C.white;
+
+  if (cat === 'ATTACK') {
+    // ATTACK: red flash on demon + red sparkles + damage number
+    spawnTypedParticles(260, 40, 20, '#ff4444');
+    game.flash = 0.3;
+    combat._floatingText = { text: '-' + dmg, x: 260, y: 30, color: '#ff4444', t: 0, life: 1.0 };
+  } else if (cat === 'DEFENSE') {
+    // DEFENSE: blue shield glow + heal number
+    spawnTypedParticles(50, 180, 12, '#4488ff');
+    const e = verse.effect;
+    let healAmt = 0;
+    if (e === 'shield') { game.shield += 10; healAmt = 10; }
+    else if (e === 'armor') { game.shield += 14; healAmt = 14; }
+    else if (e && e.startsWith('heal')) { healAmt = parseInt(e.split('_')[1] || '5', 10); }
+    if (healAmt > 0) combat._floatingText = { text: '+' + healAmt, x: 50, y: 170, color: '#44ff88', t: 0, life: 1.0 };
+    else combat._floatingText = { text: 'SHIELD', x: 50, y: 170, color: '#4488ff', t: 0, life: 1.0 };
+    game.shield = (game.shield || 0) + (healAmt > 0 ? 0 : 10);
+  } else if (cat === 'BUFF') {
+    // BUFF: gold sparkles rising
+    spawnTypedParticles(W/2, 180, 16, '#ffd700');
+    combat._floatingText = { text: 'BUFF +50%', x: W/2, y: 170, color: '#ffd700', t: 0, life: 1.0 };
+  } else if (cat === 'DEBUFF') {
+    // DEBUFF: purple swirl on demon
+    spawnTypedParticles(260, 40, 12, '#aa44ff');
+    combat._floatingText = { text: 'DEBUFF', x: 260, y: 30, color: '#aa44ff', t: 0, life: 1.0 };
+  } else if (cat === 'ULTIMATE') {
+    // ULTIMATE: massive gold flash + screen shake
+    spawnTypedParticles(W/2, H/2, 30, '#ffd700');
+    game.goldFlash = 0.8;
+    game.flash = 0.5;
+    game.shakeTimer = 0.4;
+    game.shakeIntensity = 8;
+    combat._floatingText = { text: 'ULTIMATE!', x: W/2, y: 80, color: '#ffd700', t: 0, life: 1.5 };
+  }
+
+  // Effect-specific messages
+  let effMsg = '';
+  if (cat === 'DEFENSE') {
+    const e = verse.effect;
+    if (e === 'shield') { effMsg = 'SHIELD +10'; }
+    else if (e === 'armor') { effMsg = 'ARMOR +14'; }
+    else if (e && e.startsWith('heal')) {
+      const n = parseInt(e.split('_')[1] || '5', 10);
+      effMsg = 'HEAL +' + n;
+    }
+  } else if (cat === 'BUFF') {
+    combat.buffNext += 0.5;
+    effMsg = 'NEXT ATTACK +50%';
+  }
+
+  // Retire words from pool
   if (!combat.usedWords) combat.usedWords = new Set();
   for (const w of verse.words) combat.usedWords.add(w);
   spawnSparkles(W/2, 60, 14);
 
-  // Track verse type usage for combos + adaptive AI
+  // Track for combos + adaptive AI
   if (!combat.verseTypesUsed.includes(verse.type)) combat.verseTypesUsed.push(verse.type);
   combat.correctStreak++;
   CombatTwists.recordVerseType(verse.type);
@@ -769,7 +847,7 @@ function resolveVerse(verse){
   const ctx = { correctStreak: combat.correctStreak, floor: game.floor, isBoss: combat.isBoss };
   const combos = VerseComboSystem.detectCombo(combat.verseTypesUsed, ctx);
   if (combos.length > 0){
-    const combo = combos[combos.length - 1]; // most specific / last detected
+    const combo = combos[combos.length - 1];
     const res = VerseComboSystem.applyCombo(combo, combat, game);
     let extra = '';
     if (res.damage){ combat.demon.hp -= res.damage; extra += ' ' + res.damage + ' combo dmg'; }
@@ -779,31 +857,16 @@ function resolveVerse(verse){
     if (res.stunTurns) combat.twistTriggered.push(combat.demon.name + ' STUNNED ' + res.stunTurns + ' turns!');
     if (res.debuffAttack) combat.demon._debuffAtk = res.debuffAttack;
     combat.comboResult = { name: combo.name, quote: combo.quote, extra };
-    // Super-effective gold flash + COMBO! animation
     game.goldFlash = (mult > 1) ? 0.5 : 0;
     game.comboAnim = 1.2;
-    combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
+    combat.message = typeNames[verse.type] + ' ' + verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
                      '  >> ' + combo.name.toUpperCase() + '!' + extra;
     combat.msgTimer = 2.2;
-    if (!game.hintsShown['combo']) showHint('combo', 'Words from different verses can combine! Check the hint below!');
+    if (!game.hintsShown['combo']) showHint('combo', 'Words from different verses can combine!');
   } else {
-    let effMsg = '';
-    if (cat === 'DEFENSE'){
-      const e = verse.effect;
-      if (e === 'shield'){ game.shield += 10; effMsg = 'SHIELD +10'; }
-      else if (e === 'armor'){ game.shield += 14; effMsg = 'ARMOR +14'; }
-      else if (e && e.startsWith('heal')){
-        const n = parseInt(e.split('_')[1] || '5', 10);
-        game.hp = Math.min(game.maxHp, game.hp + n);
-        effMsg = 'HEAL +' + n;
-      }
-    } else if (cat === 'BUFF'){
-      combat.buffNext += 0.5;
-      effMsg = 'NEXT ATTACK +50%';
-    }
     combat.comboResult = null;
     if (mult > 1) game.goldFlash = 0.5;
-    combat.message = verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
+    combat.message = typeNames[verse.type] + ' ' + verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
                      (effMsg ? '  ' + effMsg : '');
     combat.msgTimer = 1.6;
   }
@@ -1323,6 +1386,13 @@ function renderCombat(){
   const d = combat.demon;
   const tkey = demonTypeKey(d);
 
+  // Screen shake
+  if (game.shakeTimer > 0 && game.shakeIntensity) {
+    const intensity = game.shakeIntensity * (game.shakeTimer / 0.4);
+    ctx.save();
+    ctx.translate((Math.random()-0.5)*intensity*2, (Math.random()-0.5)*intensity*2);
+  }
+
   // ══ BACKGROUND ══
   rect(0, 0, W, H, C.bg);
   texRect(0, 0, W, H, C.bg);
@@ -1518,6 +1588,7 @@ function renderCombat(){
 
   // sparkle particles + flashes
   drawParticles();
+  drawFloatingText();
   if (game.goldFlash > 0){ rect(0,0,W,H,'rgba(255,215,0,'+(game.goldFlash*0.35)+')'); }
   if (game.flash > 0){ rect(0,0,W,H,'rgba(204,51,51,'+(game.flash)+')'); }
 
@@ -1526,6 +1597,7 @@ function renderCombat(){
     renderBible(ctx, W, H, discIds, game.biblePage, game.bibleScroll);
   }
   renderHint();
+  if (game.shakeTimer > 0) ctx.restore();
 }
 
 function renderCombatWin(){
@@ -1784,6 +1856,7 @@ function loop(now){
   if (game.flash > 0) game.flash = Math.max(0, game.flash - dt);
   if (game.goldFlash > 0) game.goldFlash = Math.max(0, game.goldFlash - dt * 1.2);
   if (game.comboAnim > 0) game.comboAnim = Math.max(0, game.comboAnim - dt);
+  if (game.shakeTimer > 0) game.shakeTimer = Math.max(0, game.shakeTimer - dt);
   updateParticles(dt);
   // hint auto-dismiss
   if (game.activeHint){
