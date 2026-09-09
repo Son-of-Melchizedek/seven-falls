@@ -1415,21 +1415,40 @@ function renderCombat(){
     rxp += 9 + refW + 16;
   });
 
-  // ══ SELECTED WORDS AREA (y:126-152) — taller, bordered, placeholder ══
-  const selY = 126, selH = 26;
+  // ══ SELECTED WORDS AREA — auto-sizes to fit the verse ══
+  const selWords = combat.selected.map(i => combat.pool[i].word);
+  const selText = selWords.join(' ');
+  // Measure how many lines we need
+  setFont(Math.round(7 * S));
+  const maxLineW = W - 24;
+  const words2 = selText.split(' ');
+  const lines2 = []; let line2 = '';
+  for (const w of words2) {
+    const test = line2 ? line2 + ' ' + w : w;
+    if (ctx.measureText(test).width > maxLineW && line2) { lines2.push(line2); line2 = w; } else line2 = test;
+  }
+  if (line2) lines2.push(line2);
+  const numLines = Math.max(1, lines2.length);
+  // Font size adapts: shrink if >2 lines
+  let fontSize = numLines <= 2 ? 7 : (numLines <= 3 ? 6 : 5);
+  const lineH = fontSize + 4;
+  const selH = Math.max(20, numLines * lineH + 8);
+  const selY = 126;
   rect(6, selY, W-12, selH, C.stoneDark);
   strokeRect(6, selY, W-12, selH, C.holy);
-  const selWords = combat.selected.map(i => combat.pool[i].word);
-  if (selWords.length === 0){
-    text('Tap words above...', 12, selY + selH/2 - 4, C.dim, 8, 'left');
+  if (selWords.length === 0) {
+    text('Tap words above...', 12, selY + selH/2 - 4, C.dim, 7, 'left');
   } else {
-    const sl = wrapText(selWords.join(' '), 56);
+    setFont(Math.round(fontSize * S));
     let sy = selY + 4;
-    for (const l of sl.slice(0,2)){ text(l, 12, sy, C.holy, 8, 'left'); sy += 11; }
+    for (const l of lines2) {
+      text(l, 12, sy, C.holy, fontSize, 'left');
+      sy += lineH;
+    }
   }
 
-  // ══ WORD POOL (y:154+) — 56x20 bubbles, 6 cols, white-on-dark ══
-  const startY = 154;
+  // ══ WORD POOL — starts below the auto-sized selection area ══
+  const startY = selY + selH + 4;
   const cols = 6, bw = 58, bh = 20, gx = 3, gy = 3;
   for (let i = 0; i < combat.pool.length; i++){
     const c = i % cols, row = Math.floor(i / cols);
