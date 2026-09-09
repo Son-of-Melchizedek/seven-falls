@@ -77,6 +77,12 @@
 <script src='src/BIBLE_VERSES.js'></script>
 <script src='src/bible-ui.js'></script>
 <script src='src/music.js'></script>
+<script src='src/mechanics.js'></script>
+<script src='src/audio-sfx.js'></script>
+<script src='src/achievements.js'></script>
+<script src='src/verse-difficulty.js'></script>
+<script src='src/screen-fx.js'></script>
+<script src='src/meta-progression.js'></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -683,6 +689,8 @@ function startCombat(node){
     verses: [], pool: [], selected: [],
     usedWords: new Set(),
     verseTypesUsed: [],   // verse types used this combat (combo tracking)
+    _typeHistory: [],      // last few types (fatigue/synergy)
+    _enemyTurns: 0, _lastDmgTurn: 0,
     correctStreak: 0,     // consecutive correct verses (ultimate trigger)
     adds: [],             // reinforcement enemies
     resistance: null,     // adaptive-resisted verse type
@@ -696,7 +704,9 @@ function startCombat(node){
     flatBonus: 0, stunTurns: 0,
     isLust: (demon.type === 'lust' || demon.sin === 'Lust'),
     lustHits: 0, lustBroken: false, revealedWeak: null,
+    _phase2: false, _evolved: false, _stolen: false, _cycleTick: 0,
   };
+  MECH.initEnemy(demon, game.floor);
   CombatTwists.twistTriggered = [];
   CombatTwists.swarmMode = false;
   KnowledgeSystem.observeDemon(combat.key);
@@ -709,8 +719,11 @@ function startCombat(node){
 }
 
 function loadVerse(){
-  // Offer TWO verses at once; the player may form either by tapping its words.
-  if (!combat.verses.length){
+  // Apply easy-verse difficulty scaling if VerseDifficulty module is present
+  if (typeof VerseDifficulty !== 'undefined') {
+    combat.verses = VerseDifficulty.getScaledVersePair(game.floor, getCombatVersePair);
+    combat.usedWords = new Set();
+  } else {
     combat.verses = getCombatVersePair(game.floor);
     combat.usedWords = new Set();
   }
@@ -722,8 +735,10 @@ function loadVerse(){
   }
   combat.pool = getCombatPool(combat.verses, game.floor, combat.usedWords);
   combat.selected = [];
+  // Flow state freezes the timer
   combat.maxTimer = Math.max(8, 16 - game.floor);
   if (combat.isBoss) combat.maxTimer = Math.max(10, combat.maxTimer + 2);
+  if (MECH.flowActive) combat.maxTimer = 99; // frozen while flow active
   combat.timer = combat.maxTimer;
   if (!game.hintsShown['combat']) showHint('combat', 'Tap words to form Bible verses. The glowing word is next!', true);
   game.verseHighlight = 0;
@@ -732,6 +747,7 @@ function loadVerse(){
 
 function selectWord(idx){
   if (!combat) return;
+  if (typeof SFX !== 'undefined') SFX.play('select');
   if (combat.selected.includes(idx)){ // tap again to deselect
     combat.selected = combat.selected.filter(s => s !== idx);
     return;
@@ -761,13 +777,28 @@ function submitVerse(){
     return;
   }
   resolveVerse(match);
+  if (typeof SFX !== 'undefined') SFX.play('verse');
 }
 
 function resolveVerse(verse){
   const cat = verseCardType(verse);
+  // ── #25 ENEMY IMMUNITY: floor 7+ immune to one type ──
+  if (MECH.isImmune(verse.type)){
+    combat.message = combat.demon.name + ' is IMMUNE to ' + verse.type.toUpperCase() + ' verses! Choose another.';
+    combat.msgTimer = 2.0;
+    combat.correctStreak = 0;
+    combat.selected = [];
+    if (typeof SFX !== 'undefined') SFX.play('error');
+    loadVerse();
+    return;
+  }
   let dmg = verse.damage;
   const mult = getDamageMultiplier(combat.demon.type, verse.type, combat.demon.weakTo);
   if (combat.buffNext > 0){ dmg = Math.floor(dmg * (1 + combat.buffNext)); combat.buffNext = 0; }
+  // #23 VERSE FATIGUE: 0.7x if same type 3x in a row
+  dmg = Math.floor(dmg * MECH.fatigueMult());
+  // #20 SYNERGY: Holy Wisdom (Praise+Wisdom) +20% wisdom dmg
+  dmg = Math.floor(dmg * MECH.synergyBonus(verse.type));
   let resistedNote = '';
   if (CombatTwists.isResisted(verse.type)){
     dmg = Math.floor(dmg * 0.5);
@@ -776,7 +807,14 @@ function resolveVerse(verse){
   if (combat.isSwarm){ dmg = Math.max(1, Math.floor(dmg * 0.6)); }
   dmg = Math.max(1, Math.floor(dmg * mult));
   if (combat.flatBonus){ dmg += combat.flatBonus; combat.flatBonus = 0; }
+  // #16 FLOW STATE: double damage when active
+  if (MECH.flowActive) dmg = Math.floor(dmg * 2);
+  // #24 CRITICAL HIT: 15% → 2x
+  const crit = MECH.rollCrit(dmg);
+  dmg = crit.dmg;
   combat.demon.hp -= dmg;
+  // reset enemy-evolution idle counter (player dealt damage this turn)
+  combat._lastDmgTurn = combat.turnCount;
 
   // ── VERSE-TYPE VISUAL EFFECTS ──
   const typeColors = { praise:'#ffe066', wisdom:'#aa66ff', warfare:'#4488ff', fire:'#ff4422', mercy:'#44ff88' };
@@ -787,7 +825,7 @@ function resolveVerse(verse){
     // ATTACK: red flash on demon + red sparkles + damage number
     spawnTypedParticles(260, 40, 20, '#ff4444');
     game.flash = 0.3;
-    combat._floatingText = { text: '-' + dmg, x: 260, y: 30, color: '#ff4444', t: 0, life: 1.0 };
+    combat._floatingText = { text: '-' + dmg + (crit.crit ? '!' : ''), x: 260, y: 30, color: crit.crit ? '#ffff00' : '#ff4444', t: 0, life: 1.0 };
   } else if (cat === 'DEFENSE') {
     // DEFENSE: blue shield glow + heal number
     spawnTypedParticles(50, 180, 12, '#4488ff');
@@ -872,6 +910,20 @@ function resolveVerse(verse){
   }
   combat.turn++;
   combat.turnCount++;
+  // ── NEW MECHANICS POST-RESOLVE ──
+  MECH.recordType(verse.type);
+  if (!MECH.applyShield(dmg, verse)) {
+    // shield did not absorb — proceed with boss phase + flow checks
+    MECH.checkBossPhase();
+    MECH.checkFlow();
+  }
+  MECH.evolveCheck();
+  MECH.cycleWeakness();
+  MECH.trySteal();
+  if (MECH._hazard) MECH.hazardTick();
+  if (game.hazardNote){ combat.message = (combat.message ? combat.message + '  ' : '') + game.hazardNote; combat.msgTimer = Math.max(combat.msgTimer, 1.8); game.hazardNote = null; }
+  // count enemy idle turns (for evolution)
+  if (combat._lastDmgTurn < combat.turnCount - 1) combat._enemyTurns++;
   // ── Combat Twists: check each turn ──
   const triggered = CombatTwists.checkTwists(combat, game);
   for (const t of triggered){
@@ -979,6 +1031,7 @@ function demonAttack(full){
 }
 
 function winCombat(){
+  if (typeof SFX !== 'undefined') SFX.play('victory');
   KnowledgeSystem.slayDemon(combat.key);
   game.gold += combat.demon.gold || 0;
   if (RNG.random() < 0.2){ // 20% enemy drop
@@ -995,6 +1048,7 @@ function winCombat(){
 }
 
 function die(){
+  if (typeof SFX !== 'undefined') SFX.play('death');
   game.lastDeathText = 'For a just man falleth seven times, and riseth up again: ' +
     'but the wicked shall fall into mischief. — Proverbs 24:16';
   const vs = combat ? (combat.verses[0] || null) : null;
@@ -1004,6 +1058,21 @@ function die(){
   KnowledgeSystem.endRun(game.floor, false);
   AdaptiveDifficulty.recordLoss(game.floor);
   NemesisSystem.onDeath();
+  // Meta-progression: record run end (achievements, history, bestiary)
+  if (typeof Achievements !== 'undefined') {
+    Achievements.checkRunEnd({
+      floor: game.floor, won: false, demonsSlain: (KnowledgeSystem.getRunStats().demonsSlain || 0),
+      versesKnown: game.discoveredCount || 0, noDamageFloor: (game._noDamageFloor || false),
+      maxCombo: (game._maxCombo || 0), usedUltimate: (game._usedUltimate || false),
+      usedSacrifice: (game._usedSacrifice || false), discoveredTypes: (game._discoveredTypes || []),
+      isDaily: (game._isDaily || false), nemesisKilled: (game._nemesisKilled || false), diedThisRun: true,
+    });
+  }
+  if (typeof MetaProg !== 'undefined') {
+    if (game.floor >= 3) localStorage.setItem('seven_falls_daily_unlocked', '1');
+    MetaProg.addRun({ date: new Date().toISOString().slice(0,10), floor: game.floor, kills: KnowledgeSystem.getRunStats().demonsSlain || 0, verses: game.discoveredCount || 0, won: false });
+    if (combat && combat.demon) MetaProg.recordDiscoveredType(combat.demon.type || 'demon');
+  }
   game.state = 'DEATH'; MusicEngine.playTrack('death');
 }
 
@@ -1016,7 +1085,13 @@ function enterNode(node){
     case NODE_TYPE.COMBAT:
     case NODE_TYPE.ELITE:
     case NODE_TYPE.BOSS:
-      startCombat(node); break;
+      if (typeof ScreenFX !== 'undefined') {
+        ScreenFX.startBossIntro(getBossForFloor(game.floor), () => startCombat(node));
+        game.state = 'BOSS_INTRO';
+      } else {
+        startCombat(node);
+      }
+      break;
     case NODE_TYPE.EVENT:
       activeEvent = EventEngine.generate(game.floor, {
         floor: game.floor,
@@ -1148,6 +1223,8 @@ function render(){
     case 'SCHOLAR':  renderScholar(); break;
     case 'MAP':      renderMap(); break;
     case 'EXPLORE':  renderExplore(); break;
+    case 'CRAWL':    if (typeof ScreenFX !== 'undefined') ScreenFX.renderCrawl(); break;
+    case 'BOSS_INTRO': if (typeof ScreenFX !== 'undefined') ScreenFX.renderBossIntro(); break;
     case 'COMBAT':   renderCombat(); break;
     case 'COMBAT_WIN': renderCombatWin(); break;
     case 'EVENT':    renderEvent(); break;
@@ -1158,6 +1235,11 @@ function render(){
     case 'FLOOR_TRANS': renderFloorTrans(); break;
     case 'VICTORY':  renderVictory(); break;
   }
+
+  // Screen-FX fade overlay (covers all states during transitions)
+  if (typeof ScreenFX !== 'undefined') ScreenFX.render();
+  // Achievement toasts (top-center)
+  if (typeof Achievements !== 'undefined') Achievements.renderToasts();
 }
 
 function renderTitle(){ MusicEngine.playTrack('title');
@@ -1177,13 +1259,32 @@ function renderTitle(){ MusicEngine.playTrack('title');
   text(stats, cx, 130, C.cyan, 6, 'center'); text('v0.11', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 148, 100, 18, 'BEGIN', () => {
+    if (typeof SFX !== 'undefined') { SFX.init(); }
     if (!localStorage.getItem('seven_falls_seen_intro')){
       game.state = 'INTRO';
     } else {
       startNewRun();
     }
   }, C.gold);
-  button(cx-50, 170, 100, 14, 'RESET DATA', () => {
+  // Difficulty selector (Easy / Normal / Hard)
+  const diffLabels = { easy:'EASY', normal:'NORMAL', hard:'HARD' };
+  const curDiff = (typeof VerseDifficulty !== 'undefined') ? VerseDifficulty.setting : 'normal';
+  button(cx-50, 148+20, 32, 12, '◀', () => {
+    const order = ['easy','normal','hard'];
+    const i = order.indexOf(curDiff);
+    const next = order[(i+2)%3];
+    if (typeof VerseDifficulty !== 'undefined') VerseDifficulty.set(next);
+    if (typeof SFX !== 'undefined') SFX.play('click');
+  }, C.dim);
+  text(diffLabels[curDiff] || 'NORMAL', cx, 172, C.cyan, 6, 'center');
+  button(cx+18, 148+20, 32, 12, '▶', () => {
+    const order = ['easy','normal','hard'];
+    const i = order.indexOf(curDiff);
+    const next = order[(i+1)%3];
+    if (typeof VerseDifficulty !== 'undefined') VerseDifficulty.set(next);
+    if (typeof SFX !== 'undefined') SFX.play('click');
+  }, C.dim);
+  button(cx-50, 188, 100, 14, 'RESET DATA', () => {
     if (confirm('Erase all knowledge and progress?')){
       KnowledgeSystem.reset(); NemesisSystem.nemesis = null; NemesisSystem.init();
       AdaptiveDifficulty.stats = { wins:0, losses:0, avgFloorReached:0, totalFloors:0, perfectCombats:0, totalCombats:0 };
@@ -1319,9 +1420,27 @@ function renderMap(){
 
     if (reachable){
       clickables.push({ x: p.x-8, y: p.y-8, w: 16, h: 16, onClick: () => {
+        if (typeof SFX !== 'undefined') SFX.play('click');
         const node = moveToNode(n.id);
         game.pendingNode = node;
-        game.state = 'EXPLORE';
+        // Dungeon crawl transition (or boss intro for boss nodes)
+        if (typeof ScreenFX !== 'undefined') {
+          ScreenFX.startCrawl(node, () => {
+            if (node.type === NODE_TYPE.BOSS && combat && combat.isBoss || node.type === NODE_TYPE.BOSS) {
+              // defer to startCombat which sets up the boss; show intro
+              if (typeof ScreenFX !== 'undefined') ScreenFX.startBossIntro(
+                (typeof getBossForFloor === 'function') ? getBossForFloor(game.floor) : { name:'Guardian', tier:5, type:'fallen_angel' },
+                () => enterNode(node)
+              );
+              else enterNode(node);
+            } else {
+              enterNode(node);
+            }
+          });
+        } else {
+          enterNode(node);
+        }
+        game.state = 'CRAWL';
       }});
     }
   }
@@ -1857,6 +1976,9 @@ function loop(now){
   if (game.goldFlash > 0) game.goldFlash = Math.max(0, game.goldFlash - dt * 1.2);
   if (game.comboAnim > 0) game.comboAnim = Math.max(0, game.comboAnim - dt);
   if (game.shakeTimer > 0) game.shakeTimer = Math.max(0, game.shakeTimer - dt);
+  if (typeof MECH !== 'undefined') MECH.tickFlow(dt);
+  if (typeof Achievements !== 'undefined') Achievements.update(dt);
+  if (typeof ScreenFX !== 'undefined') ScreenFX.update(dt);
   updateParticles(dt);
   // hint auto-dismiss
   if (game.activeHint){
