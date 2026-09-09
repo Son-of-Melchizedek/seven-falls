@@ -111,6 +111,15 @@ const WEAKNESS_MAP = (function(){
 // DEMON_TYPES is only used by KnowledgeSystem.getRunStats() for a count
 const DEMON_TYPES = SIN_TYPE;
 
+// ── MECH safety alias ──
+// mechanics.js defines the real MECH object (combat mechanics). If that script
+// fails to load, alias a no-op stub so the game never hard-crashes on MECH.* calls.
+// Use globalThis assignment (not const/var) to avoid re-declaration conflict with
+// the real `const MECH` from mechanics.js.
+if (typeof MECH === 'undefined') {
+  globalThis.MECH = new Proxy({}, { get: (t, p) => (typeof p === 'string' ? () => {} : undefined) });
+}
+
 // ── Seeded PRNG (deterministic runs) ────────────────────────
 class RandomGenerator {
   constructor(seed){ this.seed = (seed>>>0) || 1; this.state = this.seed; }
@@ -727,8 +736,9 @@ function loadVerse(){
     combat.verses = getCombatVersePair(game.floor);
     combat.usedWords = new Set();
   }
-  // If every offered verse is fully solved, draw a fresh pair.
-  const allDone = combat.verses.every(v => v.words.every(w => combat.usedWords.has(w)));
+  // If every offered verse's PLAYABLE words are fully solved, draw a fresh pair.
+  // (Uses verseWords so easy-mode shortened verses count correctly, not the full .words)
+  const allDone = combat.verses.every(v => verseWords(v).every(w => combat.usedWords.has(w)));
   if (allDone){
     combat.verses = getCombatVersePair(game.floor);
     combat.usedWords = new Set();
@@ -812,9 +822,26 @@ function resolveVerse(verse){
   // #24 CRITICAL HIT: 15% → 2x
   const crit = MECH.rollCrit(dmg);
   dmg = crit.dmg;
-  combat.demon.hp -= dmg;
+  // #21 ENEMY SHIELD PHASES: non-DEFENSE verses are blocked by an active shield.
+  // Must be checked BEFORE applying damage so the shield actually absorbs the hit.
+  let shieldBlocked = false;
+  if (MECH.isShielded()){
+    const sc = verseCardType(verse);
+    if (sc !== 'DEFENSE'){
+      combat.demon._shieldPhase--;
+      shieldBlocked = true;
+      combat.message = combat.demon.name + ' SHIELD absorbs the strike! (' + Math.max(0, combat.demon._shieldPhase) + ' left)';
+      combat.msgTimer = 1.6;
+    } else {
+      combat.demon._shieldPhase = 0;
+      combat.message = 'Shield broken by faith!';
+    }
+  }
+  if (!shieldBlocked) combat.demon.hp -= dmg;
   // reset enemy-evolution idle counter (player dealt damage this turn)
   combat._lastDmgTurn = combat.turnCount;
+  // flag so post-resolve skips boss-phase/flow checks if fully blocked (already messaged)
+  combat._shieldBlockedThisTurn = shieldBlocked;
 
   // ── VERSE-TYPE VISUAL EFFECTS ──
   const typeColors = { praise:'#ffe066', wisdom:'#aa66ff', warfare:'#4488ff', fire:'#ff4422', mercy:'#44ff88' };
@@ -912,7 +939,7 @@ function resolveVerse(verse){
   combat.turnCount++;
   // ── NEW MECHANICS POST-RESOLVE ──
   MECH.recordType(verse.type);
-  if (!MECH.applyShield(dmg, verse)) {
+  if (!combat._shieldBlockedThisTurn) {
     // shield did not absorb — proceed with boss phase + flow checks
     MECH.checkBossPhase();
     MECH.checkFlow();
@@ -1084,6 +1111,8 @@ function enterNode(node){
   switch (node.type){
     case NODE_TYPE.COMBAT:
     case NODE_TYPE.ELITE:
+      startCombat(node);
+      break;
     case NODE_TYPE.BOSS:
       if (typeof ScreenFX !== 'undefined') {
         ScreenFX.startBossIntro(getBossForFloor(game.floor), () => startCombat(node));
@@ -1297,6 +1326,8 @@ function renderTitle(){ MusicEngine.playTrack('title');
     game.timerEnabled = !game.timerEnabled;
     localStorage.setItem('seven_falls_timer', game.timerEnabled ? 'true' : 'false');
   }, game.timerEnabled ? C.green : C.dim);
+  // Credit line (bottom)
+  text('A game by Bear Sensei', cx, H - 10, C.dim, 5, 'center');
 }
 
 let introStep = 0;
@@ -1423,20 +1454,10 @@ function renderMap(){
         if (typeof SFX !== 'undefined') SFX.play('click');
         const node = moveToNode(n.id);
         game.pendingNode = node;
-        // Dungeon crawl transition (or boss intro for boss nodes)
+        // Dungeon crawl transition. After the crawl, enterNode() handles the
+        // boss intro (for BOSS nodes) or starts combat directly. No double-trigger.
         if (typeof ScreenFX !== 'undefined') {
-          ScreenFX.startCrawl(node, () => {
-            if (node.type === NODE_TYPE.BOSS && combat && combat.isBoss || node.type === NODE_TYPE.BOSS) {
-              // defer to startCombat which sets up the boss; show intro
-              if (typeof ScreenFX !== 'undefined') ScreenFX.startBossIntro(
-                (typeof getBossForFloor === 'function') ? getBossForFloor(game.floor) : { name:'Guardian', tier:5, type:'fallen_angel' },
-                () => enterNode(node)
-              );
-              else enterNode(node);
-            } else {
-              enterNode(node);
-            }
-          });
+          ScreenFX.startCrawl(node, () => { enterNode(node); });
         } else {
           enterNode(node);
         }

@@ -129,7 +129,7 @@ const MECH = {
       game.hp -= dmg;
       game.hazardNote = 'Fire scorches you (-' + dmg + ' HP)! Use a PRAISE verse to quench.';
     } else if (combat._hazard === 'poison') {
-      combat.maxTimer = Math.max(4, combat.maxTimer); // shrinks timer effectively
+      combat.maxTimer = Math.max(4, combat.maxTimer - 2); // poison shrinks the timer
       game.hp -= 3;
       game.hazardNote = 'Poison clouds choke you (-3 HP)!';
     }
