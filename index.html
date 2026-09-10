@@ -396,6 +396,63 @@ function drawDemonSprite(cx, cy, hurt){
 // ITEM & SPRITE SYSTEM (Pokemon-style overhaul)
 // ═══════════════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════════════
+// SECRET VERSE UNLOCKS
+// ═══════════════════════════════════════════════════════════════
+const SecretVerses = {
+  _key: 'seven_falls_secret_verses',
+  _unlocked: null,
+  _notifications: [],
+  _defs: [
+    { id: 'secret_resurrection', name: 'Resurrection',   condition: 'no_death_run',   desc: 'Complete a run without dying.',   ref: 'John 11:25' },
+    { id: 'secret_dominion',     name: 'Dominion',        condition: 'all_types',      desc: 'Discover all 8 demon types.',     ref: 'Genesis 1:28' },
+    { id: 'secret_parables',     name: 'The Parables',    condition: 'easter_egg',     desc: 'Trigger the 7:77 Easter egg.',    ref: 'Psalm 78:2' },
+    { id: 'secret_depths',       name: 'Depths Unknown',  condition: 'floor_10',       desc: 'Reach floor 10.',                 ref: 'Romans 11:33' },
+  ],
+  _load() {
+    if (this._unlocked !== null) return;
+    try { this._unlocked = JSON.parse(localStorage.getItem(this._key) || '[]'); } catch(e) { this._unlocked = []; }
+  },
+  isUnlocked(id) { this._load(); return this._unlocked.includes(id); },
+  unlock(id) {
+    this._load();
+    if (!this._unlocked.includes(id)){
+      this._unlocked.push(id);
+      localStorage.setItem(this._key, JSON.stringify(this._unlocked));
+      const def = this._defs.find(d => d.id === id);
+      if (def) this._notifications.push(def);
+      return true;
+    }
+    return false;
+  },
+  getNotifications() { const n = this._notifications.slice(); this._notifications = []; return n; },
+  checkRunEnd(stats) {
+    // no_death_run: won and diedThisRun is false
+    if (stats.won && !stats.diedThisRun) this.unlock('secret_resurrection');
+    // all_types: discoveredTypes has 8+ unique types
+    if (stats.discoveredTypes && stats.discoveredTypes.length >= 8) this.unlock('secret_dominion');
+    // easter_egg: triggered 7:77
+    if (stats.triggeredEasterEgg) this.unlock('secret_parables');
+    // floor_10: reached floor 10
+    if (stats.floor >= 10) this.unlock('secret_depths');
+  },
+  _notifTimer: 0,
+  renderNotifications(dt) {
+    if (this._notifications.length === 0) return;
+    this._notifTimer += dt;
+    if (this._notifTimer > 4){ this._notifications.shift(); this._notifTimer = 0; return; }
+    const n = this._notifications[0];
+    const alpha = this._notifTimer < 0.5 ? this._notifTimer * 2 : this._notifTimer > 3.5 ? (4 - this._notifTimer) * 2 : 1;
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    rect(W/2 - 80, 8, 160, 24, 'rgba(30,10,50,0.9)');
+    strokeRect(W/2 - 80, 8, 160, 24, C.gold);
+    text('SECRET UNLOCKED', W/2, 11, C.gold, 6, 'center');
+    text(n.name + ' — ' + n.ref, W/2, 20, C.holy, 5, 'center');
+    ctx.restore();
+  }
+};
+
 // ── Item definitions ──
 const ITEM_DEFS = {
   holy_water:   { name:'Holy Water',    icon:'💧', desc:'Heals 20 HP',   rarity:'common' },
@@ -637,6 +694,29 @@ function startNewRun(){
   maybeShowScholarNote('MAP');
 }
 
+function startDailyRun(){
+  const seed = (typeof MetaProg !== 'undefined') ? MetaProg.dailySeed() : ((Date.now() ^ 7777) >>> 0);
+  RNG = new RandomGenerator(seed);
+  game.seed = seed;
+  game.floor = 1;
+  game.hp = 50; game.maxHp = 50;
+  game.gold = 0; game.shield = 0;
+  game.attackBuff = 0; game.defenseBuff = 0;
+  game.items = [];
+  game.nemesisDone = {};
+  game._isDaily = true;
+  game.hintsShown = {};
+  const perm = JSON.parse(localStorage.getItem('seven_falls_hints_permanent') || '[]');
+  for (const id of perm) game.hintsShown[id] = true;
+  game.activeHint = null;
+  game.hintQueue = [];
+  game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
+  KnowledgeSystem.startRun();
+  CombatTwists.init();
+  initMap(1);
+  maybeShowScholarNote('MAP');
+}
+
 function maybeShowScholarNote(after){
   const note = getScholarNoteForFloor(game.floor);
   if (note){
@@ -653,6 +733,11 @@ function advanceFloor(){
   if (game.floor >= 10){
     AdaptiveDifficulty.recordWin(10, false);
     KnowledgeSystem.endRun(10, true);
+    // Secret verse checks on victory
+    if (typeof SecretVerses !== 'undefined') SecretVerses.checkRunEnd({
+      floor: 10, won: true, diedThisRun: false,
+      discoveredTypes: game._discoveredTypes || [], triggeredEasterEgg: game._triggeredEasterEgg || false
+    });
     game.state = 'VICTORY'; MusicEngine.playTrack('victory');
     return;
   }
@@ -1100,6 +1185,11 @@ function die(){
     MetaProg.addRun({ date: new Date().toISOString().slice(0,10), floor: game.floor, kills: KnowledgeSystem.getRunStats().demonsSlain || 0, verses: game.discoveredCount || 0, won: false });
     if (combat && combat.demon) MetaProg.recordDiscoveredType(combat.demon.type || 'demon');
   }
+  // Secret verse checks
+  if (typeof SecretVerses !== 'undefined') SecretVerses.checkRunEnd({
+    floor: game.floor, won: false, diedThisRun: true,
+    discoveredTypes: game._discoveredTypes || [], triggeredEasterEgg: game._triggeredEasterEgg || false
+  });
   game.state = 'DEATH'; MusicEngine.playTrack('death');
 }
 
@@ -1269,6 +1359,8 @@ function render(){
   if (typeof ScreenFX !== 'undefined') ScreenFX.render();
   // Achievement toasts (top-center)
   if (typeof Achievements !== 'undefined') Achievements.renderToasts();
+  // Secret verse unlock notifications
+  if (typeof SecretVerses !== 'undefined') SecretVerses.renderNotifications(1/60);
 }
 
 function renderTitle(){ MusicEngine.playTrack('title');
@@ -1285,16 +1377,25 @@ function renderTitle(){ MusicEngine.playTrack('title');
   const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 130, C.cyan, 6, 'center'); text('v0.11', W-10, H-10, C.dim, 5, 'right');
+  text(stats, cx, 130, C.cyan, 6, 'center'); text('v0.24', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 148, 100, 18, 'BEGIN', () => {
     if (typeof SFX !== 'undefined') { SFX.init(); }
     if (!localStorage.getItem('seven_falls_seen_intro')){
       game.state = 'INTRO';
     } else {
+      game._isDaily = false;
       startNewRun();
     }
   }, C.gold);
+  // Daily challenge button (unlocked after reaching floor 3)
+  if (typeof MetaProg !== 'undefined' && MetaProg.isDailyUnlocked()){
+    button(cx-50, 148+38, 100, 14, 'DAILY', () => {
+      if (typeof SFX !== 'undefined') { SFX.init(); }
+      startDailyRun();
+    }, C.cyan);
+    text('seed: ' + (typeof MetaProg !== 'undefined' ? MetaProg.dailySeed().toString(36) : '?'), cx, 148+54, C.dim, 5, 'center');
+  }
   // Difficulty selector (Easy / Normal / Hard)
   const diffLabels = { easy:'EASY', normal:'NORMAL', hard:'HARD' };
   const curDiff = (typeof VerseDifficulty !== 'undefined') ? VerseDifficulty.setting : 'normal';
@@ -1921,6 +2022,7 @@ function renderFloorTrans(){
 function renderDeath(){
   rect(0,0,W,H,C.stoneDark);
   text('YOU FELL', W/2, 14, C.red, 12, 'center');
+  if (game._isDaily) text('DAILY RUN', W/2, 30, C.cyan, 7, 'center');
   const lines = wrapText(game.lastDeathText, 34);
   let y = 36; for (const l of lines){ text(l, W/2, y, C.holy, 6, 'center'); y += 11; }
   const il = wrapText('Insight: ' + game.lastDeathInsight, 36);
@@ -1933,8 +2035,9 @@ function renderDeath(){
 function renderVictory(){
   rect(0,0,W,H,C.bg);
   text('VICTORY', W/2, 30, C.gold, 18, 'center');
-  text('The Dragon is bound.', W/2, 60, C.holy, 8, 'center');
-  text('The Word prevailed.', W/2, 76, C.cyan, 7, 'center');
+  if (game._isDaily) text('DAILY RUN COMPLETE', W/2, 52, C.cyan, 7, 'center');
+  text('The Dragon is bound.', W/2, game._isDaily ? 66 : 60, C.holy, 8, 'center');
+  text('The Word prevailed.', W/2, game._isDaily ? 82 : 76, C.cyan, 7, 'center');
   const s = KnowledgeSystem.getRunStats();
   text('Verses known: ' + s.versesKnown + '/' + s.totalVerses, W/2, 100, C.white, 6, 'center');
   text('Demons slain: ' + s.demonsSlain, W/2, 112, C.white, 6, 'center');
@@ -1963,7 +2066,19 @@ function loop(now){
       }
     }
     if (game.timerEnabled){
+      const prevTimer = combat.timer;
       combat.timer -= dt;
+      // Easter egg: floor 7, timer crosses 7.77
+      if (game.floor === 7 && prevTimer > 7.77 && combat.timer <= 7.77 && !combat._easterEgg777){
+        combat._easterEgg777 = true;
+        game._triggeredEasterEgg = true;
+        combat.message = '7:77 — "I will open my mouth in parables"';
+        combat.msgTimer = 2.5;
+        game.hp = Math.min(game.maxHp, game.hp + 7);
+        game.gold += 77;
+        if (typeof SFX !== 'undefined') SFX.play('buff');
+        game.goldFlash = 1.0;
+      }
       if (combat.timer <= 0){
         combat.message = 'TIME! The demon strikes!';
         combat.msgTimer = 1.2;

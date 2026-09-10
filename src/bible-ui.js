@@ -17,7 +17,7 @@
 // ── Navigation state ────────────────────────────────────
 // currentPage is one of:
 //   'overview' | 'attack' | 'defense' | 'buff' | 'debuff' | 'ultimate'
-//   'detail:<verseId>' | 'search'
+//   'detail:<verseId>' | 'search' | 'lore'
 const BIBLE_UI = {
   page: 'overview',
   scrollY: 0,
@@ -30,6 +30,20 @@ const BIBLE_CAT_LABEL = {
   attack: 'ATTACK', defense: 'DEFENSE', buff: 'BUFF', debuff: 'DEBUFF', ultimate: 'ULTIMATE'
 };
 const BIBLE_CAT_ORDER = ['attack', 'defense', 'buff', 'debuff', 'ultimate'];
+
+// Lore entries — unlocked as you descend
+const LORE_ENTRIES = [
+  { id: 'lore_abyss',    title: 'The Abyss',         floor: 1, text: 'Seven depths. Seven watchers. The abyss is not empty — it is occupied. Each floor is a fallen domain, and the Word is the only light that cuts the dark.' },
+  { id: 'lore_word',     title: 'The Word',          floor: 1, text: 'You carry no sword. Your weapon is scripture itself. Each verse is a strike, a shield, a blessing. The demons fear the Word because it is truth, and truth cannot be defeated.' },
+  { id: 'lore_demons',   title: 'The Seven Hierarchy',floor: 2, text: 'Seven tiers of fallen power: from whispering demons to the Dragon himself. Each tier grows stronger, prouder, more deceptive. But pride always falls before the Word.' },
+  { id: 'lore_nemesis',  title: 'The Stalker',        floor: 3, text: 'It watches from the shadows. It learns your patterns. Every three floors it returns, stronger than before. It is your personal nemesis — the sin that knows you best.' },
+  { id: 'lore_combos',   title: 'Chaining Scripture',  floor: 3, text: 'When verses chain together, their power multiplies. Attack upon attack, defense upon defense — the Word compounds. This is not magic. This is meditation. This is remembrance.' },
+  { id: 'lore_floor5',   title: 'The Deep',           floor: 5, text: 'Below floor five, the air itself resists you. The demons here are ancient — fallen angels who remember heaven. They do not merely fight. They tempt.' },
+  { id: 'lore_bosses',   title: 'The Wardens',        floor: 5, text: 'Each floor has a warden — a boss who guards the descent. They are named in the old texts. They are not metaphors. They are real, and they are waiting.' },
+  { id: 'lore_floor8',   title: 'The Bottomless',     floor: 8, text: 'At floor eight, you approach the throne of the Dragon. The walls weep. The ground trembles. Every verse you have learned is tested here. There is no turning back.' },
+  { id: 'lore_lucifer',  title: 'The Dragon',         floor: 9, text: 'Lucifer. The Light-Bearer. The most beautiful of all who fell. He does not roar — he whispers. He does not attack — he offers. His combat is seduction. His weapon is doubt.' },
+  { id: 'lore_victory',  title: 'The Word Prevails',  floor: 10, text: 'The Dragon is bound. The abyss is sealed. But the Word endures forever. Every verse you learned, every chain you forged, every fall you rose from — it is written. It is eternal.' },
+];
 
 function setBibleNavigate(cb){ BIBLE_UI.onNav = cb; }
 function bibleResetNav(){ BIBLE_UI.page = 'overview'; BIBLE_UI.scrollY = 0; BIBLE_UI.search = ''; BIBLE_UI.detailId = null; }
@@ -82,6 +96,11 @@ function _bibleRegions(discoveredIds, currentPage, scrollY, W, H){
       regions.push({ x: 6, y: y, w: W - 12, h: 12, kind: 'tab', page: c, label: BIBLE_CAT_LABEL[c], sub: s.discovered + '/' + s.total, scroll: 0 });
       y += 14;
     }
+    // Lore tab (below categories)
+    const maxFloor = (typeof game !== 'undefined' && game.floor) ? game.floor : 1;
+    const loreUnlocked = (typeof LORE_ENTRIES !== 'undefined') ? LORE_ENTRIES.filter(e => e.floor <= maxFloor).length : 0;
+    const loreTotal = (typeof LORE_ENTRIES !== 'undefined') ? LORE_ENTRIES.length : 0;
+    regions.push({ x: 6, y: y, w: W - 12, h: 12, kind: 'tab', page: 'lore', label: 'LORE', sub: loreUnlocked + '/' + loreTotal, scroll: 0 });
     return regions;
   }
 
@@ -323,6 +342,77 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
         text(cknown ? cv.reference : '???', r.x + 12, r.y + 3, cknown ? C.holy : C.dim, 7, 'left');
         _biblePushClickable(r, ids);
       }
+    }
+    return;
+  }
+
+  // Lore page
+  if (page === 'lore'){
+    text('LORE', 36, 4, C.purple, 8, 'left');
+    const maxFloor = (typeof game !== 'undefined' && game.floor) ? game.floor : 1;
+    const entries = (typeof LORE_ENTRIES !== 'undefined') ? LORE_ENTRIES.filter(e => e.floor <= maxFloor) : [];
+    const locked = (typeof LORE_ENTRIES !== 'undefined') ? LORE_ENTRIES.filter(e => e.floor > maxFloor) : [];
+    const listTop = BIBLE_HEADER_H + 2;
+    const viewH = H - listTop - BIBLE_FOOTER_H;
+    const ROW_H = 14;
+    const allItems = entries.map(e => ({...e, locked: false})).concat(locked.map(e => ({...e, locked: true})));
+    // Append unlocked secret verses
+    if (typeof SecretVerses !== 'undefined'){
+      for (const sv of SecretVerses._defs){
+        if (SecretVerses.isUnlocked(sv.id)){
+          allItems.push({ id: sv.id, title: sv.name, floor: 99, text: sv.desc + ' — ' + sv.ref, locked: false, isSecret: true });
+        } else {
+          allItems.push({ id: sv.id, title: '???', floor: 99, text: '???', locked: true, isSecret: true });
+        }
+      }
+    }
+    const maxScroll = Math.max(0, allItems.length * ROW_H - viewH);
+    const sy = Math.max(0, Math.min(scrollY || 0, maxScroll));
+    let i = Math.floor(sy / ROW_H);
+    let y = listTop - (sy - i * ROW_H);
+    let drawn = 0;
+    // Back button
+    button(4, 4, 30, 9, '< BIBLE', () => _bibleNav('back', 'overview', 0, null), C.red);
+    while (i < allItems.length && drawn < Math.floor(viewH / ROW_H) + 1){
+      const e = allItems[i];
+      const isSecret = e.isSecret;
+      const col = isSecret ? C.gold : (e.locked ? C.stone2 : C.purple);
+      rect(4, y, W - 8, ROW_H, e.locked ? C.stoneDark : C.stone);
+      strokeRect(4, y, W - 8, ROW_H, col);
+      if (isSecret) text('★', 8, y + 3, e.locked ? C.dim : C.gold, 7, 'left');
+      text(e.locked ? '???' : e.title, isSecret ? 16 : 8, y + 3, e.locked ? C.dim : (isSecret ? C.gold : C.holy), 7, 'left');
+      text(e.locked ? 'Secret' : (isSecret ? 'SECRET' : 'F' + e.floor), W - 8, y + 3, e.locked ? C.dim : C.cyan, 6, 'right');
+      if (!e.locked){
+        const textLines = wrapText(e.text, Math.floor((W - 16) / 6));
+        let ty = y + ROW_H;
+        for (const tl of textLines.slice(0, 2)){
+          text(tl, 8, ty, C.dim, 5, 'left');
+          ty += 7;
+        }
+        // clickable to show full text (detail-like)
+        const idx = i;
+        clickables.push({ x: 4, y: y, w: W - 8, h: ROW_H, onClick: () => {
+          BIBLE_UI._loreDetail = allItems[idx];
+          _bibleNav('lore_detail', 'lore', sy, null);
+        }});
+      }
+      y += ROW_H; i++; drawn++;
+    }
+    // Lore detail overlay
+    if (BIBLE_UI._loreDetail){
+      const e = BIBLE_UI._loreDetail;
+      rect(4, listTop, W - 8, viewH, C.stoneDark);
+      strokeRect(4, listTop, W - 8, viewH, C.purple);
+      text(e.title, 8, listTop + 4, C.gold, 8, 'left');
+      const tl = wrapText(e.text, Math.floor((W - 16) / 6));
+      let ty = listTop + 16;
+      for (const l of tl){ text(l, 8, ty, C.holy, 6, 'left'); ty += 9; }
+      button(W/2 - 30, H - BIBLE_FOOTER_H - 14, 60, 10, 'BACK', () => { BIBLE_UI._loreDetail = null; _bibleNav('lore', 'lore', sy, null); }, C.red);
+      return;
+    }
+    if (maxScroll > 0){
+      button(W - 12, listTop, 10, 9, '^', () => _bibleNav('scroll', 'lore', Math.max(0, (scrollY || 0) - ROW_H * 3), null), C.cyan);
+      button(W - 12, H - BIBLE_FOOTER_H - 9, 10, 9, 'v', () => _bibleNav('scroll', 'lore', (scrollY || 0) + ROW_H * 3, null), C.cyan);
     }
     return;
   }
