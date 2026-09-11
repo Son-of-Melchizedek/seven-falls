@@ -905,6 +905,16 @@ function loadVerse(){
     combat.usedWords = new Set();
   }
   combat.pool = getCombatPool(combat.verses, game.floor, combat.usedWords);
+  // ponytail: the tile grid stops rendering at y+bh > 243, so a pool longer than
+  // the grid makes some words invisible AND unclickable — the verse then cannot
+  // be completed and the demon cannot be damaged. Cap the pool, and never drop a
+  // correct word (v >= 0): only Bible extras and decoys are expendable.
+  const MAX_TILES = 24;
+  if (combat.pool.length > MAX_TILES) {
+    const mustKeep = combat.pool.filter(t => t.v >= 0);
+    const optional = combat.pool.filter(t => t.v < 0);
+    combat.pool = mustKeep.concat(optional.slice(0, Math.max(0, MAX_TILES - mustKeep.length)));
+  }
   combat.selected = [];
   // Discover verses shown in combat (so they appear in Bible)
   for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
@@ -1476,7 +1486,7 @@ function renderTitle(){ MusicEngine.playTrack('title');
   const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.31', W-10, H-10, C.dim, 5, 'right');
+  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.32', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 144, 100, 18, 'BEGIN', () => {
     if (typeof SFX !== 'undefined') { SFX.init(); }
@@ -1895,9 +1905,16 @@ function renderCombat(){
     strokeRect(x, y, bw, bh, used ? C.white : vcol);
     ctx.fillStyle = vcol; ctx.fillRect(x+3, y+3, 5, 5);
     let label = tok.word;
-    setFont(Math.round(7 * S)); ctx.textAlign = 'left';
-    // shrink font instead of chopping mid-word
-    while (label.length > 1 && ctx.measureText(label).width > bw - 14) { setFont(Math.round((parseInt(ctx.font) - 1) * S)); }
+    // ponytail: shrink monotonically and bounded. The old form did
+    // setFont(round((parseInt(ctx.font) - 1) * S)) with S = 1.5, so the font
+    // GREW 11 -> 15 -> 21... and the while never exited: an infinite loop that
+    // hard-froze the page the instant combat first drew its word tiles.
+    let fs = Math.round(7 * S);
+    setFont(fs); ctx.textAlign = 'left';
+    let guard = 0;
+    while (label.length > 1 && fs > 5 && guard++ < 40 && ctx.measureText(label).width > bw - 14) {
+      fs -= 1; setFont(fs);
+    }
     const isNextWord = (game.verseHighlight >= 0 && tok.word.toLowerCase() === getExpectedWord() && !used);
     if (isNextWord) {
       ctx.save(); ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 10;
