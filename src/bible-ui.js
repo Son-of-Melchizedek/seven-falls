@@ -63,14 +63,14 @@ function _bibleNav(action, page, scrollY, detailId){
   }
 }
 
-// ── Layout constants (canvas is 256x192) ───────────────
-const BIBLE_HEADER_H = 28;
-const BIBLE_TAB_Y = 14;
-const BIBLE_TAB_H = 11;
-const BIBLE_ROW_H = 14;
-const BIBLE_SEARCH_BOX_H = 14;
-const BIBLE_FOOTER_H = 8;
-const BIBLE_SCROLL_COL = 12;   // reserved right-edge column for scroll buttons
+// ── Layout constants (canvas is 384x288) ───────────────
+const BIBLE_HEADER_H = 32;
+const BIBLE_TAB_Y = 18;
+const BIBLE_TAB_H = 16;
+const BIBLE_ROW_H = 24;
+const BIBLE_SEARCH_BOX_H = 20;
+const BIBLE_FOOTER_H = 14;
+const BIBLE_SCROLL_COL = 18;
 
 // ── Geometry builder (shared by draw + hit-test) ────────
 // Returns list of regions: {x,y,w,h,kind,page,detailId,label,scroll}
@@ -242,29 +242,29 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
   strokeRect(0, 0, W, BIBLE_HEADER_H, C.gold);
 
   if (page === 'overview'){
-    text('BIBLE CODEX', 36, 4, C.gold, 8, 'left');
+    text('BIBLE CODEX', W/2, 6, C.gold, 10, 'center');
     const regions = _bibleRegions(ids, currentPage, scrollY, W, H);
     for (const r of regions){
       if (r.kind === 'back'){
         button(r.x, r.y, r.w, r.h, r.label, () => _bibleNav('back', 'overview', 0, null), C.red);
       } else if (r.kind === 'btn'){
         if (r.page === 'search') button(r.x, r.y, r.w, r.h, r.label, () => _bibleNav('nav', 'search', 0, null), C.cyan);
-        else { text(r.label, r.x + 2, r.y + 1, C.white, 8, 'left'); _biblePushClickable(r, ids); }
+        else { text(r.label, r.x + 4, r.y + 3, C.white, 8, 'left'); _biblePushClickable(r, ids); }
       } else if (r.kind === 'tab'){
         const col = _bibleCatColor(r.page);
         rect(r.x, r.y, r.w, r.h, C.stone);
         strokeRect(r.x, r.y, r.w, r.h, col);
-        text(r.label, r.x + 6, r.y + 2, col, 7, 'left');
-        text(r.sub, r.x + r.w - 4, r.y + 2, C.dim, 7, 'right');
+        text(r.label, r.x + 8, r.y + 4, col, 8, 'left');
+        text(r.sub, r.x + r.w - 8, r.y + 4, C.dim, 7, 'right');
         _biblePushClickable(r, ids);
       }
     }
-    text('C = ' + (typeof getBibleStats === 'function' ? getBibleStats(ids).pct : 0) + '% found', 4, H - 8, C.dim, 6, 'left');
+    text('C = ' + (typeof getBibleStats === 'function' ? getBibleStats(ids).pct : 0) + '% found', 8, H - BIBLE_FOOTER_H + 2, C.dim, 7, 'left');
     return;
   }
 
   if (page === 'search'){
-    text('SEARCH', 36, 4, C.cyan, 8, 'left');
+    text('SEARCH', W/2, 6, C.cyan, 10, 'center');
     const regions = _bibleRegions(ids, currentPage, scrollY, W, H);
     for (const r of regions){
       if (r.kind === 'back'){
@@ -274,23 +274,23 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
       } else if (r.kind === 'searchbox'){
         rect(r.x, r.y, r.w, r.h, C.stoneDark);
         strokeRect(r.x, r.y, r.w, r.h, C.cyan);
-        text(r.label, r.x + 2, r.y + 4, r.label === 'type to filter...' ? C.dim : C.white, 7, 'left');
+        text(r.label, r.x + 4, r.y + 5, r.label === 'type to filter...' ? C.dim : C.white, 8, 'left');
         _biblePushClickable(r, ids);
       } else if (r.kind === 'row'){
         const v = r.sub;
         const known = ids.indexOf(v.id) >= 0;
         rect(r.x, r.y, r.w, r.h, C.stoneDark);
         strokeRect(r.x, r.y, r.w, r.h, known ? _bibleCatColor(v.category) : C.stone2);
-        text(_bibleCatIcon(v.category), r.x + 2, r.y + 3, known ? _bibleCatColor(v.category) : C.dim, 7, 'left');
-        text(known ? v.reference : '???', r.x + 12, r.y + 3, known ? C.holy : C.dim, 7, 'left');
-        text(_bibleStars(v.difficulty), r.x + r.w - 16, r.y + 3, C.gold, 6, 'left');
+        text(_bibleCatIcon(v.category), r.x + 4, r.y + 6, known ? _bibleCatColor(v.category) : C.dim, 8, 'left');
+        text(known ? v.reference : '???', r.x + 18, r.y + 6, known ? C.holy : C.dim, 8, 'left');
+        text(_bibleStars(v.difficulty), r.x + r.w - 20, r.y + 6, C.gold, 7, 'left');
         _biblePushClickable(r, ids);
       } else if (r.kind === 'scrollup' || r.kind === 'scrolldown'){
         const up = r.kind === 'scrollup';
         button(r.x, r.y, r.w, r.h, up ? '^' : 'v', () => _bibleNav('scroll', r.page, up ? Math.max(0, r.scroll - BIBLE_ROW_H * 3) : r.scroll + BIBLE_ROW_H * 3, null), C.cyan);
       }
     }
-    text('keys: a-z filter, backspace', 4, H - 8, C.dim, 6, 'left');
+    text('a-z filter, backspace del', 8, H - BIBLE_FOOTER_H + 2, C.dim, 6, 'left');
     return;
   }
 
@@ -453,19 +453,19 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
       const isActive = (r.page === page);
       rect(r.x, r.y, r.w, r.h, isActive ? C.stone : C.stoneDark);
       strokeRect(r.x, r.y, r.w, r.h, col);
-      text(r.label, r.x + 6, r.y + 2, isActive ? col : C.dim, 7, 'left');
+      text(r.label, r.x + 4, r.y + 4, isActive ? col : C.dim, 7, 'left');
       _biblePushClickable(r, ids);
     } else if (r.kind === 'row'){
       const v = r.sub;
       const known = ids.indexOf(v.id) >= 0;
       rect(r.x, r.y, r.w, r.h, C.stoneDark);
       strokeRect(r.x, r.y, r.w, r.h, known ? _bibleCatColor(v.category) : C.stone2);
-      text(_bibleCatIcon(v.category), r.x + 2, r.y + 3, known ? _bibleCatColor(v.category) : C.dim, 7, 'left');
-      text(known ? v.reference : '???', r.x + 12, r.y + 3, known ? C.holy : C.dim, 7, 'left');
+      text(_bibleCatIcon(v.category), r.x + 4, r.y + 6, known ? _bibleCatColor(v.category) : C.dim, 8, 'left');
+      text(known ? v.reference : '???', r.x + 18, r.y + 6, known ? C.holy : C.dim, 8, 'left');
       // text snippet (clipped)
       if (known){
-        const clip = v.text.length > 26 ? v.text.slice(0, 25) + '…' : v.text;
-        text(clip, r.x + 70, r.y + 3, C.white, 6, 'left');
+        const clip = v.text.length > 30 ? v.text.slice(0, 29) + '…' : v.text;
+        text(clip, r.x + 80, r.y + 6, C.white, 6, 'left');
       }
       text(_bibleStars(v.difficulty), r.x + r.w - 16, r.y + 3, C.gold, 6, 'left');
       _biblePushClickable(r, ids);
@@ -477,13 +477,13 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
   // progress caption
   const list = (typeof getVersesByCategory === 'function') ? getVersesByCategory(page) : [];
   const found = list.filter(v => ids.indexOf(v.id) >= 0).length;
-  text(BIBLE_CAT_LABEL[page] + '  ' + found + '/' + list.length, 4, H - 8, C.dim, 6, 'left');
+  text(BIBLE_CAT_LABEL[page] + '  ' + found + '/' + list.length, 8, H - BIBLE_FOOTER_H + 2, C.dim, 7, 'left');
 }
 
 // ── Pure click navigator (alternative to clickables) ────
 function handleBibleClick(x, y, discoveredIds, currentPage, scrollY){
-  const cw = (typeof W !== 'undefined') ? W : 256;
-  const ch = (typeof H !== 'undefined') ? H : 192;
+  const cw = (typeof W !== 'undefined') ? W : 384;
+  const ch = (typeof H !== 'undefined') ? H : 288;
   const regions = _bibleRegions(discoveredIds || [], currentPage || 'overview', scrollY || 0, cw, ch);
   let result = { action: 'none', page: currentPage || 'overview', scrollY: scrollY || 0 };
   // Prefer non-row hit regions (back / tab / scroll) so they win over overlapping rows.
