@@ -905,10 +905,9 @@ function loadVerse(){
   // Discover verses shown in combat (so they appear in Bible)
   for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
-  // Flow state freezes the timer
-  combat.maxTimer = Math.max(8, 16 - game.floor);
-  if (combat.isBoss) combat.maxTimer = Math.max(10, combat.maxTimer + 2);
-  if (MECH.flowActive) combat.maxTimer = 99; // frozen while flow active
+  // Timer: 2 minutes
+  combat.maxTimer = 120;
+  if (MECH.flowActive) combat.maxTimer = 999; // frozen while flow active
   combat.timer = combat.maxTimer;
   if (!game.hintsShown['combat']) showHint('combat', 'Tap words to form Bible verses. The glowing word is next!', true);
   game.verseHighlight = 0;
@@ -1434,6 +1433,8 @@ function render(){
 
   // Screen-FX fade overlay (covers all states during transitions)
   if (typeof ScreenFX !== 'undefined') ScreenFX.render();
+  // Hint overlay (all states)
+  renderHint();
   // Achievement toasts (top-center)
   if (typeof Achievements !== 'undefined') Achievements.renderToasts();
   // Secret verse unlock notifications
@@ -1878,7 +1879,7 @@ function renderCombat(){
     if (y + bh > 244) break;
     const used = combat.selected.includes(i);
     const tok = combat.pool[i];
-    const vcol = tok.v >= 0 ? verseTypeColor(combat.verses[tok.v].type) : C.dim;
+    const vcol = tok.v >= 0 ? verseTypeColor(combat.verses[tok.v].type) : (tok.v === -2 ? C.purple : C.dim);
     const hovered = pointIn(pointer.x, pointer.y, x, y, bw, bh);
     if (used){
       rect(x, y, bw, bh, C.gold);
@@ -1905,6 +1906,11 @@ function renderCombat(){
   }
 
   // ══ BOTTOM ACTION BAR (y:247-261) — timer, items, run, bible ══
+  // Color legend (tiny, above action bar)
+  text('■new ■Bible ■decoy', 6, 243, C.dim, 4, 'left');
+  ctx.fillStyle = C.holy; ctx.fillRect(6, 243, 4, 4);
+  ctx.fillStyle = C.purple; ctx.fillRect(52, 243, 4, 4);
+  ctx.fillStyle = C.dim; ctx.fillRect(96, 243, 4, 4);
   // Timer thin bar (just below pool) — only counts down when enabled
   const tFrac = game.timerEnabled
     ? Math.max(0, Math.min(1, combat.timer / combat.maxTimer))
@@ -1945,7 +1951,6 @@ function renderCombat(){
     const discIds = KnowledgeSystem.store.discoveredVerses || [];
     renderBible(ctx, W, H, discIds, game.biblePage, game.bibleScroll);
   }
-  renderHint();
   if (game.shakeTimer > 0) ctx.restore();
 }
 

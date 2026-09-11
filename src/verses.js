@@ -229,6 +229,21 @@ function getCombatPool(verses, floor, usedWords) {
     for (const w of verseWords(v)) if (!usedWords.has(w)) correct.push({ word: w, v: vi });
   });
 
+  // Bible verses: add words from discovered verses (v=-2 marks them as "known")
+  if (typeof KnowledgeSystem !== 'undefined' && typeof getVerseById === 'function'){
+    const discIds = KnowledgeSystem.store.discoveredVerses || [];
+    const offeredIds = verses.map(v => v.id);
+    const bibleCandidates = discIds.filter(id => !offeredIds.includes(id));
+    // Pick up to 2 random discovered verses
+    const shuffled = bibleCandidates.sort(() => Math.random() - 0.5).slice(0, 2);
+    for (const id of shuffled){
+      const bv = getVerseById(id);
+      if (bv){
+        for (const w of verseWords(bv)) if (!usedWords.has(w)) correct.push({ word: w, v: -2, bibleId: id });
+      }
+    }
+  }
+
   // Decoys: words from verses NOT in this combat's pair
   const queuedIds = verses.map(v => v.id);
   const other = VERSES.filter(v => !queuedIds.includes(v.id));
@@ -254,10 +269,27 @@ function getCombatPool(verses, floor, usedWords) {
 // Returns the matched verse object, or null.
 function checkVerse(selected, verses) {
   const sel = selected.map(s => s.word === undefined ? s : s.word);
+  // Check offered verses first
   for (const vObj of verses) {
     const target = verseWords(vObj);
     if (sel.length !== target.length) continue;
     if (sel.every((w, i) => w === target[i])) return vObj;
+  }
+  // Check discovered Bible verses (reduced damage: 50%)
+  if (typeof KnowledgeSystem !== 'undefined' && typeof getVerseById === 'function'){
+    const discIds = KnowledgeSystem.store.discoveredVerses || [];
+    const offeredIds = verses.map(v => v.id);
+    for (const id of discIds){
+      if (offeredIds.includes(id)) continue; // already checked above
+      const bv = getVerseById(id);
+      if (!bv) continue;
+      const target = verseWords(bv);
+      if (sel.length !== target.length) continue;
+      if (sel.every((w, i) => w === target[i])) {
+        // Return a wrapper that signals "bible verse" with reduced damage
+        return Object.assign({}, bv, { _bibleUsed: true, damage: Math.max(3, Math.floor(bv.damage * 0.5)) });
+      }
+    }
   }
   return null;
 }
