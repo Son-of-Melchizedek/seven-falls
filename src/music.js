@@ -610,8 +610,11 @@ const MusicEngine = (function () {
     const r = (lane.env && lane.env.r != null) ? lane.env.r : 0.08;
 
     list.forEach(f => {
+      // ponytail: some lanes ship without a valid `instr`; assigning undefined to
+      // oscillator.type throws, which killed the audio scheduler. Default instead.
+      const instr = (typeof lane.instr === 'string' && lane.instr !== 'perc') ? lane.instr : 'square';
       const o1 = ctx.createOscillator();
-      o1.type = lane.instr;
+      o1.type = instr;
       o1.frequency.value = f;
 
       const g = ctx.createGain();
@@ -628,7 +631,7 @@ const MusicEngine = (function () {
       const nodes = [o1];
       if (lane.width) {
         const o2 = ctx.createOscillator();
-        o2.type = lane.instr;
+        o2.type = instr;
         o2.frequency.value = f;
         o2.detune.value = lane.width;
         o2.connect(g);
@@ -706,12 +709,19 @@ const MusicEngine = (function () {
     masterGain.connect(compressor);
     compressor.connect(ctx.destination);
     noiseBuffer = makeNoise();
-    if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
+    // ponytail: resume once, on the first user gesture. Calling resume() every
+    // frame before a gesture is allowed spams a console error and burns CPU.
+    if (ctx.state === 'suspended' && ctx.resume) {
+      const kick = () => { if (ctx.state === 'suspended') ctx.resume(); };
+      ctx.resume().then(() => {}, () => {});
+      document.addEventListener('pointerdown', kick, { once: true });
+      document.addEventListener('touchstart', kick, { once: true });
+      document.addEventListener('keydown', kick, { once: true });
+    }
   }
 
   function startTrack(name) {
     if (!ctx) { console.warn('MusicEngine: call init() first (after a user gesture).'); return; }
-    if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
     const builder = TRACKS[name];
     if (!builder) { console.warn('MusicEngine: unknown track "' + name + '".'); return; }
 
