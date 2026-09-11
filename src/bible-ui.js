@@ -93,8 +93,8 @@ function _bibleRegions(discoveredIds, currentPage, scrollY, W, H){
     y += 13;
     for (const c of BIBLE_CAT_ORDER){
       const s = (stats.byCategory && stats.byCategory[c]) || { total: 0, discovered: 0 };
-      regions.push({ x: 6, y: y, w: W - 12, h: 12, kind: 'tab', page: c, label: BIBLE_CAT_LABEL[c], sub: s.discovered + '/' + s.total, scroll: 0 });
-      y += 14;
+      regions.push({ x: 6, y: y, w: W - 12, h: 16, kind: 'tab', page: c, label: BIBLE_CAT_LABEL[c], sub: s.discovered + '/' + s.total, scroll: 0 });
+      y += 18;
     }
     // Lore tab (below categories)
     const maxFloor = (typeof game !== 'undefined' && game.floor) ? game.floor : 1;
@@ -256,9 +256,15 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
         // always legible. Previously the text was drawn IN the saturated colour,
         // which made the darker categories (violet, blue) hard to read on black.
         panel(r.x, r.y, r.w, r.h, 3, C.panel);
-        rect(r.x, r.y + 2, 3, r.h - 4, col);
+        rect(r.x, r.y + 3, 3, r.h - 6, col);
         text(r.label, r.x + 10, r.y + 3, C.holy, 7, 'left');
-        text(r.sub, r.x + r.w - 8, r.y + 4, col, 6, 'right');
+        text(r.sub, r.x + r.w - 8, r.y + 3, col, 6, 'right');
+        // Completion bar: the old thin underline did not read as progress.
+        const seg = String(r.sub || '').split('/');
+        const frac = (seg.length === 2) ? (parseFloat(seg[0]) / Math.max(1, parseFloat(seg[1]))) : 0;
+        const bwidth = r.w - 20;
+        rect(r.x + 10, r.y + r.h - 4, bwidth, 2, C.stone);
+        if (frac > 0) rect(r.x + 10, r.y + r.h - 4, Math.max(1, bwidth * Math.min(1, frac)), 2, col);
         _biblePushClickable(r, ids);
       }
     }

@@ -1604,7 +1604,7 @@ function renderTitle(){ MusicEngine.playTrack('title');
   const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.34', W-10, H-10, C.dim, 5, 'right');
+  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.35', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 144, 100, 18, 'BEGIN', () => {
     if (typeof SFX !== 'undefined') { SFX.init(); }
@@ -2002,7 +2002,14 @@ function renderCombat(){
 
   // ══ WORD POOL — starts below the auto-sized selection area ══
   const startY = selY + selH + 4;
-  const cols = 4, bw = 91, bh = 20, gx = 3, gy = 3;
+  const cols = 4, bw = 91, gx = 3, gy = 3;
+  // Fit EVERY pool tile on screen. The grid used to hard-break at y+bh > 243,
+  // so any pool longer than the last row left words invisible AND unclickable —
+  // which made those verses impossible to complete. Tile height now adapts to
+  // the pool size so capacity can never be exceeded.
+  const _rows = Math.max(1, Math.ceil(combat.pool.length / cols));
+  const _avail = Math.max(24, 243 - startY);
+  const bh = Math.max(8, Math.min(20, Math.floor(_avail / _rows) - gy));
   for (let i = 0; i < combat.pool.length; i++){
     const c = i % cols, row = Math.floor(i / cols);
     const x = 6 + c * (bw + gx);
@@ -2027,19 +2034,21 @@ function renderCombat(){
     // setFont(round((parseInt(ctx.font) - 1) * S)) with S = 1.5, so the font
     // GREW 11 -> 15 -> 21... and the while never exited: an infinite loop that
     // hard-froze the page the instant combat first drew its word tiles.
-    let fs = Math.round(7 * S);
+    let fs = Math.max(6, Math.round(Math.min(7, bh * 0.62) * S));
     setFont(fs); ctx.textAlign = 'left';
     let guard = 0;
     while (label.length > 1 && fs > 5 && guard++ < 40 && ctx.measureText(label).width > bw - 14) {
       fs -= 1; setFont(fs);
     }
     const isNextWord = (game.verseHighlight >= 0 && tok.word.toLowerCase() === getExpectedWord() && !used);
+    const tsize = Math.max(4, Math.min(7, bh * 0.55));
+    const ty = y + Math.max(1, (bh - tsize * S) / 2);
     if (isNextWord) {
       ctx.save(); ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 10;
-      text(label, x+11, y+6, C.gold, 7, 'left');
+      text(label, x+11, ty, C.gold, tsize, 'left');
       ctx.restore();
     } else {
-      text(label, x+11, y+6, used ? C.bg : C.white, 7, 'left');
+      text(label, x+11, ty, used ? C.bg : C.white, tsize, 'left');
     }
     clickables.push({ x, y, w: bw, h: bh, onClick: () => selectWord(i) });
   }
