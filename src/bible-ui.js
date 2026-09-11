@@ -300,48 +300,74 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
     if (!v){ text('NOT FOUND', 8, 40, C.red, 8, 'left'); return; }
     const known = ids.indexOf(v.id) >= 0;
     text('VERSE', 36, 4, C.gold, 8, 'left');
-    const regions = _bibleRegions(ids, currentPage, scrollY, W, H);
     // back button
-    for (const r of regions){
-      if (r.kind === 'back'){ /* handled below */ }
-    }
     button(4, 4, 30, 9, '< BIBLE', () => _bibleNav('back', 'overview', 0, null), C.red);
 
-    let y = BIBLE_HEADER_H + 4;
-    // reference + category icon
-    rect(4, y, W - 8, 14, C.stoneDark);
-    strokeRect(4, y, W - 8, 14, _bibleCatColor(v.category));
-    text(_bibleCatIcon(v.category), 8, y + 4, _bibleCatColor(v.category), 9, 'left');
-    text(known ? v.reference : '??? : ?', 18, y + 4, known ? C.gold : C.dim, 8, 'left');
-    y += 18;
+    const listTop = BIBLE_HEADER_H;
+    const viewH = H - listTop - BIBLE_FOOTER_H;
+    const maxChars = 42; // fits at font 7 in 384px canvas
+    const lineH = 10;
 
-    // full text
-    const tlines = wrapText(known ? v.text : '???  ???  ???', Math.floor((W - 16) / 6));
-    for (const ln of tlines){ text(ln, 8, y, known ? C.holy : C.dim, 7, 'left'); y += 10; }
-
-    if (known){
-      y += 2;
-      text('TYPE ' + v.verseType.toUpperCase() + '  ' + _bibleStars(v.difficulty), 8, y, C.cyan, 6, 'left');
-      y += 9;
-      text('EFFECT ' + v.effect.toUpperCase() + (v.damage ? '  (' + v.damage + ')' : ''), 8, y, C.green, 6, 'left');
-      y += 9;
-      const dl = wrapText(v.desc, Math.floor((W - 16) / 6));
-      for (const ln of dl){ text(ln, 8, y, C.dim, 6, 'left'); y += 8; }
+    // Build all content lines
+    const contentLines = [];
+    // reference header
+    contentLines.push({ text: (known ? v.reference : '??? : ?'), color: known ? C.gold : C.dim, size: 8, gap: 4 });
+    // KJV text
+    contentLines.push({ text: '--- KJV ---', color: C.dim, size: 5, gap: 2 });
+    const kjvLines = wrapText(known ? v.text : '???  ???  ???', maxChars);
+    for (const ln of kjvLines) contentLines.push({ text: ln, color: known ? C.holy : C.dim, size: 7, gap: 0 });
+    // Translation variants
+    if (known && v.nkjv){
+      contentLines.push({ text: '--- NKJV ---', color: C.dim, size: 5, gap: 3 });
+      for (const ln of wrapText(v.nkjv, maxChars)) contentLines.push({ text: ln, color: C.cyan, size: 6, gap: 0 });
     }
-    y += 4;
-    // cross-refs + combos (regions)
-    for (const r of regions){
-      if (r.kind === 'section'){
-        text(r.label, r.x, r.y, C.cyan, 7, 'left');
-      } else if (r.kind === 'row'){
-        const cv = r.sub;
-        const cknown = ids.indexOf(cv.id) >= 0;
-        rect(r.x, r.y, r.w, r.h, C.stoneDark);
-        strokeRect(r.x, r.y, r.w, r.h, cknown ? _bibleCatColor(cv.category) : C.stone2);
-        text(_bibleCatIcon(cv.category), r.x + 2, r.y + 3, cknown ? _bibleCatColor(cv.category) : C.dim, 7, 'left');
-        text(cknown ? cv.reference : '???', r.x + 12, r.y + 3, cknown ? C.holy : C.dim, 7, 'left');
-        _biblePushClickable(r, ids);
+    if (known && v.niv){
+      contentLines.push({ text: '--- NIV ---', color: C.dim, size: 5, gap: 3 });
+      for (const ln of wrapText(v.niv, maxChars)) contentLines.push({ text: ln, color: C.green, size: 6, gap: 0 });
+    }
+    if (known && v.nlt){
+      contentLines.push({ text: '--- NLT ---', color: C.dim, size: 5, gap: 3 });
+      for (const ln of wrapText(v.nlt, maxChars)) contentLines.push({ text: ln, color: C.blue, size: 6, gap: 0 });
+    }
+    // Stats
+    if (known){
+      contentLines.push({ text: 'TYPE ' + v.verseType.toUpperCase() + '  ' + _bibleStars(v.difficulty), color: C.cyan, size: 6, gap: 4 });
+      contentLines.push({ text: 'EFFECT ' + v.effect.toUpperCase() + (v.damage ? '  (' + v.damage + ')' : ''), color: C.green, size: 6, gap: 2 });
+      if (v.desc){
+        for (const ln of wrapText(v.desc, maxChars)) contentLines.push({ text: ln, color: C.dim, size: 5, gap: 0 });
       }
+    }
+
+    // Calculate total content height
+    let totalH = 0;
+    for (const l of contentLines) totalH += (l.gap || 0) + (l.size || 7);
+
+    // Scrolling
+    const scrollKey = 'detail_' + id;
+    if (BIBLE_UI._detailScroll === undefined) BIBLE_UI._detailScroll = {};
+    if (BIBLE_UI._detailScroll[scrollKey] === undefined) BIBLE_UI._detailScroll[scrollKey] = 0;
+    const maxScroll = Math.max(0, totalH - viewH);
+    let sy = Math.max(0, Math.min(BIBLE_UI._detailScroll[scrollKey] || 0, maxScroll));
+
+    // Draw visible content
+    let cy = listTop - sy;
+    for (const l of contentLines){
+      const nextY = cy + (l.gap || 0) + (l.size || 7);
+      if (nextY > listTop - 10 && cy < H - BIBLE_FOOTER_H + 10){
+        if (l.gap) cy += l.gap;
+        if (cy >= listTop && cy < H - BIBLE_FOOTER_H){
+          text(l.text, 8, cy, l.color, l.size, 'left');
+        }
+        cy += l.size || 7;
+      } else {
+        cy += (l.gap || 0) + (l.size || 7);
+      }
+    }
+
+    // Scroll buttons
+    if (maxScroll > 0){
+      button(W - 14, listTop, 10, 9, '^', () => { BIBLE_UI._detailScroll[scrollKey] = Math.max(0, sy - 30); }, C.cyan);
+      button(W - 14, H - BIBLE_FOOTER_H - 9, 10, 9, 'v', () => { BIBLE_UI._detailScroll[scrollKey] = Math.min(maxScroll, sy + 30); }, C.cyan);
     }
     return;
   }
