@@ -1277,6 +1277,7 @@ function die(){
 // NODE RESOLUTION (non-combat)
 // ═══════════════════════════════════════════════════════════════
 function enterNode(node){
+  if (!node){ game.state = 'MAP'; return; } // ponytail: total function — null can never crash the frame loop
   game.pendingNode = null;
   switch (node.type){
     case NODE_TYPE.COMBAT:
@@ -1475,7 +1476,7 @@ function renderTitle(){ MusicEngine.playTrack('title');
   const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.29', W-10, H-10, C.dim, 5, 'right');
+  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.30', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 144, 100, 18, 'BEGIN', () => {
     if (typeof SFX !== 'undefined') { SFX.init(); }
@@ -1664,10 +1665,10 @@ function renderMap(){
         // boss intro (for BOSS nodes) or starts combat directly. No double-trigger.
         if (typeof ScreenFX !== 'undefined') {
           ScreenFX.startCrawl(node, () => { enterNode(node); });
+          game.state = 'CRAWL';
         } else {
           enterNode(node);
         }
-        game.state = 'CRAWL';
       }});
     }
   }
@@ -2159,6 +2160,12 @@ function renderVictory(){
 // ═══════════════════════════════════════════════════════════════
 let lastT = performance.now();
 function loop(now){
+  // ponytail: one frame can never kill the game — an uncaught throw here used to
+  // stop requestAnimationFrame forever, freezing the canvas on the last drawn frame.
+  try { tick(now); } catch (e) { console.error('SEVEN FALLS frame error:', e); }
+  requestAnimationFrame(loop);
+}
+function tick(now){
   const dt = (now - lastT) / 1000;
   lastT = now;
 
@@ -2234,7 +2241,6 @@ function loop(now){
   }
 
   render();
-  requestAnimationFrame(loop);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2274,6 +2280,7 @@ canvas.addEventListener('pointerdown', e => {
     const c = clickables[i];
     if (p.x >= c.x && p.x <= c.x + c.w && p.y >= c.y && p.y <= c.y + c.h){
       if (c.onClick) c.onClick();
+      clickables = []; // ponytail: consume — a stale frame's array must not fire twice
       return;
     }
   }
