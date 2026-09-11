@@ -2462,6 +2462,23 @@ window.addEventListener('keydown', e => {
   }
 });
 
+// ── QA hook ──────────────────────────────────────────────────────────────────
+// Exposes internals for automated browser testing and design review.
+// Strictly read-only handles — no game code reads from window.SF.
+window.SF = {
+  get state(){ return game.state; },
+  get game(){ return game; },
+  get map(){ return mapState ? mapState.map : null; },
+  get combat(){ return combat; },
+  get colors(){ return C; },
+  get dims(){ return { W, H }; },
+  nodePos, canMoveTo, nodeType: NODE_TYPE,
+  reachable(){ const m = mapState && mapState.map; if(!m) return [];
+    return m.nodes.filter(n => canMoveTo(n.id)).map(n => { const p = nodePos(n, m.totalRows); return { id:n.id, type:n.type, x:p.x, y:p.y }; }); },
+  allNodes(){ const m = mapState && mapState.map; if(!m) return [];
+    return m.nodes.map(n => { const p = nodePos(n, m.totalRows); return { id:n.id, type:n.type, x:p.x, y:p.y, visited:m.visited.has(n.id) }; }); }
+};
+
 requestAnimationFrame(loop);
 </script>
 </body>
