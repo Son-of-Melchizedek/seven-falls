@@ -252,10 +252,13 @@ function renderBible(ctx, W, H, discoveredIds, currentPage, scrollY){
         else { text(r.label, r.x + 4, r.y + 3, C.white, 8, 'left'); _biblePushClickable(r, ids); }
       } else if (r.kind === 'tab'){
         const col = _bibleCatColor(r.page);
-        rect(r.x, r.y, r.w, r.h, C.stone);
-        strokeRect(r.x, r.y, r.w, r.h, col);
-        text(r.label, r.x + 8, r.y + 4, col, 8, 'left');
-        text(r.sub, r.x + r.w - 8, r.y + 4, C.dim, 7, 'right');
+        // Colour codes the category; the label itself stays parchment so it is
+        // always legible. Previously the text was drawn IN the saturated colour,
+        // which made the darker categories (violet, blue) hard to read on black.
+        panel(r.x, r.y, r.w, r.h, 3, C.panel);
+        rect(r.x, r.y + 2, 3, r.h - 4, col);
+        text(r.label, r.x + 10, r.y + 3, C.holy, 7, 'left');
+        text(r.sub, r.x + r.w - 8, r.y + 4, col, 6, 'right');
         _biblePushClickable(r, ids);
       }
     }

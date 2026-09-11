@@ -90,11 +90,15 @@
 // ═══════════════════════════════════════════════════════════════
 
 // ── Color palette ────────────────────────────────────────────
+// Warm, desaturated "brass on ink" theme. Kept the same semantic keys so every
+// existing call site inherits the new look without touching game logic.
 const C = {
-  bg:'#080812', stone:'#1e1e30', stone2:'#2a2a42', stoneDark:'#0e0e1c',
-  gold:'#ffd700', holy:'#e8e0ff', red:'#e03030', green:'#00cc55',
-  blue:'#3355cc', purple:'#8844cc', cyan:'#33cccc', white:'#f0f0ff', dim:'#555578',
-  accent:'#ff6644', holyGlow:'rgba(232,224,255,0.15)', goldGlow:'rgba(255,215,0,0.2)',
+  bg:'#0b0a12', stone:'#1c1a26', stone2:'#2e2a3a', stoneDark:'#121019',
+  gold:'#d8b46a', holy:'#efe7d7', red:'#c9564f', green:'#7fb069',
+  blue:'#6d8bc9', purple:'#9b7bc4', cyan:'#7fb8b8', white:'#ece7f2', dim:'#6f6884',
+  accent:'#e08a5f', holyGlow:'rgba(239,231,215,0.12)', goldGlow:'rgba(216,180,106,0.22)',
+  // extra surfaces for the modernised chrome
+  panel:'#15131f', panelHi:'#1d1a29', edge:'#332e42', ink:'#0b0a12',
 };
 
 // ── Fill gaps the source files expect but do not define ──────
@@ -278,25 +282,66 @@ function wrapText(t, maxChars){
   if (line.trim()) lines.push(line.trim());
   return lines;
 }
+// ── Modern chrome primitives ──────────────────────────────
+// arcTo-based rounded path: works on old WebViews where ctx.roundRect is absent.
+function roundRectPath(x, y, w, h, r){
+  r = Math.max(0, Math.min(r == null ? 3 : r, w / 2, h / 2));
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y,     x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x,     y + h, r);
+  ctx.arcTo(x,     y + h, x,     y,     r);
+  ctx.arcTo(x,     y,     x + w, y,     r);
+  ctx.closePath();
+}
+// A card surface: soft fill + hairline edge. Use instead of raw rect() for panels.
+function panel(x, y, w, h, r, fillColor){
+  roundRectPath(x, y, w, h, r == null ? 4 : r);
+  ctx.fillStyle = fillColor || C.panel;
+  ctx.fill();
+  roundRectPath(x + 0.5, y + 0.5, w - 1, h - 1, r == null ? 4 : r);
+  ctx.strokeStyle = C.edge; ctx.lineWidth = 1; ctx.stroke();
+}
+// Vertical sheen, clipped to the current path. Fake depth on flat fills.
+function sheen(x, y, w, h, alpha){
+  ctx.save(); ctx.clip();
+  const g = ctx.createLinearGradient(0, y, 0, y + h);
+  g.addColorStop(0, 'rgba(255,255,255,' + (alpha == null ? 0.05 : alpha) + ')');
+  g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(x, y, w, h);
+  ctx.restore();
+}
 function button(x, y, w, h, label, onClick, color, txtColor, fill){
   const hovered = pointIn(pointer.x, pointer.y, x, y, w, h);
-  // hover glow
-  if (hovered && color){
-    ctx.save();
-    ctx.shadowColor = color;
-    ctx.shadowBlur = 6;
-    rect(x, y, w, h, fill || C.stoneDark);
-    ctx.restore();
-  } else {
-    rect(x, y, w, h, fill || C.stoneDark);
-  }
-  strokeRect(x, y, w, h, color || C.gold);
+  const accent = color || C.gold;
+  const base = fill || C.stoneDark;
+  const rad = h >= 16 ? 4 : 2;
+
+  // body: subtle vertical gradient so buttons read as raised, not painted on
+  roundRectPath(x, y, w, h, rad);
+  const g = ctx.createLinearGradient(0, y, 0, y + h);
+  g.addColorStop(0, shadeColor(base, hovered ? 30 : 14));
+  g.addColorStop(1, shadeColor(base, hovered ? 8 : -8));
+  ctx.fillStyle = g; ctx.fill();
+  sheen(x, y, w, h, hovered ? 0.09 : 0.05);
+
+  // edge: one neutral chrome language. Accent colour is reserved for the label
+  // (and hover), instead of every control getting its own coloured outline —
+  // which read as debug flags rather than a system.
+  roundRectPath(x + 0.5, y + 0.5, w - 1, h - 1, rad);
+  ctx.strokeStyle = hovered ? accent : (fill ? shadeColor(accent, -70) : C.edge);
+  ctx.lineWidth = 1; ctx.stroke();
+
+  // label: fit by shrinking, then ellipsis — bounded and monotonic
   let lbl = String(label);
-  setFont(Math.round(7 * S));
+  let fs = Math.round((h >= 18 ? 7 : 6) * S);
+  const maxW = w - 10;
+  setFont(fs);
+  let guard = 0;
+  while (lbl.length > 1 && fs > 6 && guard++ < 20 && ctx.measureText(lbl).width > maxW){ fs -= 1; setFont(fs); }
+  if (ctx.measureText(lbl).width > maxW && lbl.length > 2) lbl = lbl.slice(0, -1) + '…';
   ctx.textAlign = 'center';
-  const maxW = w - 8;
-  while (lbl.length > 1 && ctx.measureText(lbl).width > maxW) lbl = lbl.slice(0, -1);
-  text(lbl, x + w/2, y + h/2 - 4*S, txtColor || C.white, 7, 'center');
+  text(lbl, x + w / 2, y + h / 2 - fs / 2 - 1, hovered ? accent : (txtColor || C.holy), (h >= 18 ? 7 : 6), 'center');
   clickables.push({ x, y, w, h, onClick });
 }
 function bar(x, y, w, h, frac, color, bg){
@@ -660,14 +705,29 @@ function drawWarriorSprite(cx, cy, breathe){
 }
 
 // ── Hint overlay (bottom of screen) ──
+// Wrap by MEASURED pixel width. wrapText() counts characters, which overflowed
+// the box at this font size and made every line render ellipsised ("The glow..").
+function wrapTextPx(t, maxW, size){
+  setFont(Math.round((size || 6) * S));
+  const words = String(t).split(/\s+/).filter(Boolean);
+  const out = [];
+  let line = '';
+  for (const w of words){
+    const probe = line ? line + ' ' + w : w;
+    if (!line || ctx.measureText(probe).width <= maxW) line = probe;
+    else { out.push(line); line = w; }
+  }
+  if (line) out.push(line);
+  return out;
+}
 function renderHint(){
   if (!game.activeHint) return;
   const x = 6, y = H - 32, w = W - 12, h = 30;
-  rect(x, y, w, h, 'rgba(6,6,18,0.92)');
-  strokeRect(x, y, w, h, C.gold);
-  const lines = wrapText(game.activeHint.text, 46);
-  let ly = y + 4;
-  for (const l of lines.slice(0, 3)){ text(l, x + 5, ly, C.holy, 6, 'left'); ly += 9; }
+  panel(x, y, w, h, 4, 'rgba(20,17,28,0.96)');
+  rect(x, y, 3, h, C.gold);
+  const lines = wrapTextPx(game.activeHint.text, w - 16, 6);
+  let ly = y + 5;
+  for (const l of lines.slice(0, 3)){ text(l, x + 9, ly, C.holy, 6, 'left'); ly += 9; }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1423,6 +1483,19 @@ function nodePos(node, rows){
 // ═══════════════════════════════════════════════════════════════
 // RENDER
 // ═══════════════════════════════════════════════════════════════
+// Soft corner darkening — one cheap depth cue applied to every screen, so flat
+// fills stop reading as an unfinished clear-colour.
+let VIGNETTE = null;
+function vignette(){
+  if (!VIGNETTE){
+    const g = ctx.createRadialGradient(W/2, H/2, Math.min(W, H) * 0.28, W/2, H/2, Math.max(W, H) * 0.75);
+    g.addColorStop(0, 'rgba(0,0,0,0)');
+    g.addColorStop(1, 'rgba(0,0,0,0.55)');
+    VIGNETTE = g;
+  }
+  ctx.fillStyle = VIGNETTE;
+  ctx.fillRect(0, 0, W, H);
+}
 function render(){
   clickables = [];
   rect(0, 0, W, H, C.bg);
@@ -1446,7 +1519,8 @@ function render(){
     case 'VICTORY':  renderVictory(); break;
   }
 
-  // Screen-FX fade overlay (covers all states during transitions)
+  // Global depth pass, then the fade overlay on top of it
+  vignette();
   if (typeof ScreenFX !== 'undefined') ScreenFX.render();
   // Hint overlay (all states)
   renderHint();
@@ -1486,7 +1560,7 @@ function renderTitle(){ MusicEngine.playTrack('title');
   const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.32', W-10, H-10, C.dim, 5, 'right');
+  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.33', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 144, 100, 18, 'BEGIN', () => {
     if (typeof SFX !== 'undefined') { SFX.init(); }
@@ -1496,7 +1570,7 @@ function renderTitle(){ MusicEngine.playTrack('title');
       game._isDaily = false;
       startNewRun();
     }
-  }, C.gold);
+  }, C.gold, C.gold, '#2a2113');
   // Difficulty selector (Easy / Normal / Hard) — compact row, label centered between arrows
   const diffLabels = { easy:'EASY', normal:'NORMAL', hard:'HARD' };
   const curDiff = (typeof VerseDifficulty !== 'undefined') ? VerseDifficulty.setting : 'normal';
