@@ -116,6 +116,31 @@ const WEAKNESS_MAP = (function(){
 // DEMON_TYPES is only used by KnowledgeSystem.getRunStats() for a count
 const DEMON_TYPES = SIN_TYPE;
 
+// ── Verse data normalisation ─────────────────────────────────
+// BIBLE_VERSES ships `verseType` (and 580 entries with damage 0), but the whole
+// combat system reads `verse.type` and `verse.damage`. With type undefined, the
+// weakness multiplier, fatigue, immunity, synergy, combos, tile colours and the
+// damage message all silently degraded — every hit read "undefined <ref> -1".
+// Normalise once, here, so every consumer downstream sees one shape.
+(function normaliseVerseData(){
+  const src = (typeof BIBLE_VERSES !== 'undefined' && BIBLE_VERSES) ? BIBLE_VERSES : null;
+  if (!src) return;
+  for (const v of src){
+    if (!v.type && v.verseType) v.type = v.verseType;
+    // Verses with no usable damage made combat an ~15-turn grind at 1 dmg/hit.
+    // Derive a modest value from difficulty so every verse can actually hurt.
+    if (!v.damage || v.damage <= 0){
+      const d = v.difficulty || 1;
+      v.damage = 6 + d * 2;
+    }
+  }
+  // `typeNames` is referenced by the damage message but was never defined, which
+  // is what produced the literal string "undefined" in front of every hit.
+  if (typeof globalThis.typeNames === 'undefined'){
+    globalThis.typeNames = { praise:'PRAISE', warfare:'WARFARE', fire:'FIRE', wisdom:'WISDOM', mercy:'MERCY' };
+  }
+})();
+
 // ── MECH safety alias ──
 // mechanics.js defines the real MECH object (combat mechanics). If that script
 // fails to load, alias a no-op stub so the game never hard-crashes on MECH.* calls.
@@ -975,8 +1000,27 @@ function loadVerse(){
     const optional = combat.pool.filter(t => t.v < 0);
     combat.pool = mustKeep.concat(optional.slice(0, Math.max(0, MAX_TILES - mustKeep.length)));
   }
+  // Solvability invariant: every offered verse must be spellable from the pool.
+  // This is the assert that would have caught both blocking combat bugs on day
+  // one — if it ever fails, combat is unwinnable, so say so loudly.
+  (function assertSolvable(){
+    const words = combat.pool.map(p => p.word);
+    for (const v of combat.verses){
+      const need = verseWords(v);
+      const used = new Set();
+      let ok = true;
+      for (const w of need){
+        let found = -1;
+        for (let i = 0; i < words.length; i++){
+          if (!used.has(i) && words[i] === w){ found = i; break; }
+        }
+        if (found < 0){ ok = false; break; }
+        used.add(found);
+      }
+      if (!ok) console.error('SEVEN FALLS UNPLAYABLE: verse not spellable from pool:', (v.reference || v.id), need);
+    }
+  })();
   combat.selected = [];
-  // Discover verses shown in combat (so they appear in Bible)
   for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   // Timer: 2 minutes
@@ -1560,7 +1604,7 @@ function renderTitle(){ MusicEngine.playTrack('title');
   const stats = 'Runs ' + s.runs + '  Best Floor ' + s.bestFloor +
                 '  Slain ' + s.demonsSlain +
                 '  Verses ' + s.versesKnown + '/' + s.totalVerses;
-  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.33', W-10, H-10, C.dim, 5, 'right');
+  text(stats, cx, 128, C.cyan, 6, 'center'); text('v0.34', W-10, H-10, C.dim, 5, 'right');
 
   button(cx-50, 144, 100, 18, 'BEGIN', () => {
     if (typeof SFX !== 'undefined') { SFX.init(); }
