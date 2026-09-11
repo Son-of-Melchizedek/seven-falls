@@ -207,6 +207,7 @@ const game = {
   timerEnabled: true,
   particles: [],
   comboAnim: 0,
+  devMode: false,
 };
 // Timer preference persists across runs
 game.timerEnabled = localStorage.getItem('seven_falls_timer') !== 'false';
@@ -689,6 +690,19 @@ function startNewRun(){
   game.hintQueue = [];
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   KnowledgeSystem.startRun();
+  // Bible starter verses: 2 per category for beginners
+  if (typeof BIBLE_VERSES !== 'undefined' && typeof getVerseById === 'function'){
+    const starterIds = [
+      'ps23_1', 'ps91_1',         // Attack
+      'eph6_11', 'eph6_13',       // Defense
+      'pro3_5', 'pro1_7',         // Buff
+      'heb4_12', 'jam4_7',        // Debuff
+    ];
+    for (const id of starterIds){
+      KnowledgeSystem.discoverVerse(id);
+    }
+    game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
+  }
   CombatTwists.init();
   initMap(1);
   maybeShowScholarNote('MAP');
@@ -776,6 +790,15 @@ function startCombat(node){
 
   AdaptiveDifficulty.applyToDemon(demon);
 
+  // Progressive HP scaling: floors 1-2 are tutorial-easy (10-15 HP)
+  if (game.floor <= 2 && !isBoss && !isElite){
+    demon.hp = Math.min(demon.hp, 10 + game.floor * 5);  // floor 1: 15, floor 2: 20
+    demon.maxHp = demon.hp;
+  } else if (game.floor <= 4 && !isBoss && !isElite){
+    demon.hp = Math.min(demon.hp, 20 + game.floor * 8);  // floor 3: 44, floor 4: 52
+    demon.maxHp = demon.hp;
+  }
+
   combat = {
     demon,
     isBoss, isElite, isNemesis,
@@ -830,6 +853,9 @@ function loadVerse(){
   }
   combat.pool = getCombatPool(combat.verses, game.floor, combat.usedWords);
   combat.selected = [];
+  // Discover verses shown in combat (so they appear in Bible)
+  for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
+  game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   // Flow state freezes the timer
   combat.maxTimer = Math.max(8, 16 - game.floor);
   if (combat.isBoss) combat.maxTimer = Math.max(10, combat.maxTimer + 2);
@@ -888,6 +914,8 @@ function resolveVerse(verse){
     return;
   }
   let dmg = verse.damage;
+  // Dev mode: one-shot kills
+  if (game.devMode) dmg = 9999;
   const mult = getDamageMultiplier(combat.demon.type, verse.type, combat.demon.weakTo);
   if (combat.buffNext > 0){ dmg = Math.floor(dmg * (1 + combat.buffNext)); combat.buffNext = 0; }
   // #23 VERSE FATIGUE: 0.7x if same type 3x in a row
@@ -1427,6 +1455,13 @@ function renderTitle(){ MusicEngine.playTrack('title');
     game.timerEnabled = !game.timerEnabled;
     localStorage.setItem('seven_falls_timer', game.timerEnabled ? 'true' : 'false');
   }, game.timerEnabled ? C.green : C.dim);
+  // Dev Mode toggle
+  const devLabel = 'DEV MODE: ' + (game.devMode ? 'ON' : 'OFF');
+  button(cx-50, 172 + 28, 100, 12, devLabel, () => {
+    game.devMode = !game.devMode;
+    if (typeof SFX !== 'undefined') SFX.play('click');
+  }, game.devMode ? C.red : C.dim);
+  if (game.devMode) text('One-shot kills active', cx, 172 + 42, C.red, 5, 'center');
   // Credit line (bottom)
   text('A game by Bear Sensei', cx, H - 10, C.dim, 5, 'center');
 }
@@ -1761,7 +1796,7 @@ function renderCombat(){
 
   // ══ WORD POOL — starts below the auto-sized selection area ══
   const startY = selY + selH + 4;
-  const cols = 6, bw = 58, bh = 20, gx = 3, gy = 3;
+  const cols = 5, bw = 70, bh = 22, gx = 2, gy = 2;
   for (let i = 0; i < combat.pool.length; i++){
     const c = i % cols, row = Math.floor(i / cols);
     const x = 6 + c * (bw + gx);
@@ -1772,7 +1807,6 @@ function renderCombat(){
     const vcol = tok.v >= 0 ? verseTypeColor(combat.verses[tok.v].type) : C.dim;
     const hovered = pointIn(pointer.x, pointer.y, x, y, bw, bh);
     if (used){
-      // VERY obvious selected state: bright gold background
       rect(x, y, bw, bh, C.gold);
     } else {
       ctx.save();
@@ -1780,20 +1814,18 @@ function renderCombat(){
       rect(x, y, bw, bh, '#11122a');
       ctx.restore();
     }
-    // 2px visible border
     strokeRect(x, y, bw, bh, used ? C.white : vcol);
-    // colored dot: which verse this word belongs to
     ctx.fillStyle = vcol; ctx.fillRect(x+3, y+3, 5, 5);
-    let label = tok.word; if (i < 9) label = (i+1) + label;
-    setFont(Math.round(6 * S)); ctx.textAlign = 'left';
-    while (label.length > 1 && ctx.measureText(label).width > bw - 13) label = label.slice(0, -1);
+    let label = tok.word;
+    setFont(Math.round(7 * S)); ctx.textAlign = 'left';
+    while (label.length > 1 && ctx.measureText(label).width > bw - 14) label = label.slice(0, -1);
     const isNextWord = (game.verseHighlight >= 0 && tok.word.toLowerCase() === getExpectedWord() && !used);
     if (isNextWord) {
       ctx.save(); ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 10;
-      text(label, x+11, y+6, C.gold, 7, 'left');
+      text(label, x+11, y+5, C.gold, 7, 'left');
       ctx.restore();
     } else {
-      text(label, x+11, y+7, used ? C.bg : C.white, 6, 'left');
+      text(label, x+11, y+6, used ? C.bg : C.white, 7, 'left');
     }
     clickables.push({ x, y, w: bw, h: bh, onClick: () => selectWord(i) });
   }
@@ -1817,9 +1849,10 @@ function renderCombat(){
   }
   if (items.length === 0) text('No items', 98, 250, C.dim, 5, 'left');
 
-  // Submit / Clear (left cluster)
+  // Submit / Clear / Undo (left cluster)
   button(6, 247, 44, 14, 'HIT', () => submitVerse(), C.gold, C.bg, C.gold);
   button(54, 247, 40, 14, 'CLR', () => clearSelection(), C.blue, C.white, C.stone);
+  button(98, 247, 40, 14, 'UNDO', () => { if (combat && combat.selected.length > 0) combat.selected.pop(); }, C.dim, C.white, C.stone);
 
   // RUN + BIBLE (right cluster) — clearly visible
   if (!(combat.isLust && !combat.lustBroken)){
