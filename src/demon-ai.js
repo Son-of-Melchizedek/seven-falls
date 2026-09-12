@@ -254,8 +254,40 @@ const DemonAI = (function(){
     if (!c || !c.demon) return;
     tick(c);
     if (c.stunTurns > 0){ c.stunTurns--; say(c, c.demon.name + ' is stunned and cannot act.'); return; }
+    // ── GRANDIA: a charged move fires now, unless the player broke it ──
+    if (c.cast && c.cast.mv){
+      const cm = c.cast.mv;
+      c.cast = null;
+      const ca = apiFor(c, g, full);
+      c._aiLast = cm.id; c._aiCd[cm.id] = cm.cd || 3;
+      if (typeof SpriteStates !== 'undefined') SpriteStates.set('demon', cm.pose || 'attack');
+      if (typeof SFX !== 'undefined') SFX.play('phase');
+      if (c._follow){ const f = c._follow, od = ca.dmg; ca.dmg = (mul, o) => od((mul || 1) * f, o); c._follow = 0; }
+      if (cm.x){
+        const cd = cm.m ? ca.dmg(cm.m) : 0;
+        say(c, c.demon.name + ' — ' + cm.n + '!' + (cd ? ' (' + cd + ' dmg)' : ''));
+        cm.x(c, g, ca);
+      } else {
+        cm.run(c, g, ca);
+      }
+      c._aiLastMove = cm.n || cm.id;
+      return;
+    }
     const a = apiFor(c, g, full);
     const mv = choose(c, g);
+    // ── GRANDIA: heavy moves telegraph for one turn behind a visible bar. The
+    // player can cancel it by landing this demon's weak verse type in the window;
+    // otherwise it lands as it always did. Below 20% HP the gloves come off and
+    // it fires immediately, so a losing demon is still dangerous.
+    const heavy = mv.big || (typeof mv.m === 'number' && mv.m >= 1.3);
+    if (heavy && c.demon.hp > c.demon.maxHp * 0.2){
+      c.cast = { mv: mv, name: mv.n || mv.id };
+      c._aiLast = mv.id; c._aiCd[mv.id] = mv.cd || 3;
+      if (typeof SpriteStates !== 'undefined') SpriteStates.set('demon', 'cast');
+      if (typeof SFX !== 'undefined') SFX.play('phase');
+      say(c, c.demon.name + ' gathers its strength — ' + (mv.n || 'a heavy blow') + ' approaches!');
+      return;
+    }
     c._aiLast = mv.id;
     c._aiCd[mv.id] = mv.cd || 2;
     if (typeof SpriteStates !== 'undefined') SpriteStates.set('demon', mv.pose || 'attack');

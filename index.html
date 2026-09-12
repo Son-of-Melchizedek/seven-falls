@@ -98,6 +98,7 @@
 <script src='src/sprite-states.js'></script>
 <script src='src/demon-ai.js'></script>
 <script src='src/polish.js'></script>
+<script src='src/deep.js'></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -1284,6 +1285,15 @@ function resolveVerse(verse){
   // demon AI debuffs: hexes, locked verse types, fatigue and the feint punish window
   if (typeof DemonAI !== 'undefined') dmg = Math.max(1, Math.floor(dmg * DemonAI.playerDamageMult(combat, verse.type)));
   if (combat.flatBonus){ dmg += combat.flatBonus; combat.flatBonus = 0; }
+  // ── DEEP MOVES (#3 inscription cost, #4 pool links, #5 cast break) ──
+  // Order matters: the break resolves first (it can grant flow), then links pay
+  // their bonus, then the over-budget tax is charged on the result.
+  let deepNotes = [];
+  if (typeof Deep !== 'undefined'){
+    if (Deep.tryBreak(verse, deepNotes)) dmg = Math.floor(dmg * 1.25);
+    dmg = Deep.applyLinks(dmg, deepNotes);
+    dmg = Deep.applyCostTax(dmg, deepNotes);
+  }
   // #16 FLOW STATE: double damage when active
   if (MECH.flowActive) dmg = Math.floor(dmg * 2);
   // #24 CRITICAL HIT: 15% → 2x
@@ -1312,6 +1322,11 @@ function resolveVerse(verse){
   if (typeof SFX !== 'undefined') SFX.play(shieldBlocked ? 'block' : (verseCat === 'DEFENSE' ? 'bless' : 'impact'));
   if (!shieldBlocked){
     combat.demon.hp -= dmg;
+    // #7 WITNESS: a super-effective hit *is* the weakness, demonstrated — stamp it
+    // into the saved store so later descents see what this one taught.
+    if (mult > 1 && typeof Deep !== 'undefined'){
+      if (Deep.stampWitness(combat.demon.name, verse.type, game.floor)) deepNotes.push('WITNESSED');
+    }
     if (typeof Polish !== 'undefined') Polish.hit('demon', dmg, mult > 1 ? '#ffe36e' : '#ffc247', { big: mult > 1 });
     if (typeof DemonAI !== 'undefined') DemonAI.onPlayerHit(combat, game, dmg); // mirrors reflect part of the verse
   }
@@ -1402,14 +1417,16 @@ function resolveVerse(verse){
     game.goldFlash = (mult > 1) ? 0.5 : 0;
     game.comboAnim = 1.2;
     combat.message = typeNames[verse.type] + ' ' + verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
-                     '  >> ' + combo.name.toUpperCase() + '!' + extra;
+                     '  >> ' + combo.name.toUpperCase() + '!' + extra +
+                     (deepNotes.length ? '  [' + deepNotes.join(' ') + ']' : '');
     combat.msgTimer = 2.2;
     if (!game.hintsShown['combo']) showHint('combo', 'Words from different verses can combine!');
   } else {
     combat.comboResult = null;
     if (mult > 1) game.goldFlash = 0.5;
     combat.message = typeNames[verse.type] + ' ' + verse.reference + '  -' + dmg + (mult > 1 ? '!' : '') + resistedNote +
-                     (effMsg ? '  ' + effMsg : '');
+                     (effMsg ? '  ' + effMsg : '') +
+                     (deepNotes.length ? '  [' + deepNotes.join(' ') + ']' : '');
     combat.msgTimer = 1.6;
   }
   combat.turn++;
@@ -2010,6 +2027,8 @@ function renderScholar(){
     y += 8;
     for (const ln of hintLines){ text(ln, 26, y, C.cyan, 6, 'left'); y += 11; }
   }
+  // #7 WITNESS: the knowledge this run starts with, before you descend.
+  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(26, y0 + h - 40, 8);
   button(W/2-50, y0 + h - 26, 100, 16, 'CONTINUE', () => {
     const after = game.afterNote;
     game.pendingNote = null;
@@ -2032,6 +2051,8 @@ function renderMap(){
   text('HP ' + game.hp + '/' + game.maxHp, W-8, 4, C.green, 6, 'right');
   text('GOLD ' + game.gold, W-8, 14, C.gold, 6, 'right');
   text('ITEMS ' + (game.items ? game.items.length : 0) + '/5', W-8, 24, C.cyan, 6, 'right');
+  // #7 WITNESS: what previous descents taught you about this floor.
+  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(8, 25, 6);
 
   // Direction cues: boss at TOP, entrance at BOTTOM (Slay the Spire style)
   text('↑ BOSS', W/2, 4, C.red, 6, 'center');
@@ -2222,6 +2243,10 @@ function renderCombat(){
   // eScale * 1.1: the Child of God reads a touch larger than a common demon.
   drawWarriorSprite(56, 104, true, eScale * 1.1);
 
+  // #5 CAST: the telegraph the player can break by landing the weak type. Drawn
+  // in the enemy's stat column (under the HP numbers), not over the player row.
+  if (typeof Deep !== 'undefined') Deep.renderCastBar(116, 43);
+
   text((TIER_NAMES[d.tier] || 'Demon').toUpperCase(), 116, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
   text(d.name, 116, 12, C.red, 8, 'left');
   let badgeY = 23;
@@ -2337,7 +2362,11 @@ function renderCombat(){
   }
 
   // ══ WORD POOL — starts below the auto-sized selection area ══
-  const startY = selY + selH + 4;
+  // #3 INSCRIPTION strip sits between the selection box and the word pool: it
+  // declares the verse type, the word cost against the per-turn budget, and how
+  // many useful words remain.
+  if (typeof Deep !== 'undefined') Deep.renderInscription(selY + selH + 3);
+  const startY = selY + selH + 15;
   const cols = 4, gx = 2, gy = 3;
   // Fit EVERY pool tile on screen. The grid used to hard-break at y+bh > 243,
   // so any pool longer than the last row left words invisible AND unclickable —
@@ -2394,6 +2423,8 @@ function renderCombat(){
     // left accent in the verse-type colour, inset so it never touches the border
     ctx.fillStyle = used ? '#1a1526' : vcol;
     ctx.fillRect(x + 2, ty + 2, 3, bh - 4);
+    // #4 LINKS + junk crowding on the tile itself
+    if (typeof Deep !== 'undefined') Deep.decorateTile(i, tok, x, ty, bw, bh, vcol);
     const label = tok.word;
     const glyphH = lsize * (S / RS);            // logical px the glyphs actually occupy
     const ly = ty + Math.max(1, Math.round((bh - glyphH) / 2));
@@ -2643,6 +2674,10 @@ function renderDeath(){
   const body = [];
   for (const l of wrapTextPx(game.lastDeathText, 328, 6)) body.push({ t: l, c: C.holy, s: 6 });
   body.push({ t: 'Reached Floor ' + game.floor, c: C.gold, s: 7 });
+  if (typeof Deep !== 'undefined'){
+    const wc = Deep.witnessCount();
+    if (wc) body.push({ t: 'Witness: ' + wc + ' weakness' + (wc > 1 ? 'es' : '') + ' known on this floor', c: C.cyan, s: 6 });
+  }
   for (const l of wrapTextPx('Insight: ' + game.lastDeathInsight, 328, 6)) body.push({ t: l, c: C.cyan, s: 6 });
   sceneCard('YOU FELL', game._isDaily ? 'DAILY RUN' : null, body, [
     { label: 'RETRY', color: C.gold, onClick(){ startNewRun(); } },

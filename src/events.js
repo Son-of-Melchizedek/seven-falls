@@ -1243,6 +1243,3326 @@ const EventEngine = {
         { text: 'Let it pass', effect: 'neutral', weight: 1 },
       ],
     },
+  ,
+{
+  "category": "npc",
+  "weight": 3,
+  "slots": {
+    "npc_role": [
+      "a widow clutching a sealed letter",
+      "a leper barred from the path",
+      "a deserter from the host above",
+      "a child guarding a broken bell",
+      "a scribe with ink-stained hands",
+      "a captive angel in chains",
+      "a mourner dressed in ash"
+    ],
+    "npc_offer": [
+      "presses a relic into your palm",
+      "whispers a name you have heard in prayer",
+      "points to a scar upon the wall",
+      "offers to read your fortune in dust",
+      "begs you to carry a message upward",
+      "reveals a wound that will not close"
+    ]
+  },
+  "text": "A {npc_role} blocks your path and {npc_offer}.",
+  "choices": [
+    {
+      "text": "Hear them out",
+      "effect": "reveal_truth",
+      "weight": 2
+    },
+    {
+      "text": "Give them alms",
+      "effect": "mercy_reward",
+      "weight": 1
+    },
+    {
+      "text": "Pass by in silence",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "npc",
+  "weight": 3,
+  "slots": {
+    "traveler_form": [
+      "a blind pilgrim counting his steps",
+      "a merchant of forbidden salt",
+      "a penitent who scourges himself",
+      "a ghost of someone you failed",
+      "a ferryman with no boat",
+      "a beggar crowned in thorns",
+      "a soldier who lost his banner"
+    ],
+    "traveler_secret": [
+      "knows the stair that turns back on itself",
+      "has seen the Watcher in the deep",
+      "carries a verse etched in bone",
+      "can name the demon that hunts you",
+      "heard the chorus that calls your name",
+      "knows where the lost souls gather"
+    ]
+  },
+  "text": "A {traveler_form} sits by the cold fire and {traveler_secret}.",
+  "choices": [
+    {
+      "text": "Buy their secret",
+      "effect": "permanent_knowledge",
+      "weight": 2
+    },
+    {
+      "text": "Pray for them",
+      "effect": "heal_or_verse",
+      "weight": 1
+    },
+    {
+      "text": "Move on",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "moral",
+  "weight": 4,
+  "slots": {
+    "moral_scene": [
+      "a demon bound and weeping for release",
+      "a thief who stole bread for his family",
+      "a sister shielding a cursed sibling",
+      "a traitor begging to undo his oath",
+      "a mother who traded her son for peace",
+      "a servant who lied to spare a life"
+    ],
+    "moral_cost": [
+      "demands a verse from your heart",
+      "asks a year of your remaining days",
+      "requires you to kneel in the dust",
+      "costs the gold you carried for the sick",
+      "takes a drop of your own blood",
+      "asks you to speak a hard forgiveness"
+    ]
+  },
+  "text": "You face {moral_scene}. To act with mercy {moral_cost}.",
+  "choices": [
+    {
+      "text": "Show mercy",
+      "effect": "mercy_reward",
+      "weight": 1
+    },
+    {
+      "text": "Demand justice",
+      "effect": "justice_reward",
+      "weight": 1
+    },
+    {
+      "text": "Walk away",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "moral",
+  "weight": 4,
+  "slots": {
+    "moral_dilemma": [
+      "two souls bound to one stone",
+      "a judge who condemned the innocent",
+      "a friend who denied you thrice",
+      "a warrior who spared a child",
+      "a liar who saved a town",
+      "an elder who hid the map"
+    ],
+    "moral_truth": [
+      "knows the verse that seals the pit",
+      "has seen the path the others missed",
+      "can name the floor that devours the proud",
+      "carries the secret of the silent choir",
+      "knows where mercy was first given"
+    ]
+  },
+  "text": "Before you stands {moral_dilemma}, who {moral_truth}. What will you do?",
+  "choices": [
+    {
+      "text": "Hear their confession",
+      "effect": "reveal_truth",
+      "weight": 2
+    },
+    {
+      "text": "Grant them peace",
+      "effect": "mercy_reward",
+      "weight": 1
+    },
+    {
+      "text": "Leave them bound",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "shrine",
+  "weight": 2,
+  "slots": {
+    "shrine_deity": [
+      "the Ancient of Days",
+      "the Lamb who was slain",
+      "the Spirit that broods on water",
+      "the Angel of the Covenant",
+      "the Word made flesh",
+      "the Host of heaven",
+      "the Breath of life"
+    ],
+    "shrine_sign": [
+      "bleeds a single drop of wine",
+      "weeps where no eye sees",
+      "burns with a steady, cold flame",
+      "sings a line you half-remember",
+      "holds a light beneath the dark",
+      "shivers at your approach"
+    ]
+  },
+  "text": "An altar to {shrine_deity} stands in the gloom and {shrine_sign}.",
+  "choices": [
+    {
+      "text": "Kneel and pray",
+      "effect": "heal_or_verse",
+      "weight": 2
+    },
+    {
+      "text": "Offer what you carry",
+      "effect": "buff_for_gold",
+      "weight": 1
+    },
+    {
+      "text": "Read the inscription",
+      "effect": "reveal_map",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "shrine",
+  "weight": 2,
+  "slots": {
+    "shrine_object": [
+      "a basin of still water",
+      "a pillar marked with seven names",
+      "a brazier of unburnt coal",
+      "a door with no hinges",
+      "a tree that bears no fruit",
+      "a lamp that casts no shadow",
+      "a stone that drinks the light"
+    ],
+    "shrine_action": [
+      "reveals your reflection as a stranger",
+      "shows the road you refused",
+      "hums the song of the redeemed",
+      "opens onto a room not there",
+      "lists the sins already counted",
+      "promises what the pit cannot"
+    ]
+  },
+  "text": "You come upon {shrine_object}. It {shrine_action}.",
+  "choices": [
+    {
+      "text": "Draw near in faith",
+      "effect": "full_heal_small",
+      "weight": 2
+    },
+    {
+      "text": "Study its meaning",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Turn away",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "lore",
+  "weight": 2,
+  "slots": {
+    "lore_subject": [
+      "the war that split the morning stars",
+      "why the seraph hid his face",
+      "the name the Father keeps secret",
+      "how the first gate was sealed",
+      "what the dragon lost at the flood",
+      "the silence between two thunderous psalms",
+      "where the light was kept before time"
+    ],
+    "lore_vision": [
+      "unfolds as a city of glass",
+      "appears as a throne grown dim",
+      "shows a garden before the fall",
+      "reveals a book with seven seals",
+      "opens a window onto the void",
+      "sings the song no demon knows"
+    ]
+  },
+  "text": "In the dark, {lore_subject} {lore_vision} before your eyes.",
+  "choices": [
+    {
+      "text": "Watch and remember",
+      "effect": "permanent_knowledge",
+      "weight": 2
+    },
+    {
+      "text": "Recite it as prayer",
+      "effect": "buff_wisdom",
+      "weight": 1
+    },
+    {
+      "text": "Shut your eyes",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "lore",
+  "weight": 2,
+  "slots": {
+    "lore_relic": [
+      "a feather from a fallen watcher",
+      "the coin paid for a life",
+      "a thorn from the cursed crown",
+      "the nail that held the morning",
+      "a page torn from the lost book",
+      "the rope that bound a prophet",
+      "a scale from the sealed beast"
+    ],
+    "lore_truth": [
+      "tells of the mercy that outlasted wrath",
+      "names the demon that fled the cross",
+      "shows the verse that unmade the pit",
+      "reveals the floor where angels fell",
+      "whispers the name that silences the deep",
+      "uncovers the path the proud cannot walk"
+    ]
+  },
+  "text": "A {lore_relic} lies in the ash and {lore_truth}.",
+  "choices": [
+    {
+      "text": "Take it and learn",
+      "effect": "learn_verse",
+      "weight": 2
+    },
+    {
+      "text": "Bury it in peace",
+      "effect": "mercy_reward",
+      "weight": 1
+    },
+    {
+      "text": "Leave it to rot",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "negotiate",
+  "weight": 3,
+  "slots": {
+    "negotiator": [
+      "a trader with eyes of coin",
+      "a demon wearing a merchant's smile",
+      "a go-between of ash and silk",
+      "a broker of souls and small favors",
+      "a haggler who speaks in parables",
+      "a peddler of borrowed light",
+      "a bargainer with a ledger of names"
+    ],
+    "negotiator_offer": [
+      "offers safe passage for a verse",
+      "will sell the map for your blood",
+      "trades power for a year of mercy",
+      "gives silence in exchange for a secret",
+      "offers to hide you from the Stalker",
+      "sells the weakness of the pit"
+    ]
+  },
+  "text": "A {negotiator} blocks the stair and {negotiator_offer}.",
+  "choices": [
+    {
+      "text": "Hear the terms",
+      "effect": "reveal_weakness",
+      "weight": 2
+    },
+    {
+      "text": "Pay the price",
+      "effect": "deal_with_demon",
+      "weight": 1
+    },
+    {
+      "text": "Refuse and pass",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "negotiate",
+  "weight": 3,
+  "slots": {
+    "diplomat": [
+      "a herald of the lower court",
+      "a serpent-tongued emissary",
+      "a courier from the silent floors",
+      "a representative of the pit's order",
+      "a voice that speaks for the bound",
+      "a steward of the forgotten oaths",
+      "a mediator between two devils"
+    ],
+    "diplomat_proposal": [
+      "proposes a truce until the next gate",
+      "offers to name your enemy for a price",
+      "will spare a soul if you kneel",
+      "proposes you carry a message downward",
+      "offers knowledge of the trap ahead",
+      "suggests you trade your fear for their favor"
+    ]
+  },
+  "text": "A {diplomat} approaches and {diplomat_proposal}.",
+  "choices": [
+    {
+      "text": "Trade for the knowledge",
+      "effect": "permanent_knowledge",
+      "weight": 2
+    },
+    {
+      "text": "Accept the truce",
+      "effect": "deal_with_demon",
+      "weight": 1
+    },
+    {
+      "text": "Denounce them",
+      "effect": "damage_demon",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "forsaken",
+  "weight": 2,
+  "slots": {
+    "forsaken_thing": [
+      "a chapel with its bell torn down",
+      "a village that worshipped the wrong name",
+      "a garden where the fruit turned to ash",
+      "a well that swallowed its own water",
+      "a tower abandoned by its builder",
+      "a congregation that sang itself to sleep",
+      "a field where the harvest refused to rise"
+    ],
+    "forsaken_sign": [
+      "still smells of extinguished incense",
+      "echoes with a prayer no one answers",
+      "bears the mark of a withdrawn hand",
+      "holds the shape of a door long closed",
+      "whispers the names of the forgotten",
+      "shows where the light once fell"
+    ]
+  },
+  "text": "You enter {forsaken_thing}. It {forsaken_sign}.",
+  "choices": [
+    {
+      "text": "Pray over the ruin",
+      "effect": "heal_or_verse",
+      "weight": 2
+    },
+    {
+      "text": "Search the remnants",
+      "effect": "reveal_secret",
+      "weight": 1
+    },
+    {
+      "text": "Flee the emptiness",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "forsaken",
+  "weight": 2,
+  "slots": {
+    "forsaken_soul": [
+      "a believer who cursed the day he hoped",
+      "a saint who doubted at the last",
+      "a mother who outlived her prayers",
+      "a watcher who fell for love of the earth",
+      "a martyr who wondered if it was worth it",
+      "a priest who buried his own faith",
+      "a child who was promised and forgotten"
+    ],
+    "forsaken_lament": [
+      "sings a hymn with no ending",
+      "asks why the heavens stayed shut",
+      "offers you the bitterness he kept",
+      "shows you the letter never answered",
+      "whispers the verse he could not finish",
+      "reveals the wound that doubt opened"
+    ]
+  },
+  "text": "A {forsaken_soul} waits in the dark and {forsaken_lament}.",
+  "choices": [
+    {
+      "text": "Speak the missing verse",
+      "effect": "heal_sick",
+      "weight": 2
+    },
+    {
+      "text": "Listen to their grief",
+      "effect": "reveal_truth",
+      "weight": 1
+    },
+    {
+      "text": "Leave them in the dark",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "TEMPTATION_OF_CHRIST",
+  "weight": 3,
+  "slots": {
+    "toc_temptation": [
+      "bread from stones at your feet",
+      "the kingdoms of the world in a single glance",
+      "the power to cast yourself down unharmed",
+      "a throne built on the backs of the fallen",
+      "a shortcut that bypasses the cross",
+      "a crown offered without the suffering",
+      "a feast in a desert of bones"
+    ],
+    "toc_voice": [
+      "quotes Scripture to your thirst",
+      "promises what the Father withheld",
+      "asks why you should hunger",
+      "offers the end without the means",
+      "whispers that the angels will catch you",
+      "says the nations are already yours"
+    ]
+  },
+  "text": "The Tempter shows you {toc_temptation}. He {toc_voice}.",
+  "choices": [
+    {
+      "text": "Answer with Scripture",
+      "effect": "counter_praise",
+      "weight": 2
+    },
+    {
+      "text": "Take the bait",
+      "effect": "gold_or_hp_cost",
+      "weight": 1
+    },
+    {
+      "text": "Flee to prayer",
+      "effect": "buff_wisdom",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "TEMPTATION_OF_CHRIST",
+  "weight": 3,
+  "slots": {
+    "toc_second": [
+      "a pinnacle above the screaming deep",
+      "a mountain where all nations bow",
+      "a wilderness of forty empty days",
+      "a vision of an easy glory",
+      "a mirror that shows you as king",
+      "a path of stones that become bread",
+      "a hollow where angels should have come"
+    ],
+    "toc_promise": [
+      "promises the nations will serve you",
+      "says the Father would not let you fall",
+      "offers to end the hunger now",
+      "shows the crown without the nails",
+      "swears the desert need not last",
+      "pledges the angels as your guard"
+    ]
+  },
+  "text": "Upon {toc_second}, the Tempter {toc_promise}.",
+  "choices": [
+    {
+      "text": "Rebuke him",
+      "effect": "counter_praise",
+      "weight": 2
+    },
+    {
+      "text": "Accept the glory",
+      "effect": "sacrifice_power",
+      "weight": 1
+    },
+    {
+      "text": "Worship in Spirit",
+      "effect": "buff_wisdom",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "DEMON_NATURE",
+  "weight": 3,
+  "slots": {
+    "demon_kind": [
+      "a legioned shadow of many voices",
+      "a devourer shaped like a friend",
+      "a liar wearing the face of an angel",
+      "an accuser that counts your sins aloud",
+      "a seducer robed in borrowed light",
+      "a writhing thing of unnumbered names",
+      "a beast that feeds on forgotten prayers"
+    ],
+    "demon_nature": [
+      "confesses it was once a singer of the height",
+      "admits it fears the name it cannot speak",
+      "reveals it was cast out for pride",
+      "shows the wound the cross left on it",
+      "confesses it envies the least of the saved",
+      "admits it cannot enter where love abides"
+    ]
+  },
+  "text": "A {demon_kind} speaks and {demon_nature}.",
+  "choices": [
+    {
+      "text": "Learn its weakness",
+      "effect": "reveal_weakness",
+      "weight": 2
+    },
+    {
+      "text": "Bind it with a verse",
+      "effect": "damage_demon",
+      "weight": 1
+    },
+    {
+      "text": "Walk past it",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "DEMON_NATURE",
+  "weight": 3,
+  "slots": {
+    "demon_form2": [
+      "a swarm that takes the shape of doubt",
+      "a pale imitation of a seraph",
+      "a thing that wears the skin of mercy",
+      "a whisperer in the language of grief",
+      "a mockery of the form you pray to",
+      "a cold fire that pretends to warm",
+      "a chorus of one, pretending to be many"
+    ],
+    "demon_reveal": [
+      "drops the mask for a single breath",
+      "shows the hollow where its heart was",
+      "uncovers the chain it hides behind pride",
+      "reveals it was once given a name of light",
+      "exposes the fear beneath its hunger",
+      "shows the seal that still marks its brow"
+    ]
+  },
+  "text": "The {demon_form2} turns and {demon_reveal}.",
+  "choices": [
+    {
+      "text": "Mark what you see",
+      "effect": "permanent_knowledge",
+      "weight": 2
+    },
+    {
+      "text": "Strike the true form",
+      "effect": "damage_demon",
+      "weight": 1
+    },
+    {
+      "text": "Pity the creature",
+      "effect": "mercy_reward",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "MORAL_AMBIGUOUS",
+  "weight": 4,
+  "slots": {
+    "amb_decision": [
+      "spare the demon who begs",
+      "burn the scroll that warns you",
+      "free the soul that asks to stay",
+      "take the gold from the undeserving",
+      "break the oath to save a life",
+      "lie to the pit about your name",
+      "give the verse to one who will misuse it"
+    ],
+    "amb_outcome": [
+      "may damn another or save you",
+      "could free a prisoner or a fiend",
+      "might heal a foe or arm him",
+      "will wound the innocent or the guilty",
+      "can open the gate or seal it",
+      "may trade a life for a life"
+    ]
+  },
+  "text": "You must {amb_decision}. The act {amb_outcome}.",
+  "choices": [
+    {
+      "text": "Choose mercy",
+      "effect": "mercy_reward",
+      "weight": 1
+    },
+    {
+      "text": "Choose survival",
+      "effect": "gold_or_hp_cost",
+      "weight": 1
+    },
+    {
+      "text": "Seek the right path",
+      "effect": "reveal_truth",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "MORAL_AMBIGUOUS",
+  "weight": 4,
+  "slots": {
+    "amb_scene2": [
+      "a scale with no true balance",
+      "a door that opens for a lie",
+      "a well that trades memory for water",
+      "a bargain written in shifting ink",
+      "a light that grows by what it consumes",
+      "a road that shortens only by a sin",
+      "a mercy that costs another their soul"
+    ],
+    "amb_choice2": [
+      "promises peace at the price of truth",
+      "offers power that forgets the weak",
+      "grants safety by betraying a friend",
+      "gives sight that blinds the spirit",
+      "buys time with a stranger's blood",
+      "saves you by dooming the nameless"
+    ]
+  },
+  "text": "Before you is {amb_scene2}, which {amb_choice2}.",
+  "choices": [
+    {
+      "text": "Take the lesser evil",
+      "effect": "both_cost",
+      "weight": 1
+    },
+    {
+      "text": "Refuse the bargain",
+      "effect": "neutral",
+      "weight": 1
+    },
+    {
+      "text": "Pray for wisdom",
+      "effect": "wisdom_reveal",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "HIDDEN_ROOM",
+  "weight": 2,
+  "slots": {
+    "hidden_room": [
+      "a chamber behind the weeping wall",
+      "a hollow beneath the broken stair",
+      "a vault sealed with a forgotten name",
+      "a niche where the air stands still",
+      "a passage that opens only in shadow",
+      "a room that the map never drew",
+      "a crypt folded into the rock"
+    ],
+    "hidden_find": [
+      "holds a relic the pit forgot",
+      "contains a verse none have spoken",
+      "keeps the bones of an unrecorded saint",
+      "hides the key to a deeper floor",
+      "wears the dust of a thousand years",
+      "guards a light the dark could not eat"
+    ]
+  },
+  "text": "You find {hidden_room}. It {hidden_find}.",
+  "choices": [
+    {
+      "text": "Enter and search",
+      "effect": "reveal_hidden",
+      "weight": 2
+    },
+    {
+      "text": "Seal it shut",
+      "effect": "seal_opening",
+      "weight": 1
+    },
+    {
+      "text": "Take only what you need",
+      "effect": "random_item",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "CURSED_ITEM",
+  "weight": 2,
+  "slots": {
+    "cursed_item": [
+      "a ring that hums with borrowed years",
+      "a blade that drinks the wielder's name",
+      "a book that rewrites the reader",
+      "a crown that weighs the soul it sits on",
+      "a charm that trades luck for memory",
+      "a mirror that pays in reflected sins",
+      "a coin that buys what it has already taken"
+    ],
+    "cursed_mark": [
+      "bears the sigil of a fallen house",
+      "weeps a slow, black dew",
+      "whispers the name you fear to hear",
+      "glows with a light that cools the blood",
+      "bears the scratch of a denied command",
+      "pulses like a second, wicked heart"
+    ]
+  },
+  "text": "You uncover {cursed_item}. It {cursed_mark}.",
+  "choices": [
+    {
+      "text": "Take it despite the warning",
+      "effect": "take_cursed",
+      "weight": 2
+    },
+    {
+      "text": "Refuse and bless it",
+      "effect": "refuse_cursed",
+      "weight": 1
+    },
+    {
+      "text": "Walk away",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "PILGRIMAGE",
+  "weight": 2,
+  "slots": {
+    "pilgrimage_road": [
+      "a road that climbs toward no sun",
+      "a riverbed where the water walked once",
+      "a stair cut into the living rock",
+      "a bridge of verses over the abyss",
+      "a path lined with the stones of the fallen",
+      "a trail that ascends through weeping trees",
+      "a way marked by the footprints of the faithful"
+    ],
+    "pilgrimage_sign": [
+      "narrows with every step you take",
+      "brightens where the lost have prayed",
+      "tests you with each remembered sin",
+      "opens onto a vista none return from",
+      "hardens beneath the weight of doubt",
+      "sings low where the righteous rested"
+    ]
+  },
+  "text": "You walk {pilgrimage_road}. It {pilgrimage_sign}.",
+  "choices": [
+    {
+      "text": "Press onward",
+      "effect": "pilgrim_steps",
+      "weight": 2
+    },
+    {
+      "text": "Rest and read",
+      "effect": "learn_verse",
+      "weight": 1
+    },
+    {
+      "text": "Turn back down",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "trap",
+  "weight": 3,
+  "slots": {
+    "trap_kind": [
+      "a floor of needle-bone",
+      "a gorge of falling ash",
+      "a ceiling of hanging hooks",
+      "a pool of black oil",
+      "a gallery of mirrored eyes",
+      "a stair that melts as you climb"
+    ],
+    "trap_oath": [
+      "opens when you speak your name",
+      "springs when you look back",
+      "binds when you doubt",
+      "ignites when you try to flee",
+      "sings when you are alone"
+    ]
+  },
+  "text": "You step into {trap_kind} that {trap_oath}. The air is thick with the smell of old iron and something worse.",
+  "choices": [
+    {
+      "text": "Trace it slowly",
+      "effect": "skill_check",
+      "weight": 2
+    },
+    {
+      "text": "Leap across blindly",
+      "effect": "hp_cost_random",
+      "weight": 1
+    },
+    {
+      "text": "Search for the hinge",
+      "effect": "reveal_hidden",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "trap",
+  "weight": 2,
+  "slots": {
+    "trap_ward": [
+      "a row of finger-bones",
+      "a ring of salt gone black",
+      "a noose of cold light",
+      "a wall that breathes inward",
+      "a pit masked by song",
+      "a door of closing teeth"
+    ],
+    "trap_price": [
+      "demands a verse to pass",
+      "claims a memory for safe crossing",
+      "takes blood before it opens",
+      "asks your true name aloud",
+      "wants a prayer you do not know"
+    ]
+  },
+  "text": "{trap_ward} bars the hall and {trap_price}. Something behind it waits, patient as famine and twice as old.",
+  "choices": [
+    {
+      "text": "Pay in blood",
+      "effect": "hp_cost_random",
+      "weight": 2
+    },
+    {
+      "text": "Refuse and turn back",
+      "effect": "nothing",
+      "weight": 1
+    },
+    {
+      "text": "Find the safe path",
+      "effect": "reveal_hidden",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "puzzle",
+  "weight": 3,
+  "slots": {
+    "puzzle_form": [
+      "a door of seven silent mouths",
+      "a bridge built from lies",
+      "a stair that counts your sins",
+      "a wall of weeping stone",
+      "a circle that turns only for truth",
+      "a gate of unspoken names"
+    ],
+    "puzzle_key": [
+      "a verse of mercy",
+      "the name of the lost",
+      "a word spoken backward",
+      "the first commandment",
+      "a psalm you half-remember"
+    ]
+  },
+  "text": "Before you stands {puzzle_form}. It will open only for {puzzle_key}, and the dark is listening to your answer.",
+  "choices": [
+    {
+      "text": "Speak the verse",
+      "effect": "answer_riddle",
+      "weight": 2
+    },
+    {
+      "text": "Force the lock",
+      "effect": "hp_cost_random",
+      "weight": 1
+    },
+    {
+      "text": "Read the carving",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "puzzle",
+  "weight": 2,
+  "slots": {
+    "puzzle_riddle": [
+      "a knot of living shadow",
+      "a scale that weighs the soul",
+      "a mirror that shows your end",
+      "a lock of interlocking prayers",
+      "a map drawn in ash",
+      "a bell that rings when lied to"
+    ],
+    "puzzle_clue": [
+      "carved beneath your feet",
+      "whispered by the wind",
+      "written in a dead tongue",
+      "shown in falling light",
+      "hummed by something near"
+    ]
+  },
+  "text": "You face {puzzle_riddle}. The answer lies in {puzzle_clue}, if your wisdom is equal to your fear.",
+  "choices": [
+    {
+      "text": "Solve with Scripture",
+      "effect": "answer_riddle",
+      "weight": 2
+    },
+    {
+      "text": "Break it open",
+      "effect": "learn_verse_or_trap",
+      "weight": 1
+    },
+    {
+      "text": "Walk away in peace",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "scroll",
+  "weight": 3,
+  "slots": {
+    "scroll_face": [
+      "a scroll of weathered skin",
+      "a page that glows dim blue",
+      "a parchment soaked in wine",
+      "a leaf of beaten gold",
+      "a strip of shadow given form",
+      "a letter in your own hand"
+    ],
+    "scroll_truth": [
+      "a verse you had forgotten",
+      "the name of your stalker",
+      "a warning about the next tier",
+      "a prayer of the first martyr",
+      "a map of the floors below"
+    ]
+  },
+  "text": "A {scroll_face} rests on the altar. {scroll_truth} crawls across it slowly as you watch, unwilling to be read.",
+  "choices": [
+    {
+      "text": "Read it aloud",
+      "effect": "learn_verse",
+      "weight": 2
+    },
+    {
+      "text": "Memorize in silence",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Burn it unread",
+      "effect": "fire_damage_or_wisdom",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "scroll",
+  "weight": 2,
+  "slots": {
+    "scroll_seal": [
+      "a seal of wax and ash",
+      "a lock of braided hair",
+      "a clasp of black iron",
+      "a knot of thorn and thread",
+      "a sigil that burns to touch",
+      "a ribbon bound by a vow"
+    ],
+    "scroll_gift": [
+      "a fragment of a lost gospel",
+      "the location of a hidden spring",
+      "a demon's true weakness",
+      "a verse of protection",
+      "the hour of your testing"
+    ]
+  },
+  "text": "You uncover {scroll_seal} hiding {scroll_gift}. The ink shifts whenever you are not looking directly at it.",
+  "choices": [
+    {
+      "text": "Break the seal",
+      "effect": "reveal_secret",
+      "weight": 2
+    },
+    {
+      "text": "Study the cipher",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Leave it sealed",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "ambush",
+  "weight": 3,
+  "slots": {
+    "ambush_foe": [
+      "a clutch of blade-winged imps",
+      "a demon of poured tar",
+      "a pack of tongue-less hounds",
+      "a hunter made of mirrors",
+      "a chorus of screaming mouths",
+      "a thing wearing a saint's face"
+    ],
+    "ambush_ground": [
+      "drops from the rafters",
+      "rises from the flooded floor",
+      "steps from a painted wall",
+      "unfolds out of the dark",
+      "crawls through the stone"
+    ]
+  },
+  "text": "{ambush_foe} {ambush_ground} before you can pray. There is no time left to choose your ground.",
+  "choices": [
+    {
+      "text": "Stand and fight",
+      "effect": "combat_start",
+      "weight": 2
+    },
+    {
+      "text": "Flee the room",
+      "effect": "flee_or_damage",
+      "weight": 1
+    },
+    {
+      "text": "Read its weakness",
+      "effect": "reveal_weakness",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "ambush",
+  "weight": 2,
+  "slots": {
+    "ambush_trap": [
+      "a snare of singing wire",
+      "a false floor of glass",
+      "a wall that collapses inward",
+      "a flood released from above",
+      "a net of grasping shadow",
+      "a ceiling of falling teeth"
+    ],
+    "ambush_voice": [
+      "laughs from the rafters",
+      "whispers your sins",
+      "counts your heartbeats",
+      "mimics a loved voice",
+      "sings a hymn gone wrong"
+    ]
+  },
+  "text": "As you move, {ambush_trap} springs and {ambush_voice}. This ambush was built for you alone, and no one else.",
+  "choices": [
+    {
+      "text": "Cut through it",
+      "effect": "combat_bonus",
+      "weight": 2
+    },
+    {
+      "text": "Take the hit, keep moving",
+      "effect": "hp_cost_random",
+      "weight": 1
+    },
+    {
+      "text": "Spot the trigger",
+      "effect": "skill_check",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "sacrifice",
+  "weight": 3,
+  "slots": {
+    "sacrifice_altar": [
+      "an altar of cold bone",
+      "a pit crowned with candle-flame",
+      "a stone that drinks light",
+      "a throne of knotted roots",
+      "a fountain of still blood",
+      "a pyre that will not die"
+    ],
+    "sacrifice_demand": [
+      "your strongest memory of home",
+      "a year of your life",
+      "the name you were given",
+      "a verse written on your heart",
+      "the warmth of your own hands"
+    ]
+  },
+  "text": "At {sacrifice_altar} a voice asks {sacrifice_demand} in exchange for the power to go on.",
+  "choices": [
+    {
+      "text": "Give what is asked",
+      "effect": "sacrifice_power",
+      "weight": 2
+    },
+    {
+      "text": "Offer something lesser",
+      "effect": "alternative_sacrifice",
+      "weight": 1
+    },
+    {
+      "text": "Refuse the altar",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "sacrifice",
+  "weight": 2,
+  "slots": {
+    "sacrifice_cost": [
+      "a cut across the palm",
+      "a prayer you will never speak again",
+      "a drop of your own blood",
+      "the weight of a secret sin",
+      "a breath you cannot take back",
+      "a tear you did not know you had"
+    ],
+    "sacrifice_boon": [
+      "sight beyond the next veil",
+      "strength to break the door",
+      "courage that does not fail",
+      "a word that wounds demons",
+      "peace that hides your fear"
+    ]
+  },
+  "text": "The angel of the threshold requires {sacrifice_cost} for {sacrifice_boon}. The price is written in ash.",
+  "choices": [
+    {
+      "text": "Pay the price",
+      "effect": "choose_sacrifice",
+      "weight": 2
+    },
+    {
+      "text": "Bargain for less",
+      "effect": "both_cost",
+      "weight": 1
+    },
+    {
+      "text": "Walk past unworthy",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "vision",
+  "weight": 3,
+  "slots": {
+    "vision_scene": [
+      "a city where no bell rings",
+      "a field of unburied bones",
+      "a throne emptied of its king",
+      "a sea that burns but does not consume",
+      "a garden where the fruit is eyes",
+      "a road that ends in silence"
+    ],
+    "vision_meaning": [
+      "the fall that is still coming",
+      "the mercy that waits below",
+      "the name you must not speak",
+      "the hour your faith is tested",
+      "the face you will become"
+    ]
+  },
+  "text": "Sleep takes you, and you see {vision_scene}. In it, {vision_meaning} is shown to you without comfort or mercy.",
+  "choices": [
+    {
+      "text": "Wake and remember",
+      "effect": "prophetic_vision",
+      "weight": 2
+    },
+    {
+      "text": "Seek its meaning",
+      "effect": "reveal_truth",
+      "weight": 1
+    },
+    {
+      "text": "Forget it quickly",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "vision",
+  "weight": 2,
+  "slots": {
+    "vision_angel": [
+      "a seraph with six folded wings",
+      "a messenger robed in storm",
+      "a watcher with eyes of coin",
+      "a herald bearing no name",
+      "a light that will not shape itself",
+      "a voice without a body"
+    ],
+    "vision_word": [
+      "a command to descend further",
+      "a warning against pride",
+      "the location of the next seal",
+      "a verse to keep close",
+      "a promise that the end is near"
+    ]
+  },
+  "text": "{vision_angel} meets you in the dark and speaks {vision_word}. You are changed whether you believe it or not.",
+  "choices": [
+    {
+      "text": "Receive the word",
+      "effect": "angel_truth",
+      "weight": 2
+    },
+    {
+      "text": "Question the vision",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Refuse to listen",
+      "effect": "doubt_sown",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "PARABLES",
+  "weight": 3,
+  "slots": {
+    "parable_scene": [
+      "a traveler left for dead by the road",
+      "a younger son who demands his share",
+      "a shepherd who leaves the ninety-nine",
+      "a servant given ten coins",
+      "a sower casting on stone",
+      "a feast where the poor are sent for"
+    ],
+    "parable_lesson": [
+      "mercy shown to an enemy",
+      "a welcome for the wasted",
+      "one soul worth the long search",
+      "a gift that grows by giving",
+      "truth that falls on ready ground"
+    ]
+  },
+  "text": "The falls show you {parable_scene}, and the lesson is {parable_lesson}. Will you live it, or merely watch?",
+  "choices": [
+    {
+      "text": "Live the parable",
+      "effect": "good_samaritan",
+      "weight": 2
+    },
+    {
+      "text": "Learn from it",
+      "effect": "learn_verse",
+      "weight": 1
+    },
+    {
+      "text": "Pass by unmoved",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "PARABLES",
+  "weight": 2,
+  "slots": {
+    "parable_coin": [
+      "a single coin of forgotten mint",
+      "a loaf that does not shrink",
+      "a seed that sprouts in stone",
+      "a ring of returned inheritance",
+      "a sheep's bell in the dark",
+      "a net full beyond its seams"
+    ],
+    "parable_offer": [
+      "given to the one who lost all",
+      "multiplied among the hungry",
+      "planted where nothing grew",
+      "restored to the one who wandered",
+      "shared until all are fed"
+    ]
+  },
+  "text": "You are offered {parable_coin}, and told it is {parable_offer}. The giver watches closely how you receive.",
+  "choices": [
+    {
+      "text": "Give it away",
+      "effect": "multiply_loaves",
+      "weight": 2
+    },
+    {
+      "text": "Study the lesson",
+      "effect": "learn_verse",
+      "weight": 1
+    },
+    {
+      "text": "Keep it for yourself",
+      "effect": "talents",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "COMBAT_VARIANTS",
+  "weight": 3,
+  "slots": {
+    "combat_foe": [
+      "a brute wrapped in chains",
+      "a singer who wounds with sound",
+      "a thing of uncoiling rope",
+      "a knight of fallen orders",
+      "a swarm that thinks as one",
+      "a mirror that fights as you do"
+    ],
+    "combat_edge": [
+      "the high ground of broken stairs",
+      "cover behind a fallen pillar",
+      "the dark it cannot enter",
+      "a verse that slows its hand",
+      "a choke where numbers fail"
+    ]
+  },
+  "text": "You meet {combat_foe} and {combat_edge} may decide who leaves this room alive when the singing stops.",
+  "choices": [
+    {
+      "text": "Press the advantage",
+      "effect": "combat_bonus",
+      "weight": 2
+    },
+    {
+      "text": "Trade blow for blow",
+      "effect": "aoe_or_damage",
+      "weight": 1
+    },
+    {
+      "text": "Call on a verse",
+      "effect": "combat_condition",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "COMBAT_VARIANTS",
+  "weight": 2,
+  "slots": {
+    "combat_wager": [
+      "your remaining strength",
+      "a held breath of prayer",
+      "the last of your gold",
+      "a stance you cannot hold long",
+      "a name you speak to wound"
+    ],
+    "combat_stakes": [
+      "the demon's binding word",
+      "a second foe from the dark",
+      "the door that will not open twice",
+      "a wound that will not close",
+      "the silence after the scream"
+    ]
+  },
+  "text": "The fight turns on {combat_wager}, with {combat_stakes} hanging in the balance between you and the dark.",
+  "choices": [
+    {
+      "text": "Risk it all",
+      "effect": "multi_combat",
+      "weight": 2
+    },
+    {
+      "text": "Fight defensively",
+      "effect": "buff_defense",
+      "weight": 1
+    },
+    {
+      "text": "Strike for the kill",
+      "effect": "damage_demon",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "TRADER_DEMONS",
+  "weight": 3,
+  "slots": {
+    "trader_wares": [
+      "a jar of stolen light",
+      "a map drawn in another's blood",
+      "a coin that buys an hour",
+      "a vial of borrowed courage",
+      "a feather from a dead angel",
+      "a key to a room not yet built"
+    ],
+    "trader_pitch": [
+      "prices it in your memories",
+      "asks a verse you love",
+      "wants your shadow as downpayment",
+      "demands a name you trust",
+      "takes a year you have not lived"
+    ]
+  },
+  "text": "A trader-demon shows {trader_wares} and {trader_pitch}. Its smile is older than your faith and colder.",
+  "choices": [
+    {
+      "text": "Buy with what's asked",
+      "effect": "demon_trade",
+      "weight": 2
+    },
+    {
+      "text": "Haggle for the price",
+      "effect": "deal_with_demon",
+      "weight": 1
+    },
+    {
+      "text": "Walk away clean",
+      "effect": "refuse_cursed",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "TRADER_DEMONS",
+  "weight": 2,
+  "slots": {
+    "trader_game": [
+      "a game of thrown bones",
+      "a wager on the next breath",
+      "a roll that names your sin",
+      "a toss for a forgotten face",
+      "a dice of burning ivory",
+      "a bet settled in blood"
+    ],
+    "trader_stake": [
+      "your gold against its secret",
+      "your silence for its blade",
+      "a verse for a way past",
+      "your name for safe passage",
+      "a memory for a weapon"
+    ]
+  },
+  "text": "The trader-demon proposes {trader_game}, staking {trader_stake}. The dice are loaded, but you might still win.",
+  "choices": [
+    {
+      "text": "Throw the dice",
+      "effect": "dice_demon",
+      "weight": 2
+    },
+    {
+      "text": "Bet your gold",
+      "effect": "bet_gold",
+      "weight": 1
+    },
+    {
+      "text": "Refuse the game",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "RIDDLE",
+  "weight": 3,
+  "slots": {
+    "riddle_keeper": [
+      "a sphinx of crumbling clay",
+      "a child who quotes the dead",
+      "a door that speaks in riddles",
+      "a star that fell and reasons",
+      "a skull that laughs in meter",
+      "a river that asks your name"
+    ],
+    "riddle_tongue": [
+      "in a language of teeth",
+      "as a verse read backward",
+      "through a mouth of smoke",
+      "in the cadence of a psalm",
+      "with words that change meaning"
+    ]
+  },
+  "text": "{riddle_keeper} poses its question {riddle_tongue}. Answer wrong, and the floor forgets you were ever here.",
+  "choices": [
+    {
+      "text": "Answer with Scripture",
+      "effect": "answer_riddle",
+      "weight": 2
+    },
+    {
+      "text": "Seek the hidden sense",
+      "effect": "reveal_truth",
+      "weight": 1
+    },
+    {
+      "text": "Silence the keeper",
+      "effect": "damage_demon",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "LEGENDARY_WEAPONS",
+  "weight": 3,
+  "slots": {
+    "weapon_form": [
+      "a sword forged from a psalm",
+      "a spear that drank the sea",
+      "a bow strung with a martyr's hair",
+      "a blade of quenched lightning",
+      "a mace of the seventh seal",
+      "a dagger earned in the flood"
+    ],
+    "weapon_curse": [
+      "binds to the hand that takes it",
+      "hungers for a verse each dawn",
+      "remembers every soul it cuts",
+      "demands a name to be its edge",
+      "grows cold when you doubt"
+    ]
+  },
+  "text": "You find {weapon_form}. The legend says it {weapon_curse}, and not all who held it walked on afterward.",
+  "choices": [
+    {
+      "text": "Take up the weapon",
+      "effect": "temp_weapon",
+      "weight": 2
+    },
+    {
+      "text": "Bless it first",
+      "effect": "safe_item",
+      "weight": 1
+    },
+    {
+      "text": "Leave it to rust",
+      "effect": "refuse_cursed",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "WITNESS",
+  "weight": 3,
+  "slots": {
+    "witness_who": [
+      "a martyr who died singing",
+      "a child who saw the heavens open",
+      "a thief who repented at the end",
+      "a widow who fed the stranger",
+      "a soldier who dropped his spear",
+      "a scribe who burned his scrolls"
+    ],
+    "witness_testimony": [
+      "names the demon by its true name",
+      "shows the way the seal was broken",
+      "tells where the light was lost",
+      "reveals who betrayed the gate",
+      "speaks the verse that holds the dark"
+    ]
+  },
+  "text": "{witness_who} appears and {witness_testimony}. The testimony cannot be unheard once it has been given.",
+  "choices": [
+    {
+      "text": "Hear the testimony",
+      "effect": "reveal_truth",
+      "weight": 2
+    },
+    {
+      "text": "Learn the verse",
+      "effect": "learn_verse",
+      "weight": 1
+    },
+    {
+      "text": "Send the witness away",
+      "effect": "leave_soul",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "temptation",
+  "weight": 3,
+  "slots": {
+    "temptation": [
+      "a serpent coiled around a golden fruit",
+      "a whisper promising you will be like God",
+      "a mirror where you look younger and kinder",
+      "a garden blooming in the dark",
+      "a throne shaped to your shoulders",
+      "a voice that names you a prophet",
+      "a cup that never empties"
+    ],
+    "temptation_pull": [
+      "coils closer",
+      "hisses a blessing",
+      "promises the crown",
+      "offers the fruit",
+      "sings your name",
+      "shows you a softer road"
+    ]
+  },
+  "text": "You meet {temptation}. It {temptation_pull}, and the air goes sweet with lies.",
+  "choices": [
+    {
+      "text": "Resist in silence",
+      "effect": "buff_wisdom",
+      "weight": 1
+    },
+    {
+      "text": "Take what is offered",
+      "effect": "gold_or_hp_cost",
+      "weight": 2
+    },
+    {
+      "text": "Crush it and learn",
+      "effect": "reveal_truth",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "temptation",
+  "weight": 3,
+  "slots": {
+    "temptation": [
+      "a contract written in your own blood",
+      "a doorway only the proud may open",
+      "a scale promising to weigh your soul as light",
+      "a coin that buys forgiveness",
+      "a name you could take to command demons",
+      "a shorter path lit by a false dawn"
+    ],
+    "temptation_cost": [
+      "demands a year of your life",
+      "asks for a verse you love",
+      "requires you deny one mercy",
+      "wants your truest name",
+      "takes a memory of home",
+      "costs the fear of the Lord"
+    ]
+  },
+  "text": "A {temptation} appears. It {temptation_cost} and the easy road opens wide.",
+  "choices": [
+    {
+      "text": "Walk the easy road",
+      "effect": "gold_or_hp_cost",
+      "weight": 2
+    },
+    {
+      "text": "Refuse and pray",
+      "effect": "buff_wisdom",
+      "weight": 1
+    },
+    {
+      "text": "Read the fine print",
+      "effect": "reveal_weakness",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "treasure",
+  "weight": 3,
+  "slots": {
+    "treasure": [
+      "a jar of manna that never spoils",
+      "a fleece wet with dew alone",
+      "a stone the builders rejected",
+      "a coin from the temple",
+      "a vial of oil that anoints",
+      "a cloak woven by widows",
+      "a lamp that trims itself"
+    ],
+    "treasure_sign": [
+      "glows with old holiness",
+      "bears a mark of the Most High",
+      "is warm to the touch",
+      "whispers a psalm",
+      "shines with stored mercy",
+      "hums with patient light"
+    ]
+  },
+  "text": "You find {treasure}. It {treasure_sign}, yet the price of keeping it is not written.",
+  "choices": [
+    {
+      "text": "Take it for the road",
+      "effect": "random_item",
+      "weight": 2
+    },
+    {
+      "text": "Bless it first",
+      "effect": "safe_item",
+      "weight": 1
+    },
+    {
+      "text": "Study its mark",
+      "effect": "reveal_truth",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "treasure",
+  "weight": 3,
+  "slots": {
+    "treasure": [
+      "a crown of twelve stars",
+      "a pearl of great price",
+      "a sword beaten from a plowshare",
+      "a scroll sealed with seven seals",
+      "a well that gives living water",
+      "a branch of the true vine"
+    ],
+    "treasure_guard": [
+      "is guarded by a sleeping seraph",
+      "lies where the floor once burned",
+      "rests on a bone altar",
+      "is wrapped in a shroud",
+      "sits beneath a weeping icon",
+      "is chained to the wall"
+    ]
+  },
+  "text": "A {treasure} {treasure_guard}. To reach it you must disturb the holy still.",
+  "choices": [
+    {
+      "text": "Reach past the guard",
+      "effect": "random_item",
+      "weight": 2
+    },
+    {
+      "text": "Wake and ask leave",
+      "effect": "angel_appears",
+      "weight": 1
+    },
+    {
+      "text": "Read the seal",
+      "effect": "reveal_secret",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "hazard",
+  "weight": 3,
+  "slots": {
+    "hazard": [
+      "a ceiling of falling teeth",
+      "a river of quickened glass",
+      "a bell that rings itself",
+      "a staircase that forgets its steps",
+      "a fog that prays your sins aloud",
+      "a floor of snoring stone",
+      "a wind that carries knives"
+    ],
+    "hazard_sign": [
+      "screams your name",
+      "shivers with intent",
+      "breathes frost",
+      "closes like a mouth",
+      "chants the litany of the lost",
+      "hums with old hunger"
+    ]
+  },
+  "text": "A {hazard} looms. It {hazard_sign}, and there is no wall between you and it.",
+  "choices": [
+    {
+      "text": "Speak a warding verse",
+      "effect": "verse_defense_check",
+      "weight": 2
+    },
+    {
+      "text": "Run through it",
+      "effect": "speed_check",
+      "weight": 1
+    },
+    {
+      "text": "Stand and watch",
+      "effect": "reveal_weakness",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "hazard",
+  "weight": 3,
+  "slots": {
+    "hazard": [
+      "a bridge of knotted hair",
+      "a pit of used-up prayers",
+      "a door of pressed light",
+      "a curtain of woven nerve",
+      "a chasm bridged by a promise",
+      "a ladder slick with oil"
+    ],
+    "hazard_sign": [
+      "creaks like a dying thing",
+      "wavers as you step",
+      "weeps silent drops",
+      "sings a warning",
+      "smells of the deep",
+      "bends toward the fall"
+    ]
+  },
+  "text": "Before you {hazard} and it {hazard_sign}. One false move and the dark takes you.",
+  "choices": [
+    {
+      "text": "Cross with a verse",
+      "effect": "verse_defense_check",
+      "weight": 2
+    },
+    {
+      "text": "Leap across",
+      "effect": "skill_check",
+      "weight": 1
+    },
+    {
+      "text": "Study the span",
+      "effect": "reveal_hidden",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "healing",
+  "weight": 3,
+  "slots": {
+    "source": [
+      "a fig tree that blooms in winter",
+      "a spring the woman touched",
+      "a wound that pours balm",
+      "a bread that breaks into warmth",
+      "a lamp whose oil mends",
+      "a dew that heals the blind"
+    ],
+    "source_feel": [
+      "radiates quiet life",
+      "tingles like a blessing",
+      "draws out the ache",
+      "sings without a voice",
+      "warms the old scars",
+      "pulls the fever down"
+    ]
+  },
+  "text": "You come upon {source}. It {source_feel}, and your wounds remember they can close.",
+  "choices": [
+    {
+      "text": "Receive the gift",
+      "effect": "heal_amount",
+      "weight": 2
+    },
+    {
+      "text": "Save it for the dying",
+      "effect": "store_heal",
+      "weight": 1
+    },
+    {
+      "text": "Learn its name",
+      "effect": "learn_verse",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "healing",
+  "weight": 3,
+  "slots": {
+    "source": [
+      "a pool stirred by an angel",
+      "a balm from Gilead",
+      "a leaf from the tree of life",
+      "a cup of new wine",
+      "a handprint left in the wall",
+      "a breath that smells of morning"
+    ],
+    "source_feel": [
+      "waits for the troubled",
+      "glows with mercy",
+      "breathes onto your hurt",
+      "leans toward the weak",
+      "shines on the broken",
+      "settles the shaking"
+    ]
+  },
+  "text": "A {source} finds you. It {source_feel}, and for a moment the pit forgets you.",
+  "choices": [
+    {
+      "text": "Drink and be whole",
+      "effect": "heal_amount",
+      "weight": 2
+    },
+    {
+      "text": "Share with a stranger",
+      "effect": "heal_less_more_later",
+      "weight": 1
+    },
+    {
+      "text": "Ask the source",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "map_event",
+  "weight": 2,
+  "slots": {
+    "reveal": [
+      "the stair down to the next tier",
+      "a room of stored verses",
+      "the Stalker's resting place",
+      "a river you can drink",
+      "a gate sealed from inside",
+      "a path that loops to safety"
+    ],
+    "reveal_medium": [
+      "a child's drawing in ash",
+      "a map scratched in bone",
+      "a dream of the floor",
+      "a whisper on the wind",
+      "a light that traces walls",
+      "a reflection in blood"
+    ]
+  },
+  "text": "A {reveal_medium} shows you {reveal}. The way you missed lies open now.",
+  "choices": [
+    {
+      "text": "Mark it down",
+      "effect": "reveal_map_node",
+      "weight": 1
+    },
+    {
+      "text": "Commit it to memory",
+      "effect": "reveal_map",
+      "weight": 1
+    },
+    {
+      "text": "Ignore the omen",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "map_event",
+  "weight": 2,
+  "slots": {
+    "reveal": [
+      "where the demons nest",
+      "a shortcut past the ward",
+      "the well of living water",
+      "a trap yet unsprung",
+      "the exit you walked past",
+      "a chapel hidden in stone"
+    ],
+    "reveal_medium": [
+      "a bird that maps with song",
+      "a vein of light in the rock",
+      "a voice behind the wall",
+      "a scroll that unfolds itself",
+      "a star that will not move",
+      "a shadow that points"
+    ]
+  },
+  "text": "Something {reveal_medium} reveals {reveal} to your wondering eyes.",
+  "choices": [
+    {
+      "text": "Trace it on your map",
+      "effect": "reveal_map",
+      "weight": 2
+    },
+    {
+      "text": "Walk it blindly",
+      "effect": "safe_discover",
+      "weight": 1
+    },
+    {
+      "text": "Question the sign",
+      "effect": "reveal_truth",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "BOOK_OF_REVELATION",
+  "weight": 2,
+  "slots": {
+    "horseman": [
+      "the rider on the pale horse",
+      "the one who bears a pair of scales",
+      "the rider crowned with many crowns",
+      "the angel with the key of the abyss",
+      "the woman clothed with the sun",
+      "the beast from the sea"
+    ],
+    "horseman_act": [
+      "measures the wheat and the poor",
+      "sweeps the earth with peace removed",
+      "opens a war without end",
+      "looses the locusts below",
+      "flees the dragon's wrath",
+      "demands the mark of all"
+    ]
+  },
+  "text": "You witness {horseman_act} as {horseman} passes, and the age turns toward its end.",
+  "choices": [
+    {
+      "text": "Stand as a witness",
+      "effect": "prophetic_vision",
+      "weight": 1
+    },
+    {
+      "text": "Seal your eyes",
+      "effect": "buff_wisdom",
+      "weight": 1
+    },
+    {
+      "text": "Loot the fallen world",
+      "effect": "gold_or_hp_cost",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "BOOK_OF_REVELATION",
+  "weight": 2,
+  "slots": {
+    "dragon": [
+      "the great red dragon",
+      "the ancient serpent",
+      "the accuser of the brethren",
+      "the beast with ten horns",
+      "the false prophet",
+      "the locust king Abaddon"
+    ],
+    "dragon_deed": [
+      "drags a third of the stars down",
+      "opens its mouth on the faithful",
+      "stands on the sand of the sea",
+      "makes war on the sealed",
+      "casts fire to deceive",
+      "claims the throne of the pit"
+    ]
+  },
+  "text": "In the deep {dragon} {dragon_deed}, and the host of heaven recoils.",
+  "choices": [
+    {
+      "text": "Read the omen",
+      "effect": "reveal_weakness",
+      "weight": 1
+    },
+    {
+      "text": "Stand against it",
+      "effect": "combat_bonus",
+      "weight": 1
+    },
+    {
+      "text": "Flee the prophecy",
+      "effect": "avoid_nemesis",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "OLD_TESTAMENT",
+  "weight": 2,
+  "slots": {
+    "wanderer": [
+      "a bush that burns and is not spent",
+      "a rock struck in the wilderness",
+      "a pillar of cloud by day",
+      "a manna field in the morn",
+      "a serpent lifted on a pole",
+      "a staff that blossoms"
+    ],
+    "wanderer_sign": [
+      "speaks your name in flame",
+      "pours water for the thirst",
+      "leads where the way is none",
+      "feeds the grumbling host",
+      "heals the bitten and fearful",
+      "shows life from the dead"
+    ]
+  },
+  "text": "Forty years in the waste, {wanderer} {wanderer_sign} and the desert tests your trust.",
+  "choices": [
+    {
+      "text": "Follow the sign",
+      "effect": "wilderness_40",
+      "weight": 1
+    },
+    {
+      "text": "Drink and remember",
+      "effect": "heal_amount",
+      "weight": 1
+    },
+    {
+      "text": "Learn the lesson",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "OLD_TESTAMENT",
+  "weight": 2,
+  "slots": {
+    "judge": [
+      "a judge who frees the captive",
+      "a widow who refuses to stop",
+      "a stranger who warms the floor",
+      "a youth with a sling",
+      "a carpenter who fells a giant",
+      "a brother who spares a brother"
+    ],
+    "judge_deed": [
+      "delivers Israel by faith",
+      "wears down the unjust judge",
+      "keeps covenant in secret",
+      "fells the giant with one stone",
+      "builds the temple of peace",
+      "shows mercy over revenge"
+    ]
+  },
+  "text": "A {judge} stands before the pit and {judge_deed}. Will you walk as they did?",
+  "choices": [
+    {
+      "text": "Walk in their way",
+      "effect": "combat_bonus",
+      "weight": 1
+    },
+    {
+      "text": "Study their faith",
+      "effect": "learn_verse",
+      "weight": 1
+    },
+    {
+      "text": "Pass them by",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "GEOGRAPHIC",
+  "weight": 2,
+  "slots": {
+    "gorge": [
+      "a chasm of whispered names",
+      "a valley of dry bones",
+      "a plain of standing salt",
+      "a rift of echoed prayers",
+      "a hollow of old snow",
+      "a canyon of hanging light"
+    ],
+    "gorge_cross": [
+      "a rope of braided hair",
+      "a bridge of remembered verses",
+      "stones that rise to meet you",
+      "a ford of still fire",
+      "a path that sinks then climbs",
+      "a stair carved by wind"
+    ]
+  },
+  "text": "You face {gorge}, crossed only by {gorge_cross}. The far side promises the road on.",
+  "choices": [
+    {
+      "text": "Cross with a verse",
+      "effect": "verse_path",
+      "weight": 1
+    },
+    {
+      "text": "Wade the deep",
+      "effect": "hp_cost_random",
+      "weight": 1
+    },
+    {
+      "text": "Map the far shore",
+      "effect": "reveal_map",
+      "weight": 2
+    }
+  ]
+},
+{
+  "category": "GEOGRAPHIC",
+  "weight": 2,
+  "slots": {
+    "waste": [
+      "a field of shattered commandments",
+      "a shore where the sea obeys",
+      "a hill of skulls and silence",
+      "a garden gone to thorn",
+      "a town where no bell rings",
+      "a plain of scattered armor"
+    ],
+    "waste_danger": [
+      "the stone accuses",
+      "the tide waits to part",
+      "the silence preaches",
+      "the thorn guards a gate",
+      "the quiet hides a watcher",
+      "the armor fits the dead"
+    ]
+  },
+  "text": "You cross {waste} where {waste_danger}. The ground itself weighs your steps.",
+  "choices": [
+    {
+      "text": "Press across",
+      "effect": "mountain_climb",
+      "weight": 1
+    },
+    {
+      "text": "Pray for footing",
+      "effect": "heal_amount",
+      "weight": 1
+    },
+    {
+      "text": "Read the ground",
+      "effect": "reveal_secret",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "GAMBLING",
+  "weight": 2,
+  "slots": {
+    "wager": [
+      "your name against the dark",
+      "a verse for a kingdom",
+      "your breath on the flip",
+      "gold against a soul",
+      "a prayer on the cast",
+      "your shadow for sight"
+    ],
+    "gambler": [
+      "a shade who deals in futures",
+      "a duke of the crooked table",
+      "a liar with honest eyes",
+      "the Stalker's gamester",
+      "a demon of loaded fate",
+      "a ghost who bets on despair"
+    ]
+  },
+  "text": "{gambler} lays the table and asks you to stake {wager}.",
+  "choices": [
+    {
+      "text": "Take the wager",
+      "effect": "bet_gold",
+      "weight": 1
+    },
+    {
+      "text": "Read the odds",
+      "effect": "reveal_truth",
+      "weight": 1
+    },
+    {
+      "text": "Leave the game",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "GAMBLING",
+  "weight": 2,
+  "slots": {
+    "dice": [
+      "bones that recall your sins",
+      "a wheel of weeping eyes",
+      "cards inked in blood",
+      "a coin of two judgments",
+      "lots cast at the foot",
+      "a spindle that measures days"
+    ],
+    "dice_stakes": [
+      "a life for a verse",
+      "gold for a name",
+      "freedom for a year",
+      "sight for a soul",
+      "peace for power",
+      "mercy for a price"
+    ]
+  },
+  "text": "A game of {dice} is set, its stakes: {dice_stakes}.",
+  "choices": [
+    {
+      "text": "Roll the cast",
+      "effect": "dice_demon",
+      "weight": 1
+    },
+    {
+      "text": "See through the trick",
+      "effect": "wisdom_reveal",
+      "weight": 1
+    },
+    {
+      "text": "Refuse to play",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "CHORUS_OF_HELL",
+  "weight": 2,
+  "slots": {
+    "hellsong": [
+      "a hymn of the forgotten name",
+      "a litany of the pit",
+      "a chant that unbuilds prayer",
+      "a song of the first betrayal",
+      "a chorus of the unshriven",
+      "a melody that eats light"
+    ],
+    "hellsong_effect": [
+      "it loosens your grip on truth",
+      "it hums your grave",
+      "it opens a door in you",
+      "it dims the verses you know",
+      "it calls your fear by name",
+      "it weaves a noose of sound"
+    ]
+  },
+  "text": "From the dark {hellsong} rises and {hellsong_effect}, and the air turns to iron.",
+  "choices": [
+    {
+      "text": "Sing against it",
+      "effect": "counter_praise",
+      "weight": 1
+    },
+    {
+      "text": "Steal its secret",
+      "effect": "reveal_weakness",
+      "weight": 1
+    },
+    {
+      "text": "Break the song",
+      "effect": "combat_start",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "SCRIPTURE_WALK",
+  "weight": 2,
+  "slots": {
+    "verse": [
+      "I am the resurrection",
+      "My yoke is easy",
+      "Lo, I am with you always",
+      "The meek shall inherit",
+      "Come to the water",
+      "In my Father's house"
+    ],
+    "path": [
+      "a road of broken altars",
+      "a stair of answered pleas",
+      "a bridge of spoken covenants",
+      "a gate of remembered names",
+      "a floor of trodden verses",
+      "a tunnel of whispered psalms"
+    ]
+  },
+  "text": "{path} yields only to one who walks it speaking {verse}.",
+  "choices": [
+    {
+      "text": "Speak and walk",
+      "effect": "verse_path",
+      "weight": 1
+    },
+    {
+      "text": "Recite a wrong word",
+      "effect": "wrong_verse",
+      "weight": 1
+    },
+    {
+      "text": "Read the path first",
+      "effect": "learn_verse",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "MARTYRDOM",
+  "weight": 2,
+  "slots": {
+    "martyr": [
+      "a sealed font that needs a life to open",
+      "a chain on the pit needing a flesh key",
+      "a light that dies without a flame",
+      "a gate that opens on a willing heart",
+      "a plague only blood can stay",
+      "a bell that rings for the sacrificed"
+    ],
+    "martyr_reward": [
+      "the captives are unbound",
+      "the floor is undone",
+      "the Stalker is wounded",
+      "the seal is broken",
+      "the pit grows weak",
+      "the lost are remembered"
+    ]
+  },
+  "text": "{martyr_reward} but the price is that {martyr} must be given freely.",
+  "choices": [
+    {
+      "text": "Give yourself",
+      "effect": "martyr_self",
+      "weight": 1
+    },
+    {
+      "text": "Seek another road",
+      "effect": "third_option",
+      "weight": 1
+    },
+    {
+      "text": "Learn the cost",
+      "effect": "reveal_truth",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "discovery",
+  "weight": 2,
+  "slots": {
+    "ruin": [
+      "a sealed iron casket",
+      "a crumbling confessional",
+      "a buried reliquary",
+      "a shattered icon of a saint",
+      "a chest of drowned letters",
+      "a hollowed and silent bell"
+    ],
+    "ruin_secret": [
+      "a verse glows on the lid",
+      "something inside still breathes",
+      "a name is scratched in hope",
+      "the lock remembers your hand",
+      "light leaks from the seam",
+      "a psalm hums in the dark"
+    ]
+  },
+  "text": "Among the rubble you uncover {ruin}; {ruin_secret}, and the air turns cold.",
+  "choices": [
+    {
+      "text": "Investigate the glow",
+      "effect": "learn_verse_or_trap",
+      "weight": 2
+    },
+    {
+      "text": "Pray over it first",
+      "effect": "safe_discover",
+      "weight": 1
+    },
+    {
+      "text": "Leave it alone",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "discovery",
+  "weight": 2,
+  "slots": {
+    "relic": [
+      "a severed wing of light",
+      "a vial of saint's tears",
+      "a compass that points to sin",
+      "a page torn from a gospel",
+      "a coin from a dead city",
+      "a feather of quiet judgment"
+    ],
+    "relic_speaks": [
+      "it names the room ahead",
+      "it whispers a hidden verse",
+      "it shows a path downward",
+      "it recalls a forgotten name",
+      "it warns of the Stalker",
+      "it sings a line of truth"
+    ]
+  },
+  "text": "You stumble on {relic}; {relic_speaks}, and you feel watched by something holy.",
+  "choices": [
+    {
+      "text": "Listen to the relic",
+      "effect": "reveal_truth",
+      "weight": 2
+    },
+    {
+      "text": "Take it with you",
+      "effect": "random_item",
+      "weight": 1
+    },
+    {
+      "text": "Leave it be",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "demon_talk",
+  "weight": 3,
+  "slots": {
+    "demon_plea": [
+      "\"I bore the name of an archangel once\"",
+      "\"Your suffering is my suffering\"",
+      "\"The Stalker fears one verse\"",
+      "\"I can show you the way out\"",
+      "\"We were cast down together\"",
+      "\"Spare me and I will teach\""
+    ],
+    "demon_shape": [
+      "a serpent wound in light",
+      "a weeping child of ash",
+      "a scholar with no face",
+      "a mirror of your mother",
+      "a chorus of soft voices",
+      "a beggar wreathed in shadow"
+    ]
+  },
+  "text": "A demon pleads: {demon_plea} It wears the shape of {demon_shape}.",
+  "choices": [
+    {
+      "text": "Counter with Scripture",
+      "effect": "damage_demon",
+      "weight": 1
+    },
+    {
+      "text": "Hear its secret",
+      "effect": "gain_knowledge_lose_hp",
+      "weight": 1
+    },
+    {
+      "text": "Strike it down",
+      "effect": "combat_start",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "demon_talk",
+  "weight": 3,
+  "slots": {
+    "demon_offer2": [
+      "the true name of the Stalker",
+      "a verse that unmakes walls",
+      "the location of a lost soul",
+      "forgiveness you do not deserve",
+      "the memory of your baptism",
+      "a map of the floors below"
+    ],
+    "demon_mask": [
+      "a tongue of silver",
+      "eyes like wounded stars",
+      "hands that once healed",
+      "the voice of a dead friend",
+      "a halo of cold fire",
+      "a smile too gentle"
+    ]
+  },
+  "text": "The demon trades flattery for trust: {demon_offer2}, wearing {demon_mask}.",
+  "choices": [
+    {
+      "text": "Take the name",
+      "effect": "reveal_weakness",
+      "weight": 2
+    },
+    {
+      "text": "Refuse and bind it",
+      "effect": "combat_start",
+      "weight": 1
+    },
+    {
+      "text": "Pretend to agree",
+      "effect": "reverseDeal",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "nemesis_hint",
+  "weight": 1,
+  "slots": {
+    "stalker_sign": [
+      "a wall flayed by its claws",
+      "a scent of cold iron",
+      "footprints that breathe",
+      "a feather plucked from its wing",
+      "a door it tore from its hinge",
+      "a name it scratched in panic"
+    ],
+    "stalker_mood": [
+      "fresh, and moving closer",
+      "old, but circling back",
+      "waiting beyond the dark",
+      "wounded, and furious",
+      "watching from the next room",
+      "humming the tune of your fear"
+    ]
+  },
+  "text": "You find {stalker_sign}. The sign is {stalker_mood}. The Stalker is hunting you.",
+  "choices": [
+    {
+      "text": "Study the sign",
+      "effect": "reveal_weakness",
+      "weight": 1
+    },
+    {
+      "text": "Set a snare",
+      "effect": "trap_for_nemesis",
+      "weight": 1
+    },
+    {
+      "text": "Flee deeper",
+      "effect": "avoid_nemesis",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "nemesis_hint",
+  "weight": 1,
+  "slots": {
+    "stalker_voice": [
+      "a whisper in your own voice",
+      "a growl through the stone",
+      "a child laughing in the vents",
+      "a tolling that follows you",
+      "a hiss at the edge of sleep",
+      "a prayer spoken backwards"
+    ],
+    "stalker_promise": [
+      "\"Come to me and rest\"",
+      "\"I already know your verse\"",
+      "\"Your soul is mine by right\"",
+      "\"We will finish what began\"",
+      "\"No angel will reach you here\"",
+      "\"I named you before you fell\""
+    ]
+  },
+  "text": "The Stalker speaks - {stalker_voice}: {stalker_promise}.",
+  "choices": [
+    {
+      "text": "Mark its words",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Draw your weapon",
+      "effect": "combat_start",
+      "weight": 1
+    },
+    {
+      "text": "Flee and hide",
+      "effect": "avoid_nemesis",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "choir",
+  "weight": 1,
+  "slots": {
+    "choir_song": [
+      "a lament no mouth should sing",
+      "a hymn with the words reversed",
+      "a chant that bends the light",
+      "a harmony of weeping",
+      "a song of the lost thrones",
+      "a melody that names the dead"
+    ],
+    "choir_source": [
+      "from a pit of open mouths",
+      "behind a wall of bone",
+      "above you in the black",
+      "within your own chest",
+      "from a fissure of light",
+      "under the floor of ash"
+    ]
+  },
+  "text": "A {choir_source} rises - {choir_song}. The sound pulls at your ribs.",
+  "choices": [
+    {
+      "text": "Join the singing",
+      "effect": "join_chorus",
+      "weight": 1
+    },
+    {
+      "text": "Listen for meaning",
+      "effect": "reveal_secret",
+      "weight": 1
+    },
+    {
+      "text": "Wall your ears",
+      "effect": "mental_resistance",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "choir",
+  "weight": 1,
+  "slots": {
+    "choir_angel": [
+      "a host of faceless singers",
+      "a single voice like thunder",
+      "a chorus robed in shadow",
+      "a choir of the unfallen",
+      "a wounded choir of saints",
+      "a song that is also a sword"
+    ],
+    "choir_effect": [
+      "it heals a hidden wound",
+      "it reveals a hidden door",
+      "it stills the demons near",
+      "it shows you a verse",
+      "it warns of the Stalker",
+      "it breaks a lock of bone"
+    ]
+  },
+  "text": "You hear {choir_angel}; {choir_effect}, and the corridor holds its breath.",
+  "choices": [
+    {
+      "text": "Walk toward it",
+      "effect": "find_choir",
+      "weight": 1
+    },
+    {
+      "text": "Learn the verse",
+      "effect": "learn_verse",
+      "weight": 2
+    },
+    {
+      "text": "Stand and pray",
+      "effect": "full_heal_small",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "enemy_trick",
+  "weight": 2,
+  "slots": {
+    "trick_form": [
+      "a bridge of frozen lies",
+      "a door painted on the wall",
+      "a treasure that is a mouth",
+      "a stair that climbs nowhere",
+      "a friend who is a wound",
+      "a light that is a snare"
+    ],
+    "trick_disguise": [
+      "shimmers like welcome",
+      "smiles with your face",
+      "glows like mercy",
+      "calls you by name",
+      "smells of home",
+      "sings like a mother"
+    ]
+  },
+  "text": "It is a trap. {trick_form} {trick_disguise}, waiting to close.",
+  "choices": [
+    {
+      "text": "React in time",
+      "effect": "dodge_check",
+      "weight": 2
+    },
+    {
+      "text": "Read it with wisdom",
+      "effect": "wisdom_reveal",
+      "weight": 1
+    },
+    {
+      "text": "Take the blow",
+      "effect": "hp_cost_random",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "enemy_trick",
+  "weight": 2,
+  "slots": {
+    "trick_demon": [
+      "a demon of mirrors",
+      "a prince of small lies",
+      "a thing of flickering skin",
+      "a trader with no shadow",
+      "a beast made of rumor",
+      "a spirit of cracked glass"
+    ],
+    "trick_bait": [
+      "offers you your own face",
+      "shows a path of gold",
+      "promises the exit",
+      "mirrors a fallen angel",
+      "breathes a false verse",
+      "holds up a key of bone"
+    ]
+  },
+  "text": "A {trick_demon} {trick_bait}. It is too perfect to be true.",
+  "choices": [
+    {
+      "text": "Strike the reflection",
+      "effect": "damage_demon",
+      "weight": 1
+    },
+    {
+      "text": "See through it",
+      "effect": "reveal_truth",
+      "weight": 2
+    },
+    {
+      "text": "Take the bait",
+      "effect": "gold_or_hp_cost",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "MIRACLE",
+  "weight": 2,
+  "slots": {
+    "miracle_light": [
+      "a storm above the sea",
+      "six jars at the wedding",
+      "five loaves in your hands",
+      "a leper at the gate",
+      "a fig tree by the road",
+      "a deaf man in the square"
+    ],
+    "miracle_act": [
+      "the wind waits for a word",
+      "the water is called to wine",
+      "the crowd waits to be fed",
+      "the sores wait to be cleansed",
+      "the branch waits to wither",
+      "the ear waits to open"
+    ]
+  },
+  "text": "Before {miracle_light}, {miracle_act}. Faith is asked of you.",
+  "choices": [
+    {
+      "text": "Step out in faith",
+      "effect": "walk_water",
+      "weight": 1
+    },
+    {
+      "text": "Give all away",
+      "effect": "multiply_loaves",
+      "weight": 1
+    },
+    {
+      "text": "Keep to yourself",
+      "effect": "gold_or_hp_cost",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "MIRACLE",
+  "weight": 2,
+  "slots": {
+    "miracle_sign": [
+      "water turned to wine",
+      "a net full beyond breaking",
+      "a coin from a fish's mouth",
+      "a blind man given sight",
+      "a storm walked upon",
+      "bread fallen as dew"
+    ],
+    "miracle_offer": [
+      "it fills the empty jars",
+      "it breaks the net with plenty",
+      "it pays the temple tax",
+      "it opens the sealed eyes",
+      "it stills the raging deep",
+      "it feeds the wandering host"
+    ]
+  },
+  "text": "A sign is given: {miracle_sign} - {miracle_offer}. The impossible asks your trust.",
+  "choices": [
+    {
+      "text": "Receive it humbly",
+      "effect": "heal_amount",
+      "weight": 2
+    },
+    {
+      "text": "Share it abroad",
+      "effect": "mercy_reward",
+      "weight": 1
+    },
+    {
+      "text": "Doubt and turn",
+      "effect": "hp_cost_random",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "ANGELIC_ENCOUNTERS",
+  "weight": 2,
+  "slots": {
+    "angel_form": [
+      "a column of living fire",
+      "a winged one with many eyes",
+      "a messenger wrapped in linen",
+      "a sentinel of whirling swords",
+      "a presence too bright to name",
+      "a cherubim whose wings are wheels"
+    ],
+    "angel_deed": [
+      "it writes your name in light",
+      "it seals a wound you hid",
+      "it stands between you and the pit",
+      "it unfolds a scroll of stars",
+      "it names the Stalker aloud",
+      "it bars a door of shadow"
+    ]
+  },
+  "text": "An {angel_form} descends and {angel_deed}. The air is terrible and holy.",
+  "choices": [
+    {
+      "text": "Fall and worship",
+      "effect": "angel_appears",
+      "weight": 1
+    },
+    {
+      "text": "Ask what it guards",
+      "effect": "angel_truth",
+      "weight": 1
+    },
+    {
+      "text": "Raise your blade",
+      "effect": "combat_start",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "ANGELIC_ENCOUNTERS",
+  "weight": 1,
+  "slots": {
+    "angel_charge": [
+      "a legion of the pit charges",
+      "the Stalker's hound breaks through",
+      "a wave of the damned surges",
+      "a prince of lies advances",
+      "a host of the fallen swarms",
+      "a beast of bone attacks"
+    ],
+    "angel_foe": [
+      "an archangel intercepts",
+      "a flaming sword sweeps down",
+      "a wall of wings erects",
+      "light splits the assault",
+      "Michael answers the call",
+      "the host forms a shield"
+    ]
+  },
+  "text": "As {angel_charge}, {angel_foe}. You may stand in the breach.",
+  "choices": [
+    {
+      "text": "Fight at its side",
+      "effect": "angel_fights",
+      "weight": 1
+    },
+    {
+      "text": "Let the host prevail",
+      "effect": "combat_bonus",
+      "weight": 1
+    },
+    {
+      "text": "Flee the glory",
+      "effect": "flee_or_damage",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "TEMPORAL",
+  "weight": 1,
+  "slots": {
+    "temporal_loop": [
+      "the last breath replays",
+      "the corridor rewinds",
+      "a death repeats itself",
+      "the bell tolls again",
+      "your last word returns",
+      "the door unlocks once more"
+    ],
+    "temporal_cause": [
+      "a shattered hourglass",
+      "a demon's dying curse",
+      "a saint who weeps backward",
+      "the dungeon's own heartbeat",
+      "a relic that remembers",
+      "a verse spoken in reverse"
+    ]
+  },
+  "text": "A {temporal_cause} traps you - {temporal_loop}. Time folds against itself.",
+  "choices": [
+    {
+      "text": "Break it with a verse",
+      "effect": "time_loop",
+      "weight": 1
+    },
+    {
+      "text": "Endure and learn",
+      "effect": "buff_wisdom",
+      "weight": 1
+    },
+    {
+      "text": "Race the loop",
+      "effect": "random_positive",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "TEMPORAL",
+  "weight": 1,
+  "slots": {
+    "temporal_gift": [
+      "a glimpse of your ending",
+      "the moment you first fell",
+      "a future floor revealed",
+      "the Stalker's birth",
+      "a friend's last prayer",
+      "the sealing of the pit"
+    ],
+    "temporal_how": [
+      "a mirror shows",
+      "the Lamb unveils",
+      "a star writes it",
+      "silence speaks it",
+      "a scroll turns to it",
+      "an angel breathes it"
+    ]
+  },
+  "text": "{temporal_how} a temporal gift: {temporal_gift}.",
+  "choices": [
+    {
+      "text": "Prepare for it",
+      "effect": "future_vision",
+      "weight": 1
+    },
+    {
+      "text": "Record the sight",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Deny what you saw",
+      "effect": "courage_check",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "LOST_SOULS",
+  "weight": 2,
+  "slots": {
+    "lost_soul": [
+      "a child who never prayed",
+      "a monk who denied his vow",
+      "a mother lost in search",
+      "a soldier who cursed God",
+      "a poet of forgotten psalms",
+      "a thief who sought mercy"
+    ],
+    "lost_bond": [
+      "a chain of weeping iron",
+      "a cage of frozen glass",
+      "a thread of spinning smoke",
+      "a ring of broken salt",
+      "a name struck from the book",
+      "a veil of silent thread"
+    ]
+  },
+  "text": "A {lost_soul} is held by {lost_bond}, awaiting a judgement not yet spoken.",
+  "choices": [
+    {
+      "text": "Free the soul",
+      "effect": "free_soul",
+      "weight": 1
+    },
+    {
+      "text": "Free it, pay the price",
+      "effect": "gold_or_hp_cost",
+      "weight": 1
+    },
+    {
+      "text": "Leave it to wait",
+      "effect": "leave_soul",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "LOST_SOULS",
+  "weight": 1,
+  "slots": {
+    "lost_message": [
+      "a plea to be remembered",
+      "the name of the Stalker",
+      "a verse they died with",
+      "a warning of the pit",
+      "a confession unsaid",
+      "the location of others"
+    ],
+    "lost_messenger": [
+      "a soul brushes your hand",
+      "a shade mouths the words",
+      "a voice leaks from the stone",
+      "a face forms in the dark",
+      "a whisper finds your ear",
+      "a tear falls without a body"
+    ]
+  },
+  "text": "{lost_messenger} and carries {lost_message} across the dark.",
+  "choices": [
+    {
+      "text": "Hear the message",
+      "effect": "reveal_truth",
+      "weight": 2
+    },
+    {
+      "text": "Carry it onward",
+      "effect": "permanent_knowledge",
+      "weight": 1
+    },
+    {
+      "text": "Shut your heart",
+      "effect": "neutral",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "SACRIFICIAL_ALTAR",
+  "weight": 1,
+  "slots": {
+    "altar_demand": [
+      "your memory of the sun",
+      "a year of your life",
+      "the name of one you loved",
+      "your voice for a day",
+      "a verse carved in your hand",
+      "your fear, laid bare"
+    ],
+    "altar_reward": [
+      "a door of bone opens",
+      "a foe is unmade",
+      "sight past the veil",
+      "a shield of cold iron",
+      "the Stalker's trail burns",
+      "a strength not your own"
+    ]
+  },
+  "text": "The altar of sacrifice demands {altar_demand}; in return, {altar_reward}.",
+  "choices": [
+    {
+      "text": "Give what is asked",
+      "effect": "choose_sacrifice",
+      "weight": 1
+    },
+    {
+      "text": "Offer gold instead",
+      "effect": "alternative_sacrifice",
+      "weight": 1
+    },
+    {
+      "text": "Spurn the altar",
+      "effect": "nothing",
+      "weight": 1
+    }
+  ]
+},
+{
+  "category": "DARK_COMMUNION",
+  "weight": 1,
+  "slots": {
+    "dark_rite": [
+      "a communion of cold ash",
+      "a mass sung in reverse",
+      "a rite beneath a black cross",
+      "a feast of the unshriven",
+      "a baptism in still shadow",
+      "a breaking of the forbidden bread"
+    ],
+    "dark_grant": [
+      "a strength that devours",
+      "sight of the deepest pit",
+      "a voice that commands fear",
+      "a shield forged of hate",
+      "the Stalker's own favor",
+      "a power that remembers sin"
+    ]
+  },
+  "text": "A {dark_rite} is offered, and {dark_grant} to any who will kneel.",
+  "choices": [
+    {
+      "text": "Partake for power",
+      "effect": "dark_ritual",
+      "weight": 1
+    },
+    {
+      "text": "Refuse and pray",
+      "effect": "refuse_ritual",
+      "weight": 1
+    },
+    {
+      "text": "Break the rite",
+      "effect": "damage_demon",
+      "weight": 1
+    }
+  ]
+},
   ],
 
   // ── EFFECT RESOLUTION ─────────────────────────────────────

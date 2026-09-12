@@ -28,6 +28,7 @@ const Polish = (function(){
   let shakeAmp = 0, shakeT = 0;
   let flashA = 0, flashColor = '#fff';
   let lastState = null;
+  let stallT = 0;      // how long the crossfade has been stuck at full black
   let heroBob = 0;
   let lastDt = 1 / 60;
 
@@ -153,6 +154,25 @@ const Polish = (function(){
         if (typeof ScreenFX !== 'undefined' && ScreenFX.fadeTo) ScreenFX.fadeTo('#000', 0.30);
         if (st === 'COMBAT') resetBars();
         changed = true;
+      }
+      // Watchdog: if the fade has been sitting at full black, force it open. A
+      // stalled fade (throttled frames, a backgrounded tab, a dropped tick) would
+      // otherwise leave the player staring at a black screen with the game alive
+      // underneath it. Cheap insurance against the worst possible failure.
+      if (typeof ScreenFX !== 'undefined' && ScreenFX.fadeAlpha !== undefined){
+        if (ScreenFX.fadeAlpha >= 0.99){
+          stallT += dt;
+          if (stallT > 2.0){
+            ScreenFX.fadeAlpha = 0;
+            ScreenFX._fadeDur = 0;
+            ScreenFX._fadeT = 0;
+            ScreenFX._fadeOnMid = null;
+            stallT = 0;
+            changed = true;
+          }
+        } else {
+          stallT = 0;
+        }
       }
     } catch (_) {}
 
