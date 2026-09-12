@@ -2480,15 +2480,15 @@ function renderCombatStage(){
     const msgCX = Math.round(W / 2);
     const msgW = Math.max(240, W - 44);
     const ml = wrapTextPx(combat.message, msgW, 6);
-    let my = 60; for (const l of ml.slice(0,2)){ text(l, msgCX, my, C.holy, 6, 'center'); my += 9; }
+    let my = 58; for (const l of ml.slice(0,2)){ text(l, msgCX, my, C.holy, 6, 'center'); my += 11; }
     if (combat.comboResult){
       const ql = wrapTextPx(combat.comboResult.quote, msgW, 5);
-      for (const l of ql.slice(0,2)){ text(l, msgCX, my, C.gold, 5, 'center'); my += 8; }
+      for (const l of ql.slice(0,2)){ text(l, msgCX, my, C.gold, 5, 'center'); my += 10; }
     }
     // wrap instead of letting the guard clip a long twist line into a single
     // ellipsised fragment — these strings name what the demon just did
     for (const tm of combat.twistTriggered.slice(-1)){
-      for (const l of wrapTextPx(tm, msgW, 5).slice(0, 2)){ text(l, msgCX, my, C.red, 5, 'center'); my += 8; }
+      for (const l of wrapTextPx(tm, msgW, 5).slice(0, 2)){ text(l, msgCX, my, C.red, 5, 'center'); my += 10; }
     }
     combat.twistTriggered = [];
   }
@@ -2689,8 +2689,8 @@ function renderCombatFight(){
 function combatMenuTiles(){
   const gap = 6;
   const cw = Math.floor((W - 16 - gap) / 2);
-  const ch = 52;
-  const y0 = 132;
+  const ch = 54;
+  const y0 = 128;
   return [
     { id: 'FIGHT', x: 8, y: y0, w: cw, h: ch },
     { id: 'BIBLE', x: 8 + cw + gap, y: y0, w: cw, h: ch },
@@ -2729,15 +2729,16 @@ function renderCombatMenu(){
     const cx = t.x + t.w / 2;
     // Every wrapped line needs its own y: drawing them all at the same baseline
     // overprinted the words on top of each other inside the tile.
-    let ty = t.y + 7;
-    text(c.title, cx, ty, C.white, 9, 'center'); ty += 17;   // clear of the title's glyphs
+    // Line advances must clear the rendered glyph height: round(size*S) px, +2.
+    let ty = t.y + 6;
+    text(c.title, cx, ty, C.white, 9, 'center'); ty += 16;     // 14px glyphs
     for (const l of wrapTextPx(c.sub, t.w - 14, 5)){
-      if (ty > t.y + t.h - 14) break;
-      text(l, cx, ty, C.cyan, 5, 'center'); ty += 7;
+      if (ty > t.y + t.h - 12) break;
+      text(l, cx, ty, C.cyan, 5, 'center'); ty += 10;          // 8px glyphs
     }
     for (const l of wrapTextPx(c.detail, t.w - 12, 4)){
-      if (ty > t.y + t.h - 6) break;
-      text(l, cx, ty, C.dim, 4, 'center'); ty += 6;
+      if (ty > t.y + t.h - 7) break;
+      text(l, cx, ty, C.dim, 4, 'center'); ty += 8;            // 6px glyphs
     }
     clickables.push({ x: t.x, y: t.y, w: t.w, h: t.h, onClick: () => {
       if (t.id === 'FIGHT') setCombatScreen('FIGHT');
@@ -2849,7 +2850,7 @@ function renderCombatItems(){
     rect(8, y, W - 16, rowH - 4, i % 2 ? '#12132a' : '#161735');
     strokeRect(8, y, W - 16, rowH - 4, C.blue);
     text(def.icon + ' ' + def.name, 14, y + 3, C.white, 6, 'left');
-    text(def.desc, 14, y + 12, C.cyan, 5, 'left');
+    text(def.desc, 14, y + 14, C.cyan, 5, 'left');   // clear of the 9px name glyphs
     const bw = 62, bx = W - 12 - bw, by = y + 3, bh = rowH - 10;
     button(bx, by, bw, bh, 'USE', () => { useItem(i); }, C.blue, C.white, C.stone);
     clickables.push({ x: bx, y: by, w: bw, h: bh, onClick: () => useItem(i) });
