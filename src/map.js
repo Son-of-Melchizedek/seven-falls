@@ -392,72 +392,13 @@ function generateShopItems(floor) {
 
 // ── NEMESIS SYSTEM ──────────────────────────────────────────
 // A recurring enemy that grows stronger each run
-const NemesisSystem = {
-  nemesis: null,
-  
-  init() {
-    // Load saved nemesis or create new one
-    try {
-      const saved = localStorage.getItem('seven_falls_nemesis');
-      if (saved) { this.nemesis = JSON.parse(saved); return; }
-    } catch(e) {}
-    
-    // Create initial nemesis
-    this.nemesis = {
-      name: 'The Stalker',
-      type: SIN_TYPE.DECEPTION,
-      baseHp: 50,
-      hp: 50,
-      killCount: 0,
-      encounterCount: 0,
-      lastFloor: 0,
-    };
-  },
-  
-  save() {
-    try { localStorage.setItem('seven_falls_nemesis', JSON.stringify(this.nemesis)); } catch(e) {}
-  },
-  
-  // Nemesis appears every 3 floors
-  shouldAppear(floor) {
-    return floor % 3 === 0 && floor > 1;
-  },
-  
-  // Get scaled nemesis for current run
-  getScaled() {
-    const scaling = 1 + (this.nemesis.encounterCount * 0.2); // +20% each encounter
-    return {
-      ...this.nemesis,
-      hp: Math.floor(this.nemesis.baseHp * scaling),
-      maxHp: Math.floor(this.nemesis.baseHp * scaling),
-      tier: DEMON_TIER.LEGION,
-      floor: game.floor,
-      xp: 30 + this.nemesis.encounterCount * 10,
-      gold: 20 + this.nemesis.encounterCount * 5,
-      weakTo: 'wisdom',
-      combatMsg: `The Stalker returns. It has grown stronger. Encounter #${this.nemesis.encounterCount + 1}`,
-    };
-  },
-  
-  onEncounter() {
-    this.nemesis.encounterCount++;
-    this.nemesis.lastFloor = game.floor;
-    this.save();
-  },
-  
-  onKill() {
-    this.nemesis.killCount++;
-    this.nemesis.baseHp += 15; // Permanently stronger next time
-    this.save();
-  },
-  
-  onDeath() {
-    // Nemesis grows when player dies
-    this.nemesis.baseHp += 10;
-    this.save();
-  },
-};
-
+// ── NEMESIS (removed) ────────────────────────────────────────
+// The old NemesisSystem lived here: one hardcoded "Stalker" that returned every
+// third floor with the same name, no memory and a bigger HP number. That is
+// precisely the failure the vendetta design forbids (a replacement with the same
+// face, and routine resurrection). Rivals are now owned by src/vendetta.js, which
+// records factual encounters, derives a motive and adaptations from them, and
+// ends them permanently.
 // ── ADAPTIVE DIFFICULTY ─────────────────────────────────────
 const AdaptiveDifficulty = {
   stats: {

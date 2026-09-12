@@ -99,6 +99,7 @@
 <script src='src/demon-ai.js'></script>
 <script src='src/polish.js'></script>
 <script src='src/deep.js'></script>
+<script src='src/vendetta.js'></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -722,6 +723,10 @@ function tryFlee(){
   }
   const pct = calcEscapeChance();
   if (RNG.random() * 100 < pct){
+    if (typeof VendettaSystem !== 'undefined' && combat.rivalId){
+      const _fr = VendettaSystem.byId(combat.rivalId);
+      if (_fr) VendettaSystem.recordPlayerFlee(_fr, game.floor);
+    }
     game.state = 'MAP';
   } else {
     combat.message = 'Escape failed! (' + pct + '% chance) The demon strikes!';
@@ -989,7 +994,7 @@ function activeVerseIndex(){
 // KNOWLEDGE / PROGRESSION BOOTSTRAP
 // ═══════════════════════════════════════════════════════════════
 KnowledgeSystem.load();
-NemesisSystem.init();
+if (typeof VendettaSystem !== 'undefined') VendettaSystem.init();
 AdaptiveDifficulty.init();
 
 // ═══════════════════════════════════════════════════════════════
@@ -1081,6 +1086,7 @@ function advanceFloor(){
     return;
   }
   game.floor++;
+  if (typeof VendettaSystem !== 'undefined') VendettaSystem.tickFloor(game.floor);
   healPlayer(15); // small respite
   initMap(game.floor);
   maybeShowScholarNote('MAP');
@@ -1101,13 +1107,18 @@ function startCombat(node){
   } else if (node.type === NODE_TYPE.ELITE){
     demon = getEliteDemon(game.floor); isElite = true;
   } else {
-    // normal combat — possibly the Nemesis on floors 3/6/9
-    if (game.floor % 3 === 0 && game.floor > 1 && !game.nemesisDone[game.floor]){
-      demon = NemesisSystem.getScaled();
-      NemesisSystem.onEncounter();
-      game.nemesisDone[game.floor] = true;
+    // normal combat — a surviving rival may intercept this operation. Who shows
+    // up is decided by the conflict graph (who you wounded, who you fled from,
+    // who watched you die), never by a floor counter alone.
+    const _rival = (typeof VendettaSystem !== 'undefined') ? VendettaSystem.collision(game.floor) : null;
+    if (_rival){
+      demon = VendettaSystem.adapter(_rival, getDemonForFloor(game.floor));
+      _rival.encounters++;
+      _rival.lastSeen = game.floor;
+      _rival.due = 0;
       isNemesis = true;
-      if (!game.hintsShown['nemesis']) showHint('nemesis', 'The Stalker returns every 3 floors. It grows stronger.', true);
+      if (!game.hintsShown['vendetta'])
+        showHint('vendetta', 'This one survived you before. Its adaptations are its history — and every one has a counter.', true);
     } else {
       demon = getDemonForFloor(game.floor);
     }
@@ -1116,10 +1127,10 @@ function startCombat(node){
   AdaptiveDifficulty.applyToDemon(demon);
 
   // Progressive HP scaling: floors 1-2 are tutorial-easy (10-15 HP)
-  if (game.floor <= 2 && !isBoss && !isElite){
+  if (game.floor <= 2 && !isBoss && !isElite && !demon.isRival){
     demon.hp = Math.min(demon.hp, 10 + game.floor * 5);  // floor 1: 15, floor 2: 20
     demon.maxHp = demon.hp;
-  } else if (game.floor <= 4 && !isBoss && !isElite){
+  } else if (game.floor <= 4 && !isBoss && !isElite && !demon.isRival){
     demon.hp = Math.min(demon.hp, 20 + game.floor * 8);  // floor 3: 44, floor 4: 52
     demon.maxHp = demon.hp;
   }
@@ -1127,6 +1138,7 @@ function startCombat(node){
   combat = {
     demon,
     isBoss, isElite, isNemesis,
+    isRival: !!demon.isRival, rivalId: demon.rivalId || null,
     key: demonTypeKey(demon),
     verses: [], pool: [], selected: [],
     usedWords: new Set(),
@@ -1294,6 +1306,15 @@ function resolveVerse(verse){
     dmg = Deep.applyLinks(dmg, deepNotes);
     dmg = Deep.applyCostTax(dmg, deepNotes);
   }
+  // ── VENDETTA: the rival's adaptations change this exchange. Each problem it
+  // carries has its opening applied in the same breath, so nothing is a wall.
+  const _rv = (typeof VendettaSystem !== 'undefined' && combat.rivalId)
+    ? VendettaSystem.byId(combat.rivalId) : null;
+  if (_rv){
+    const vm = VendettaSystem.damageModifier(_rv, verse.type, selectedTypes(), combat.demon);
+    if (vm.mult !== 1) dmg = Math.max(1, Math.floor(dmg * vm.mult));
+    for (const note of vm.notes) deepNotes.push(note);
+  }
   // #16 FLOW STATE: double damage when active
   if (MECH.flowActive) dmg = Math.floor(dmg * 2);
   // #24 CRITICAL HIT: 15% → 2x
@@ -1326,6 +1347,22 @@ function resolveVerse(verse){
     // into the saved store so later descents see what this one taught.
     if (mult > 1 && typeof Deep !== 'undefined'){
       if (Deep.stampWitness(combat.demon.name, verse.type, game.floor)) deepNotes.push('WITNESSED');
+    }
+    // Record what actually happened to this rival — the only source of its memory.
+    if (_rv) VendettaSystem.recordHit(_rv, verse.type, dmg, game.floor, combat.resistance || null);
+    // A losing rival tries to live. It may escape; it is never resurrected.
+    if (_rv && combat.demon.hp > 0 && combat.demon.hp <= combat.demon.maxHp * 0.18 && !combat._rivalEscaped){
+      const cautious = _rv.temperament.indexOf('cautious') !== -1 ? 0.4 : 0.2;
+      if (RNG.random() < cautious){
+        combat._rivalEscaped = true;
+        VendettaSystem.recordRivalFlee(_rv, game.floor);
+        const who = VendettaSystem.epithet(_rv);
+        combat = null;
+        game.state = 'MAP';
+        if (typeof showHint === 'function') showHint('rival_escape', who + ' broke away alive. It will carry this.', true);
+        if (typeof SFX !== 'undefined') SFX.play('flee');
+        return;
+      }
     }
     if (typeof Polish !== 'undefined') Polish.hit('demon', dmg, mult > 1 ? '#ffe36e' : '#ffc247', { big: mult > 1 });
     if (typeof DemonAI !== 'undefined') DemonAI.onPlayerHit(combat, game, dmg); // mirrors reflect part of the verse
@@ -1559,6 +1596,11 @@ function demonAttack(full){
   if (game.defenseBuff) atk = Math.max(1, atk - game.defenseBuff);
   if (!full) atk = Math.floor(atk * 0.5);
   if (atk < 1) atk = 1;
+  if (typeof VendettaSystem !== 'undefined' && combat && combat.rivalId){
+    const _ar = VendettaSystem.byId(combat.rivalId);
+    const _am = VendettaSystem.attackModifier(_ar);
+    if (_am !== 1) atk = Math.max(1, Math.floor(atk * _am));
+  }
   let absorbed = Math.min(game.shield, atk);
   game.shield -= absorbed;
   atk -= absorbed;
@@ -1576,7 +1618,22 @@ function winCombat(){
     const it = randomItemType();
     if (addItem(it)) game.rewardText = 'The demon drops ' + ITEM_DEFS[it].icon + ' ' + ITEM_DEFS[it].name + '!';
   }
-  if (combat.isNemesis) NemesisSystem.onKill();
+  // A confirmed kill is permanent. What the rival held does not vanish with it:
+  // the operation goes vacant, the player inherits, and the neighbours notice.
+  if (combat.rivalId && typeof VendettaSystem !== 'undefined'){
+    const _kr = VendettaSystem.byId(combat.rivalId);
+    const vac = VendettaSystem.recordKill(_kr, game.floor);
+    game._nemesisKilled = true;
+    if (vac){
+      game.gold += vac.inheritance.gold;
+      const hv = getRandomVerse(game.floor);
+      KnowledgeSystem.discoverVerse(hv.id);
+      game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
+      game.rewardText = (game.rewardText ? game.rewardText + '  ' : '') +
+        'Inherited from ' + vac.operation + ': +' + vac.inheritance.gold + ' gold and a verse. ' +
+        'The operation stands vacant — ' + vac.destabilized + ' of its neighbours will be restless.';
+    }
+  }
   // discover the verses we offered for flavor
   for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
@@ -1595,7 +1652,10 @@ function die(){
   KnowledgeSystem.recordDeathInsight(game.lastDeathInsight);
   KnowledgeSystem.endRun(game.floor, false);
   AdaptiveDifficulty.recordLoss(game.floor);
-  NemesisSystem.onDeath();
+  if (combat && combat.rivalId && typeof VendettaSystem !== 'undefined'){
+    const _dr = VendettaSystem.byId(combat.rivalId);
+    if (_dr) VendettaSystem.recordPlayerDefeat(_dr, game.floor);
+  }
   // Meta-progression: record run end (achievements, history, bestiary)
   if (typeof Achievements !== 'undefined') {
     Achievements.checkRunEnd({
@@ -1863,6 +1923,8 @@ function render(){
   if (typeof Achievements !== 'undefined') Achievements.renderToasts();
   // Secret verse unlock notifications
   if (typeof SecretVerses !== 'undefined') SecretVerses.renderNotifications(1/60);
+  // VENDETTA roster: modal, drawn last so it sits above every screen.
+  if (game.vendettaOpen && typeof VendettaSystem !== 'undefined') VendettaSystem.renderRoster();
 }
 
 function renderTitle(){ MusicEngine.playTrack(MusicEngine.pickTrack('title', (typeof game !== 'undefined' && game.floor) || 1));
@@ -1948,7 +2010,8 @@ function renderTitle(){ MusicEngine.playTrack(MusicEngine.pickTrack('title', (ty
   // RESET DATA
   button(cx-56, 204, 112, 14, 'RESET DATA', () => {
     if (confirm('Erase all knowledge and progress?')){
-      KnowledgeSystem.reset(); NemesisSystem.nemesis = null; NemesisSystem.init();
+      KnowledgeSystem.reset();
+      if (typeof VendettaSystem !== 'undefined') VendettaSystem.reset();
       AdaptiveDifficulty.stats = { wins:0, losses:0, avgFloorReached:0, totalFloors:0, perfectCombats:0, totalCombats:0 };
       AdaptiveDifficulty.save();
     }
@@ -2052,7 +2115,13 @@ function renderMap(){
   text('GOLD ' + game.gold, W-8, 14, C.gold, 6, 'right');
   text('ITEMS ' + (game.items ? game.items.length : 0) + '/5', W-8, 24, C.cyan, 6, 'right');
   // #7 WITNESS: what previous descents taught you about this floor.
-  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(8, 25, 6);
+  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(8, 21, 6);
+  // VENDETTA: evidence that a rival is working toward you. Foreshadowing only
+  // appears when there is something real to show. Tapping it opens the roster.
+  if (typeof VendettaSystem !== 'undefined'){
+    VendettaSystem.renderStrip(8, 27);
+    clickables.push({ x: 6, y: 25, w: W - 12, h: 8, onClick: () => { game.vendettaOpen = true; } });
+  }
 
   // Direction cues: boss at TOP, entrance at BOTTOM (Slay the Spire style)
   text('↑ BOSS', W/2, 4, C.red, 6, 'center');
@@ -2251,6 +2320,7 @@ function renderCombat(){
   text(d.name, 116, 12, C.red, 8, 'left');
   let badgeY = 23;
   if (combat.isElite) text('ELITE', 116, badgeY, C.purple, 5, 'left');
+  else if (combat.isRival) text('RIVAL', 116, badgeY, C.red, 5, 'left');
   else if (combat.isNemesis) text('NEMESIS', 116, badgeY, C.red, 5, 'left');
   else if (combat.isBoss) text('BOSS', 116, badgeY, C.red, 5, 'left');
   bar(116, 30, 150, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('demon', Math.max(0, d.hp) / d.maxHp) : Math.max(0, d.hp) / d.maxHp), C.red);
@@ -2831,6 +2901,8 @@ canvas.addEventListener('pointerdown', e => {
     game.bibleOpen = false;
     return;
   }
+  // The vendetta roster is modal: any tap closes it.
+  if (game.vendettaOpen){ game.vendettaOpen = false; return; }
   for (let i = clickables.length - 1; i >= 0; i--){
     const c = clickables[i];
     if (p.x >= c.x && p.x <= c.x + c.w && p.y >= c.y && p.y <= c.y + c.h){
