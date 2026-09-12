@@ -1056,7 +1056,7 @@ function maybeShowScholarNote(after){
     KnowledgeSystem.addScholarNote(note);
     game.pendingNote = note;
     game.afterNote = after;
-    game.state = 'SCHOLAR'; MusicEngine.playTrack('scholar');
+    game.state = 'SCHOLAR'; MusicEngine.playTrack(MusicEngine.pickTrack('scholar', (typeof game !== 'undefined' && game.floor) || 1));
   } else {
     game.state = after;
   }
@@ -1071,7 +1071,7 @@ function advanceFloor(){
       floor: 10, won: true, diedThisRun: false,
       discoveredTypes: game._discoveredTypes || [], triggeredEasterEgg: game._triggeredEasterEgg || false
     });
-    game.state = 'VICTORY'; MusicEngine.playTrack('victory');
+    game.state = 'VICTORY'; MusicEngine.playTrack(MusicEngine.pickTrack('victory', (typeof game !== 'undefined' && game.floor) || 1));
     return;
   }
   game.floor++;
@@ -1151,7 +1151,7 @@ function startCombat(node){
     combat.message = 'The Veiled Whisper clouds your mind. You cannot think of escape...';
     combat.msgTimer = 6;
   }
-  game.state = 'COMBAT'; MusicEngine.playTrack('combat');
+  game.state = 'COMBAT'; MusicEngine.playTrack(MusicEngine.pickTrack('combat', (typeof game !== 'undefined' && game.floor) || 1));
 }
 
 function loadVerse(){
@@ -1558,7 +1558,7 @@ function winCombat(){
   for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
   AdaptiveDifficulty.recordWin(game.floor, game.hp === game.maxHp);
-  game.state = 'COMBAT_WIN'; MusicEngine.playTrack('victory');
+  game.state = 'COMBAT_WIN'; MusicEngine.playTrack(MusicEngine.pickTrack('victory', (typeof game !== 'undefined' && game.floor) || 1));
   game.combatNext = combat.isBoss ? 'FLOOR' : 'MAP';
 }
 
@@ -1593,7 +1593,7 @@ function die(){
     floor: game.floor, won: false, diedThisRun: true,
     discoveredTypes: game._discoveredTypes || [], triggeredEasterEgg: game._triggeredEasterEgg || false
   });
-  game.state = 'DEATH'; MusicEngine.playTrack('death');
+  game.state = 'DEATH'; MusicEngine.playTrack(MusicEngine.pickTrack('death', (typeof game !== 'undefined' && game.floor) || 1));
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1622,19 +1622,19 @@ function enterNode(node){
         nemesisEncounters: game.nemesisEncounters,
         knownVerses: KnowledgeSystem.getAvailableVerses(),
       });
-      game.state = 'EVENT'; MusicEngine.playTrack('event'); break;
+      game.state = 'EVENT'; MusicEngine.playTrack(MusicEngine.pickTrack('event', (typeof game !== 'undefined' && game.floor) || 1)); break;
     case NODE_TYPE.SHOP:
       shopItems = generateShopItems(game.floor);
       shopBought = {};
       if (!game.hintsShown['shop']) showHint('shop', 'Buy verses and supplies with gold from combat.', true);
-      game.state = 'SHOP'; MusicEngine.playTrack('shop'); break;
+      game.state = 'SHOP'; MusicEngine.playTrack(MusicEngine.pickTrack('shop', (typeof game !== 'undefined' && game.floor) || 1)); break;
     case NODE_TYPE.REST:
       if (!game.hintsShown['shrine']) showHint('shrine', 'Pray at shrines to heal and learn new verses.', true);
-      game.state = 'REST'; MusicEngine.playTrack('rest'); break;
+      game.state = 'REST'; MusicEngine.playTrack(MusicEngine.pickTrack('rest', (typeof game !== 'undefined' && game.floor) || 1)); break;
     case NODE_TYPE.TREASURE:
       rollTreasure(); break;
     default:
-      game.state = 'MAP'; MusicEngine.playTrack('map'); break;
+      game.state = 'MAP'; MusicEngine.playTrack(MusicEngine.pickTrack('map', (typeof game !== 'undefined' && game.floor) || 1)); break;
   }
 }
 
@@ -1824,7 +1824,7 @@ function render(){
   if (typeof SecretVerses !== 'undefined') SecretVerses.renderNotifications(1/60);
 }
 
-function renderTitle(){ MusicEngine.playTrack('title');
+function renderTitle(){ MusicEngine.playTrack(MusicEngine.pickTrack('title', (typeof game !== 'undefined' && game.floor) || 1));
   const cx = W/2;
   // Subtle animated background glow
   const t = Date.now() / 2000;

@@ -1270,12 +1270,38 @@ const MusicEngine = (function () {
     return !!currentTrack && !!schedulerTimer;
   }
 
+  /* ------------------- Context groups & floor rotation ------------------- */
+  // Each context is a rotation: floor 1 gets the signature track, later floors
+  // pick up the rest, so a run hears a different score as it descends.
+  const GROUPS = {
+    title:    ['title', 'map_void'],
+    combat:   ['combat', 'ambush', 'swarm', 'wrath', 'plague', 'forge', 'trial', 'catacomb'],
+    boss:     ['boss', 'floor_boss', 'judgement', 'revelation', 'ascent', 'descent', 'wrath'],
+    explore:  ['explore', 'map_void', 'catacomb', 'still_water', 'whispers', 'procession', 'dread', 'descent', 'plague'],
+    rest:     ['rest', 'sabbath', 'covenant', 'prayer_theme', 'lament', 'still_water'],
+    shop:     ['shop', 'relic_found', 'covenant', 'procession'],
+    scholar:  ['scholar', 'prayer_theme', 'still_water', 'covenant'],
+    event:    ['event', 'dread', 'whispers', 'descent', 'lament', 'trial'],
+    death:    ['death', 'lament', 'descent', 'dread'],
+    victory:  ['victory', 'victory_reprise', 'ascent', 'revelation'],
+  };
+
+  function pickTrack(context, floor) {
+    const g = GROUPS[context] || [context];
+    const f = Math.max(1, Math.floor(floor || 1));
+    const name = g[(f - 1) % g.length];
+    return TRACKS[name] ? name : (TRACKS[context] ? context : g[0]);
+  }
+
+  function listGroups() { return Object.keys(GROUPS); }
+
   function listTracks() {
     return Object.keys(TRACKS);
   }
 
   return {
     init, playTrack: startTrack, stop, setVolume, isPlaying, listTracks,
+    pickTrack, listGroups, _groups: GROUPS,
     _tracks: TRACKS
   };
 })();
