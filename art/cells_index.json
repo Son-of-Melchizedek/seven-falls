@@ -1,0 +1,306 @@
+[
+ {
+  "sheet": "v4",
+  "n": 0,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_00.png",
+  "bbox": [
+   16,
+   60,
+   680,
+   504
+  ],
+  "size": [
+   664,
+   444
+  ],
+  "area": 121424
+ },
+ {
+  "sheet": "v4",
+  "n": 1,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_01.png",
+  "bbox": [
+   728,
+   24,
+   1380,
+   504
+  ],
+  "size": [
+   652,
+   480
+  ],
+  "area": 170912
+ },
+ {
+  "sheet": "v4",
+  "n": 2,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_02.png",
+  "bbox": [
+   1460,
+   12,
+   2104,
+   508
+  ],
+  "size": [
+   644,
+   496
+  ],
+  "area": 165936
+ },
+ {
+  "sheet": "v4",
+  "n": 3,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_03.png",
+  "bbox": [
+   2140,
+   48,
+   2436,
+   500
+  ],
+  "size": [
+   296,
+   452
+  ],
+  "area": 100784
+ },
+ {
+  "sheet": "v4",
+  "n": 4,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_04.png",
+  "bbox": [
+   2496,
+   48,
+   2788,
+   500
+  ],
+  "size": [
+   292,
+   452
+  ],
+  "area": 97232
+ },
+ {
+  "sheet": "v4",
+  "n": 5,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_05.png",
+  "bbox": [
+   20,
+   524,
+   404,
+   1020
+  ],
+  "size": [
+   384,
+   496
+  ],
+  "area": 80480
+ },
+ {
+  "sheet": "v4",
+  "n": 6,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_06.png",
+  "bbox": [
+   432,
+   536,
+   688,
+   1020
+  ],
+  "size": [
+   256,
+   484
+  ],
+  "area": 82240
+ },
+ {
+  "sheet": "v4",
+  "n": 7,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_07.png",
+  "bbox": [
+   716,
+   540,
+   1016,
+   1020
+  ],
+  "size": [
+   300,
+   480
+  ],
+  "area": 97040
+ },
+ {
+  "sheet": "v4",
+  "n": 8,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_08.png",
+  "bbox": [
+   1048,
+   584,
+   1396,
+   1000
+  ],
+  "size": [
+   348,
+   416
+  ],
+  "area": 115472
+ },
+ {
+  "sheet": "v4",
+  "n": 9,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_09.png",
+  "bbox": [
+   1420,
+   660,
+   2100,
+   1016
+  ],
+  "size": [
+   680,
+   356
+  ],
+  "area": 134448
+ },
+ {
+  "sheet": "v4",
+  "n": 10,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_10.png",
+  "bbox": [
+   2124,
+   536,
+   2448,
+   1020
+  ],
+  "size": [
+   324,
+   484
+  ],
+  "area": 98560
+ },
+ {
+  "sheet": "v4",
+  "n": 11,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_11.png",
+  "bbox": [
+   2484,
+   540,
+   2756,
+   1020
+  ],
+  "size": [
+   272,
+   480
+  ],
+  "area": 73024
+ },
+ {
+  "sheet": "v4",
+  "n": 12,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_12.png",
+  "bbox": [
+   8,
+   1048,
+   408,
+   1536
+  ],
+  "size": [
+   400,
+   488
+  ],
+  "area": 114400
+ },
+ {
+  "sheet": "v4",
+  "n": 13,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_13.png",
+  "bbox": [
+   436,
+   1064,
+   692,
+   1536
+  ],
+  "size": [
+   256,
+   472
+  ],
+  "area": 93648
+ },
+ {
+  "sheet": "v4",
+  "n": 14,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_14.png",
+  "bbox": [
+   720,
+   1052,
+   1264,
+   1528
+  ],
+  "size": [
+   544,
+   476
+  ],
+  "area": 146672
+ },
+ {
+  "sheet": "v4",
+  "n": 15,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_15.png",
+  "bbox": [
+   1336,
+   1032,
+   1680,
+   1536
+  ],
+  "size": [
+   344,
+   504
+  ],
+  "area": 101968
+ },
+ {
+  "sheet": "v4",
+  "n": 16,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_16.png",
+  "bbox": [
+   1700,
+   1048,
+   2104,
+   1536
+  ],
+  "size": [
+   404,
+   488
+  ],
+  "area": 119600
+ },
+ {
+  "sheet": "v4",
+  "n": 17,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_17.png",
+  "bbox": [
+   2136,
+   1064,
+   2448,
+   1536
+  ],
+  "size": [
+   312,
+   472
+  ],
+  "area": 91408
+ },
+ {
+  "sheet": "v4",
+  "n": 18,
+  "file": "/home/alpha_/blueprints/seven-falls/art/cells/v4_18.png",
+  "bbox": [
+   2472,
+   1064,
+   2800,
+   1536
+  ],
+  "size": [
+   328,
+   472
+  ],
+  "area": 89760
+ }
+]
