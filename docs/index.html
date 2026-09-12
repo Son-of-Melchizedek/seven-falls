@@ -33279,7 +33279,13 @@ function renderCombatStage(){
   // 1.5 logical scale == 3 device px per art pixel at RS=2, so the enlarged
   // boss sprite stays perfectly crisp while it fills the enemy stage.
   const eScale = DEMON_SPRITE_SC * 1.5;
-  const ex = 312, ey = 72;
+  // Put the enemy at the other end of the arena. It used to sit at x=312 of a 384-wide
+  // stage, which left both fighters bunched in the middle once the logical width grew
+  // to fit a phone. 72 is the right margin the original layout used.
+  const ex = W - 72, ey = 72;
+  // The enemy's stat block (name, HP bar, weakness) travels with the sprite instead of
+  // living in a fixed middle column: 196 is the offset the original art used.
+  const hudX = Math.max(116, ex - 196);
   const pulse = 0.5 + 0.5 * Math.sin(Date.now() / 420);
   const glow = ctx.createRadialGradient(ex, ey + 12, 4, ex, ey + 12, 74);
   glow.addColorStop(0, 'rgba(255,120,90,' + (0.16 + 0.05 * pulse) + ')');
@@ -33295,39 +33301,41 @@ function renderCombatStage(){
 
   // #5 CAST: the telegraph the player can break by landing the weak type. Drawn
   // in the enemy's stat column (under the HP numbers), not over the player row.
-  if (typeof Deep !== 'undefined') Deep.renderCastBar(116, 43);
+  if (typeof Deep !== 'undefined') Deep.renderCastBar(hudX, 43);
 
-  text((TIER_NAMES[d.tier] || 'Demon').toUpperCase(), 116, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
-  text(d.name, 116, 12, C.red, 8, 'left');
+  text((TIER_NAMES[d.tier] || 'Demon').toUpperCase(), hudX, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
+  text(d.name, hudX, 12, C.red, 8, 'left');
   let badgeY = 23;
-  if (combat.isElite) text('ELITE', 116, badgeY, C.purple, 5, 'left');
-  else if (combat.isRival) text('RIVAL', 116, badgeY, C.red, 5, 'left');
-  else if (combat.isNemesis) text('NEMESIS', 116, badgeY, C.red, 5, 'left');
-  else if (combat.isBoss) text('BOSS', 116, badgeY, C.red, 5, 'left');
-  bar(116, 30, 150, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('demon', Math.max(0, d.hp) / d.maxHp) : Math.max(0, d.hp) / d.maxHp), C.red);
-  text(Math.max(0, Math.ceil(d.hp)) + '/' + d.maxHp, 191, 40, C.white, 5, 'center');
+  if (combat.isElite) text('ELITE', hudX, badgeY, C.purple, 5, 'left');
+  else if (combat.isRival) text('RIVAL', hudX, badgeY, C.red, 5, 'left');
+  else if (combat.isNemesis) text('NEMESIS', hudX, badgeY, C.red, 5, 'left');
+  else if (combat.isBoss) text('BOSS', hudX, badgeY, C.red, 5, 'left');
+  bar(hudX, 30, 150, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('demon', Math.max(0, d.hp) / d.maxHp) : Math.max(0, d.hp) / d.maxHp), C.red);
+  text(Math.max(0, Math.ceil(d.hp)) + '/' + d.maxHp, hudX + 75, 40, C.white, 5, 'center');
 
   const hint = combat.revealedWeak || KnowledgeSystem.getWeaknessHint(tkey);
   if (hint){
-    if (hint.indexOf('Unknown') === 0) text(hint, 116, 51, C.dim, 5, 'left');
-    else text('Weak: ' + hint + ' verses', 116, 51, C.cyan, 5, 'left');
+    if (hint.indexOf('Unknown') === 0) text(hint, hudX, 51, C.dim, 5, 'left');
+    else text('Weak: ' + hint + ' verses', hudX, 51, C.cyan, 5, 'left');
   } else {
-    text('Weakness: ?', 116, 51, C.dim, 5, 'left');
+    text('Weakness: ?', hudX, 51, C.dim, 5, 'left');
   }
 
-  // twist / state badges (right of enemy, below weakness)
-  if (combat.resistance) text('RESIST ' + combat.resistance, W-6, 4, C.red, 5, 'right');
+  // twist / state badges — anchored to the gap between the player's column and the
+  // enemy's, so they never land on the enemy sprite now that it owns the right edge.
+  const badgeX = Math.max(240, hudX - 12);
+  if (combat.resistance) text('RESIST ' + combat.resistance, badgeX, 4, C.red, 5, 'right');
   const ati = CombatTwists.getActiveTwistInfo();
   if (ati.length){
     let ty = 11;
     for (const t of ati){
       if (combat.resistance && t.type === 'adaptive') continue;
-      text('⟁ ' + t.name, W-6, ty, C.purple, 5, 'right'); ty += 7;
+      text('⟁ ' + t.name, badgeX, ty, C.purple, 5, 'right'); ty += 10;
     }
   }
-  if (combat.isSwarm) text('SWARM ' + Math.ceil(combat.swarmTimer) + 's', W-6, 50, C.red, 5, 'right');
-  if (combat.adds && combat.adds.length) text('+ ' + combat.adds.length + ' ADD', W-6, 57, C.purple, 5, 'right');
-  if (combat.stunTurns > 0) text('STUNNED ' + combat.stunTurns, W-6, 64, C.gold, 5, 'right');
+  if (combat.isSwarm) text('SWARM ' + Math.ceil(combat.swarmTimer) + 's', badgeX, 50, C.red, 5, 'right');
+  if (combat.adds && combat.adds.length) text('+ ' + combat.adds.length + ' ADD', badgeX, 60, C.purple, 5, 'right');
+  if (combat.stunTurns > 0) text('STUNNED ' + combat.stunTurns, badgeX, 70, C.gold, 5, 'right');
 
   // ══ MESSAGE AREA (y:58-80) ══
   if (combat.msgTimer > 0){
