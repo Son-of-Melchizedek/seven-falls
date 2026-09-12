@@ -165,15 +165,17 @@ const SpriteStates = (function(){
     const sc = (scale || 1) * 1.0;
     const p = pose(st, sc);
     const w = 32 * sc * p.sx, h = 30 * sc * p.sy;
-    const img = p.tint > 0 ? tintedSmall(p.tint) : (sheet || heroImg);
     const sx = sheet ? heroCellIndex(st.state) * 32 : 0;
+    const flashing = p.tint > 0;
+    const img = flashing ? tintedSmall(p.tint, sheet, sx) : (sheet || heroImg);
+    const srcX = flashing ? 0 : sx;              // a tinted cell is already 32 wide
     ctx.save();
     if (p.rot){
       ctx.translate(cx + p.dx, cy - h / 2 + p.dy);
       ctx.rotate(p.rot);
-      ctx.drawImage(img, sx, 0, 32, 30, -w / 2, -h / 2, w, h);
+      ctx.drawImage(img, srcX, 0, 32, 30, -w / 2, -h / 2, w, h);
     } else {
-      ctx.drawImage(img, sx, 0, 32, 30,
+      ctx.drawImage(img, srcX, 0, 32, 30,
         Math.round(cx - w / 2 + p.dx), Math.round(cy - h + p.dy), Math.round(w), Math.round(h));
     }
     ctx.restore();
@@ -187,13 +189,18 @@ const SpriteStates = (function(){
     }
   }
   const SMALL = {};
-  function tintedSmall(alpha){
-    const key = 'hero|' + Math.round(alpha * 4);
+  // White-flash copy of one hero cell. Takes the source image and the cell's x
+  // offset so it works for both the sheet and the single-cell fallback.
+  function tintedSmall(alpha, src, cellX){
+    cellX = cellX || 0;
+    const key = 'hero|' + Math.round(alpha * 4) + '|' + cellX;
     if (SMALL[key]) return SMALL[key];
     const c = document.createElement('canvas');
     c.width = 32; c.height = 30;
     const g = c.getContext('2d');
-    g.drawImage(heroImg, 0, 0);
+    const base = src || heroImg;
+    if (!base) return null;
+    g.drawImage(base, cellX, 0, 32, 30, 0, 0, 32, 30);
     g.globalCompositeOperation = 'source-atop';
     g.globalAlpha = Math.min(1, alpha * 1.4); g.fillStyle = '#ffffff';
     g.fillRect(0, 0, 32, 30);

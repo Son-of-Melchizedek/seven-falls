@@ -96,6 +96,7 @@
 <script src='src/screen-fx.js'></script>
 <script src='src/meta-progression.js'></script>
 <script src='src/sprite-states.js'></script>
+<script src='src/demon-ai.js'></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════
@@ -671,7 +672,7 @@ function useItem(idx){
   const def = ITEM_DEFS[type];
   let causedStun = false;
   switch (type){
-    case 'holy_water':    game.hp = Math.min(game.maxHp, game.hp + 20); break;
+    case 'holy_water':    healPlayer(20); break;
     case 'scroll_fire':   combat.flatBonus = (combat.flatBonus || 0) + 10; break;
     case 'prayer_beads':  game.shield += 15; break;
     case 'exorcism_salt': causedStun = true; break;
@@ -1074,7 +1075,7 @@ function advanceFloor(){
     return;
   }
   game.floor++;
-  game.hp = Math.min(game.maxHp, game.hp + 15); // small respite
+  healPlayer(15); // small respite
   initMap(game.floor);
   maybeShowScholarNote('MAP');
 }
@@ -1275,6 +1276,8 @@ function resolveVerse(verse){
   }
   if (combat.isSwarm){ dmg = Math.max(1, Math.floor(dmg * 0.6)); }
   dmg = Math.max(1, Math.floor(dmg * mult));
+  // demon AI debuffs: hexes, locked verse types, fatigue and the feint punish window
+  if (typeof DemonAI !== 'undefined') dmg = Math.max(1, Math.floor(dmg * DemonAI.playerDamageMult(combat, verse.type)));
   if (combat.flatBonus){ dmg += combat.flatBonus; combat.flatBonus = 0; }
   // #16 FLOW STATE: double damage when active
   if (MECH.flowActive) dmg = Math.floor(dmg * 2);
@@ -1302,7 +1305,10 @@ function resolveVerse(verse){
     SpriteStates.set('demon', shieldBlocked ? 'defend' : 'hit');
   }
   if (typeof SFX !== 'undefined') SFX.play(shieldBlocked ? 'block' : (verseCat === 'DEFENSE' ? 'bless' : 'impact'));
-  if (!shieldBlocked) combat.demon.hp -= dmg;
+  if (!shieldBlocked){
+    combat.demon.hp -= dmg;
+    if (typeof DemonAI !== 'undefined') DemonAI.onPlayerHit(combat, game, dmg); // mirrors reflect part of the verse
+  }
   // reset enemy-evolution idle counter (player dealt damage this turn)
   combat._lastDmgTurn = combat.turnCount;
   // flag so post-resolve skips boss-phase/flow checks if fully blocked (already messaged)
@@ -1381,7 +1387,7 @@ function resolveVerse(verse){
     const res = VerseComboSystem.applyCombo(combo, combat, game);
     let extra = '';
     if (res.damage){ combat.demon.hp -= res.damage; extra += ' ' + res.damage + ' combo dmg'; }
-    if (res.heal){ game.hp = Math.min(game.maxHp, game.hp + res.heal); extra += ' +' + res.heal + ' HP'; }
+    if (res.heal){ healPlayer(res.heal); extra += ' +' + res.heal + ' HP'; }
     if (res.shield){ game.shield += res.shield; extra += ' +' + res.shield + ' SH'; }
     if (res.doubleNext) combat.buffNext += 1.0;
     if (res.stunTurns) combat.twistTriggered.push(combat.demon.name + ' STUNNED ' + res.stunTurns + ' turns!');
@@ -1508,7 +1514,20 @@ function applyTwistResult(twist, result){
   }
 }
 
+
+// Every player heal funnels through here so a demon's CHAINS can seal recovery.
+function healPlayer(n){
+  let amt = Math.max(0, Math.floor(n));
+  if (typeof DemonAI !== 'undefined' && combat && typeof game !== 'undefined' &&
+      game.state && String(game.state).indexOf('COMBAT') === 0){
+    amt = Math.floor(amt * DemonAI.healMult(combat));
+  }
+  game.hp = Math.min(game.maxHp, game.hp + amt);
+  return amt;
+}
 function demonAttack(full){
+  // Tiered AI: every tier has its own move pool, tier 5+ has a signature, Lucifer is scripted.
+  if (typeof DemonAI !== 'undefined' && combat && combat.demon){ DemonAI.takeTurn(combat, game, full); return; }
   if (combat && combat.stunTurns > 0){ combat.stunTurns--; return; }
   if (typeof SpriteStates !== 'undefined') SpriteStates.set('demon', 'attack');
   if (typeof SFX !== 'undefined') SFX.play('swing');
@@ -1627,7 +1646,7 @@ function rollTreasure(){
     game.rewardText = 'You find ' + g + ' gold!';
   } else if (r < 0.75){
     const h = 15 + game.floor * 3;
-    game.hp = Math.min(game.maxHp, game.hp + h);
+    healPlayer(h);
     game.rewardText = 'A healing spring restores ' + h + ' HP.';
   } else {
     const v = getRandomVerse(game.floor);
@@ -1653,7 +1672,7 @@ function applyEventEffect(effect, cost){
       return 'You learn: "' + vText2 + '" (' + v.reference + ')';
     }
     case 'heal_20':
-      game.hp = Math.min(game.maxHp, game.hp + 20);
+      healPlayer(20);
       return 'You are restored by 20 HP.';
     case 'nothing':
       return 'You move on, unchanged.';
@@ -2411,7 +2430,7 @@ function applyEventEffectResult(effect, cost){
   let msg = effect.text || '...';
 
   if (effect.heal){
-    game.hp = Math.min(game.maxHp, game.hp + effect.heal);
+    healPlayer(effect.heal);
   }
   if (effect.gold){
     game.gold = Math.max(0, game.gold + effect.gold);
@@ -2517,7 +2536,7 @@ function renderShop(){
           game.gold -= it.cost;
           shopBought[i] = true;
           if (it.type === 'verse'){ KnowledgeSystem.discoverVerse(it.verseId); game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length; }
-          else if (it.type === 'heal'){ game.hp = Math.min(game.maxHp, game.hp + it.healAmount); }
+          else if (it.type === 'heal'){ healPlayer(it.healAmount); }
           else if (it.type === 'buff'){ if (it.buff==='defense') game.defenseBuff += it.amount; else game.attackBuff += it.amount; }
         }
       }});
@@ -2534,7 +2553,7 @@ function renderRest(){
       { t: 'HP ' + game.hp + '/' + game.maxHp, c: C.green, s: 7 }], [
     { label: 'HEAL', color: C.green, onClick(){
         const h = Math.floor(game.maxHp * 0.4);
-        game.hp = Math.min(game.maxHp, game.hp + h);
+        healPlayer(h);
         let msg = 'Rested. +' + h + ' HP.';
         if (addItem('prayer_beads')) msg += '  Received \u{1F4FF} Prayer Beads!';
         game.rewardText = msg;
@@ -2635,7 +2654,7 @@ function tick(now){
         game._triggeredEasterEgg = true;
         combat.message = '7:77 — "I will open my mouth in parables"';
         combat.msgTimer = 2.5;
-        game.hp = Math.min(game.maxHp, game.hp + 7);
+        healPlayer(7);
         game.gold += 77;
         if (typeof SFX !== 'undefined') SFX.play('buff');
         game.goldFlash = 1.0;

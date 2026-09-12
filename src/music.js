@@ -577,6 +577,496 @@ const MusicEngine = (function () {
               ['A4', 2, 0.7], [null, 2], ['F4', 2, 0.6], [null, 2],
               ['G4', 2, 0.6], [null, 2], ['E5', 4, 0.8]
             ], 1) }
+          ]
+        }
+      },
+
+    /* NEW 1) MAP_VOID — atmospheric, dark, slow. Hollow minor drone. ~72 BPM. */
+    map_void: () => {
+      const ch = chordsOf([['A2', 'min'], ['A2', 'min'], ['E2', 'min'], ['A2', 'min']]);
+      return {
+        bpm: 72,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 480, width: 22, env: { a: 0.8, r: 1.4 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.16, cutoff: 500,
+            steps: bass(['A1', 'A1', 'E1', 'A1'], [{ d: 4, v: 0.7 }], 0.5) },
+          { instr: 'square', vol: 0.10, cutoff: 1300, env: { a: 0.05, r: 0.9 },
+            steps: mel([
+              [null, 4], ['A4', 2, 0.5], [null, 4], ['E4', 2, 0.4], [null, 4]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 2) CATACOMB — low Genesis-style grinding bass. ~96 BPM. */
+    catacomb: () => {
+      const ch = chordsOf([['E2', 'min'], ['C2', 'maj'], ['D2', 'min'], ['B1', 'maj']]);
+      return {
+        bpm: 96,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.08, cutoff: 600, width: 14, env: { a: 0.5, r: 0.7 },
+            steps: pad(ch, 4, 0.45) },
+          { instr: 'triangle', vol: 0.30, cutoff: 520,
+            steps: bass(['E1', 'C1', 'D1', 'B0'],
+              [{ d: 0.5, v: 0.95 }, { d: 0.5, v: 0.7 }], 0.7) },
+          { instr: 'square', vol: 0.14, cutoff: 1000, env: { a: 0.02, r: 0.3 },
+            steps: mel([
+              ['E3', 1, 0.5], [null, 1], ['G3', 1, 0.4], [null, 1],
+              ['B3', 1, 0.5], [null, 1], ['E4', 1, 0.5], [null, 1],
+              ['E3', 1, 0.5], [null, 1], ['G3', 1, 0.4], [null, 1],
+              ['B3', 1, 0.5], [null, 1], ['E4', 1, 0.5], [null, 1]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 3) AMBUSH — fast, panicked. ~165 BPM. */
+    ambush: () => {
+      const ch = chordsOf([['B2', 'min'], ['G2', 'maj'], ['D3', 'maj'], ['A2', 'min']]);
+      return {
+        bpm: 165,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.07, cutoff: 1500, width: 10, env: { a: 0.02, r: 0.15 },
+            steps: pad(ch, 4, 0.4) },
+          { instr: 'triangle', vol: 0.26, cutoff: 1300,
+            steps: bass(['B1', 'G1', 'D2', 'A1'],
+              [{ d: 0.5, v: 0.9 }, { d: 0.5, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.22, cutoff: 4200, env: { a: 0.003, r: 0.05 },
+            steps: arp(ch, 4, [0, 2, 1, 2, 0, 2, 1, 2], 0.7) },
+          { instr: 'perc', vol: 0.6,
+            steps: perc([
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'hat', d: 0.5, v: 0.4 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'snare', d: 0.5, v: 0.7 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'hat', d: 0.5, v: 0.4 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'snare', d: 0.5, v: 0.7 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 4) PRAYER_THEME — gentle hymn-like, maj/min7. ~88 BPM. */
+    prayer_theme: () => {
+      const ch = chordsOf([['D4', 'maj7'], ['A3', 'min7'], ['B3', 'min7'], ['G3', 'maj7']]);
+      return {
+        bpm: 88,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.13, cutoff: 1500, width: 24, env: { a: 0.4, r: 0.7 },
+            steps: pad(ch, 4, 0.55) },
+          { instr: 'triangle', vol: 0.14, cutoff: 1900, env: { a: 0.02, r: 0.4 },
+            steps: arp(ch, 4, [0, 1, 2, 1], 0.4) },
+          { instr: 'square', vol: 0.14, cutoff: 2400, env: { a: 0.03, r: 0.5 },
+            steps: mel([
+              ['D5', 2, 0.5], [null, 2], ['F#5', 2, 0.5], [null, 2],
+              ['A5', 2, 0.5], [null, 2], ['G5', 2, 0.5]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 5) RELIC_FOUND — bright, short-phrased. ~120 BPM. */
+    relic_found: () => {
+      const ch = chordsOf([['C4', 'maj'], ['G4', 'maj'], ['A4', 'min'], ['F4', 'maj']]);
+      return {
+        bpm: 120,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.08, cutoff: 2200, width: 10, env: { a: 0.04, r: 0.3 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.22, cutoff: 1400,
+            steps: bass(['C2', 'G2', 'A2', 'F2'],
+              [{ d: 1, v: 0.9 }, { d: 1, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.24, cutoff: 4800, env: { a: 0.004, r: 0.1 },
+            steps: mel([
+              ['C5', 0.5, 0.9], ['E5', 0.5, 0.8], [null, 0.5], ['G5', 0.5, 0.9],
+              ['E5', 0.5, 0.7], [null, 0.5], ['C5', 0.5, 0.8], [null, 0.5],
+              ['A5', 0.5, 0.8], ['C6', 0.5, 0.9], [null, 1]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 6) TRIAL — tense minor with a rising figure. ~128 BPM. */
+    trial: () => {
+      const ch = chordsOf([['F#3', 'min'], ['D3', 'maj'], ['E3', 'maj'], ['C#3', 'maj']]);
+      return {
+        bpm: 128,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.09, cutoff: 1100, width: 16, env: { a: 0.1, r: 0.3 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.24, cutoff: 900,
+            steps: bass(['F#1', 'D1', 'E1', 'C#1'],
+              [{ d: 1, v: 0.9 }, { d: 1, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.20, cutoff: 3000, env: { a: 0.004, r: 0.1 },
+            steps: mel([
+              ['F#4', 0.5, 0.6], ['G4', 0.5, 0.6], ['A4', 0.5, 0.7], [null, 0.5],
+              ['B4', 0.5, 0.7], ['C#5', 0.5, 0.8], ['D5', 1, 0.7], [null, 2],
+              ['F#4', 0.5, 0.6], ['G4', 0.5, 0.6], ['A4', 0.5, 0.7], [null, 0.5]
+            ], 1) },
+          { instr: 'perc', vol: 0.55,
+            steps: perc([
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'hat', d: 1, v: 0.3 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.7 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'hat', d: 1, v: 0.3 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.7 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 7) DREAD — slow, dissonant. dim/aug, sparse clap/hat. ~76 BPM. */
+    dread: () => {
+      const ch = chordsOf([['B2', 'dim'], ['B2', 'aug'], ['F2', 'dim'], ['B2', 'dim']]);
+      return {
+        bpm: 76,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.11, cutoff: 520, width: 26, env: { a: 0.7, r: 1.2 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.18, cutoff: 420,
+            steps: bass(['B1', 'B1', 'F1', 'B1'], [{ d: 4, v: 0.7 }], 0.5) },
+          { instr: 'perc', vol: 0.4,
+            steps: perc([
+              { n: 'hat', d: 2, v: 0.3 }, { n: 'clap', d: 2, v: 0.2 },
+              { n: 'hat', d: 2, v: 0.3 }, { n: 'clap', d: 2, v: 0.25 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 8) SWARM — frantic fast arpeggios. ~170 BPM. */
+    swarm: () => {
+      const ch = chordsOf([['G3', 'min'], ['G3', 'min'], ['Bb3', 'maj'], ['F3', 'maj']]);
+      return {
+        bpm: 170,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.06, cutoff: 2000, width: 8, env: { a: 0.01, r: 0.1 },
+            steps: pad(ch, 4, 0.4) },
+          { instr: 'triangle', vol: 0.22, cutoff: 1100,
+            steps: bass(['G1', 'G1', 'Bb1', 'F1'],
+              [{ d: 0.5, v: 0.9 }, { d: 0.5, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.20, cutoff: 5200, env: { a: 0.002, r: 0.04 },
+            steps: arp(ch, 4, [0, 1, 2, 1, 2, 1, 0, 2, 1, 2, 0, 1], 0.7) }
+        ]
+      };
+    },
+
+    /* NEW 9) FORGE — industrial heavy kick pattern. ~110 BPM. */
+    forge: () => {
+      const ch = chordsOf([['D3', 'min'], ['D3', 'min'], ['A2', 'maj'], ['D3', 'min']]);
+      return {
+        bpm: 110,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 900, width: 18, env: { a: 0.05, r: 0.3 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.28, cutoff: 700,
+            steps: bass(['D1', 'D1', 'A0', 'D1'],
+              [{ d: 1, v: 0.95 }, { d: 1, v: 0.6 }], 0.7) },
+          { instr: 'square', vol: 0.16, cutoff: 1800, env: { a: 0.01, r: 0.2 },
+            steps: arp(ch, 4, [0, 2, 1, 2], 0.5) },
+          { instr: 'perc', vol: 0.85,
+            steps: perc([
+              { n: 'kick', d: 1, v: 0.95 }, { n: 'kick', d: 1, v: 0.6 },
+              { n: 'kick', d: 1, v: 0.95 }, { n: 'kick', d: 1, v: 0.6 },
+              { n: 'kick', d: 1, v: 0.95 }, { n: 'kick', d: 1, v: 0.6 },
+              { n: 'kick', d: 1, v: 0.95 }, { n: 'snare', d: 1, v: 0.8 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 10) ASCENT — heroic rising motif. ~132 BPM. */
+    ascent: () => {
+      const ch = chordsOf([['C4', 'maj'], ['A3', 'min'], ['F3', 'maj'], ['G3', 'maj']]);
+      return {
+        bpm: 132,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.11, cutoff: 2200, width: 14, env: { a: 0.05, r: 0.3 },
+            steps: pad(ch, 4, 0.55) },
+          { instr: 'triangle', vol: 0.26, cutoff: 1200,
+            steps: bass(['C2', 'A1', 'F2', 'G1'],
+              [{ d: 0.5, v: 0.9 }, { d: 0.5, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.24, cutoff: 4000, env: { a: 0.004, r: 0.1 },
+            steps: mel([
+              ['C4', 0.5, 0.7], ['E4', 0.5, 0.7], ['G4', 0.5, 0.8], ['C5', 0.5, 0.9],
+              ['A4', 0.5, 0.7], ['C5', 0.5, 0.8], ['E5', 0.5, 0.9], [null, 0.5],
+              ['F4', 0.5, 0.7], ['A4', 0.5, 0.8], ['C5', 0.5, 0.9], ['F5', 1, 0.9]
+            ], 1) },
+          { instr: 'perc', vol: 0.6,
+            steps: perc([
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'hat', d: 0.5, v: 0.35 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'snare', d: 0.5, v: 0.7 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'hat', d: 0.5, v: 0.35 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'snare', d: 0.5, v: 0.7 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 11) WHISPERS — very sparse, quiet, long rests. ~84 BPM. 2 lanes. */
+    whispers: () => {
+      const ch = chordsOf([['E3', 'min'], ['E3', 'min'], ['C3', 'maj'], ['E3', 'min']]);
+      return {
+        bpm: 84,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.05, cutoff: 700, width: 30, env: { a: 0.9, r: 1.6 },
+            steps: pad(ch, 4, 0.35) },
+          { instr: 'square', vol: 0.08, cutoff: 1600, env: { a: 0.04, r: 1.0 },
+            steps: mel([
+              [null, 6], ['E5', 2, 0.4], [null, 6], ['B4', 2, 0.3], [null, 4]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 12) JUDGEMENT — heavy, organ-like. saw pads + low bass. ~100 BPM. */
+    judgement: () => {
+      const ch = chordsOf([['A3', 'min'], ['F3', 'maj'], ['D3', 'min'], ['E3', 'maj']]);
+      return {
+        bpm: 100,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.13, cutoff: 1300, width: 28, env: { a: 0.3, r: 0.5 },
+            steps: pad(ch, 4, 0.6) },
+          { instr: 'sawtooth', vol: 0.08, cutoff: 700, width: 32, env: { a: 0.4, r: 0.6 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.30, cutoff: 560,
+            steps: bass(['A1', 'F1', 'D1', 'E1'], [{ d: 4, v: 0.8 }], 0.6) },
+          { instr: 'perc', vol: 0.6,
+            steps: perc([
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'hat', d: 1, v: 0.3 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.7 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'hat', d: 1, v: 0.3 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.7 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 13) PLAGUE — chromatic, unsettling melody. ~138 BPM. */
+    plague: () => {
+      const ch = chordsOf([['C3', 'min'], ['C3', 'min'], ['Db3', 'maj'], ['C3', 'min']]);
+      return {
+        bpm: 138,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.09, cutoff: 900, width: 12, env: { a: 0.1, r: 0.3 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.22, cutoff: 800,
+            steps: bass(['C2', 'C2', 'Db2', 'C2'],
+              [{ d: 1, v: 0.9 }, { d: 1, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.20, cutoff: 2600, env: { a: 0.004, r: 0.08 },
+            steps: mel([
+              ['C4', 0.5, 0.6], ['C#4', 0.5, 0.6], ['D4', 0.5, 0.6], ['Eb4', 0.5, 0.6],
+              ['E4', 0.5, 0.6], ['F4', 0.5, 0.5], [null, 0.5], ['D4', 0.5, 0.6],
+              ['C4', 0.5, 0.6], ['B3', 0.5, 0.5], ['A#3', 0.5, 0.6], [null, 0.5]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 14) PROCESSION — steady march, snare on the beat. ~92 BPM. */
+    procession: () => {
+      const ch = chordsOf([['F3', 'maj'], ['F3', 'maj'], ['Bb3', 'maj'], ['C3', 'maj']]);
+      return {
+        bpm: 92,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 1400, width: 18, env: { a: 0.2, r: 0.4 },
+            steps: pad(ch, 4, 0.55) },
+          { instr: 'triangle', vol: 0.26, cutoff: 950,
+            steps: bass(['F1', 'F1', 'Bb1', 'C1'],
+              [{ d: 2, v: 0.9 }, { d: 2, v: 0.6 }], 0.6) },
+          { instr: 'square', vol: 0.16, cutoff: 2800, env: { a: 0.01, r: 0.2 },
+            steps: mel([
+              ['F4', 1, 0.6], [null, 1], ['A4', 1, 0.5], [null, 1],
+              ['Bb4', 1, 0.6], [null, 1], ['C5', 1, 0.6], [null, 1]
+            ], 1) },
+          { instr: 'perc', vol: 0.7,
+            steps: perc([
+              { n: 'snare', d: 2, v: 0.8 }, { n: 'hat', d: 2, v: 0.3 },
+              { n: 'snare', d: 2, v: 0.8 }, { n: 'hat', d: 2, v: 0.3 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 15) STILL_WATER — calm, warm, slow. ~78 BPM. */
+    still_water: () => {
+      const ch = chordsOf([['D4', 'maj'], ['A3', 'maj'], ['B3', 'min'], ['G3', 'maj']]);
+      return {
+        bpm: 78,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 1300, width: 20, env: { a: 0.5, r: 0.8 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.16, cutoff: 1000,
+            steps: bass(['D2', 'A1', 'B1', 'G1'], [{ d: 4, v: 0.7 }], 0.5) },
+          { instr: 'square', vol: 0.14, cutoff: 2000, env: { a: 0.04, r: 0.6 },
+            steps: mel([
+              ['D5', 2, 0.5], [null, 2], ['F#5', 2, 0.5], [null, 2],
+              ['A5', 2, 0.5], [null, 2], ['G5', 2, 0.5]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 16) WRATH — aggressive, fast, double-kick. ~158 BPM. */
+    wrath: () => {
+      const ch = chordsOf([['A3', 'min'], ['A3', 'min'], ['F3', 'maj'], ['E3', 'min']]);
+      return {
+        bpm: 158,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 1600, width: 10, env: { a: 0.02, r: 0.15 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.28, cutoff: 1100,
+            steps: bass(['A1', 'A1', 'F1', 'E1'],
+              [{ d: 0.5, v: 0.95 }, { d: 0.5, v: 0.55 }], 0.7) },
+          { instr: 'square', vol: 0.24, cutoff: 4400, env: { a: 0.003, r: 0.06 },
+            steps: arp(ch, 4, [0, 2, 1, 2, 0, 2, 1, 2], 0.75) },
+          { instr: 'perc', vol: 0.8,
+            steps: perc([
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'kick', d: 0.25, v: 0.7 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'kick', d: 0.25, v: 0.7 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'snare', d: 0.25, v: 0.8 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'kick', d: 0.25, v: 0.7 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'snare', d: 0.25, v: 0.8 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'kick', d: 0.25, v: 0.7 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'snare', d: 0.25, v: 0.8 },
+              { n: 'kick', d: 0.25, v: 0.95 }, { n: 'kick', d: 0.25, v: 0.7 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 17) LAMENT — mournful descending minor. ~90 BPM. */
+    lament: () => {
+      const ch = chordsOf([['G3', 'min'], ['G3', 'min'], ['Eb3', 'maj'], ['D3', 'min']]);
+      return {
+        bpm: 90,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 800, width: 22, env: { a: 0.4, r: 1.0 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.18, cutoff: 700,
+            steps: bass(['G1', 'G1', 'Eb1', 'D1'], [{ d: 4, v: 0.7 }], 0.5) },
+          { instr: 'square', vol: 0.16, cutoff: 1500, env: { a: 0.04, r: 0.8 },
+            steps: mel([
+              ['G4', 1, 0.6], ['F4', 1, 0.5], ['E4', 1, 0.5], ['D4', 1, 0.5],
+              ['C4', 2, 0.5], [null, 2], ['B3', 1, 0.5], ['A3', 1, 0.5],
+              ['G3', 2, 0.5], [null, 4]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 18) COVENANT — warm major progression, hopeful. ~108 BPM. */
+    covenant: () => {
+      const ch = chordsOf([['C4', 'maj'], ['G4', 'maj'], ['A4', 'min'], ['F4', 'maj']]);
+      return {
+        bpm: 108,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.11, cutoff: 1800, width: 20, env: { a: 0.3, r: 0.5 },
+            steps: pad(ch, 4, 0.55) },
+          { instr: 'triangle', vol: 0.22, cutoff: 1200,
+            steps: bass(['C2', 'G2', 'A1', 'F2'],
+              [{ d: 1, v: 0.9 }, { d: 1, v: 0.5 }], 0.6) },
+          { instr: 'square', vol: 0.18, cutoff: 3200, env: { a: 0.01, r: 0.3 },
+            steps: arp(ch, 4, [0, 2, 1, 2], 0.45) },
+          { instr: 'perc', vol: 0.5,
+            steps: perc([
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'hat', d: 1, v: 0.3 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.6 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'hat', d: 1, v: 0.3 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.6 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 19) DESCENT — falling melodic motif each phrase. ~96 BPM. */
+    descent: () => {
+      const ch = chordsOf([['E3', 'min'], ['C3', 'maj'], ['B2', 'min'], ['A2', 'maj']]);
+      return {
+        bpm: 96,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.09, cutoff: 700, width: 18, env: { a: 0.4, r: 0.7 },
+            steps: pad(ch, 4, 0.5) },
+          { instr: 'triangle', vol: 0.18, cutoff: 600,
+            steps: bass(['E1', 'C1', 'B0', 'A0'], [{ d: 4, v: 0.7 }], 0.5) },
+          { instr: 'square', vol: 0.16, cutoff: 1600, env: { a: 0.03, r: 0.5 },
+            steps: mel([
+              ['E5', 1.5, 0.6], ['D5', 1, 0.5], ['C5', 1.5, 0.5], [null, 1],
+              ['B4', 1.5, 0.5], ['A4', 1, 0.5], ['G4', 1.5, 0.5], [null, 1],
+              ['F4', 1.5, 0.5], ['E4', 1, 0.5], ['D4', 1.5, 0.5], [null, 1]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 20) REVELATION — apocalyptic grand build, boss-tier. ~118 BPM. 5 lanes. */
+    revelation: () => {
+      const ch = chordsOf([
+        ['D3', 'min'], ['Bb3', 'maj'], ['F3', 'maj'], ['C3', 'maj'],
+        ['D3', 'min'], ['Bb3', 'maj'], ['A3', 'maj'], ['A3', 'maj']
+      ]);
+      return {
+        bpm: 118,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.12, cutoff: 1800, width: 28, env: { a: 0.2, r: 0.3 },
+            steps: pad(ch, 2, 0.6) },
+          { instr: 'sawtooth', vol: 0.07, cutoff: 900, width: 32, env: { a: 0.3, r: 0.4 },
+            steps: pad(ch, 2, 0.5) },
+          { instr: 'triangle', vol: 0.22, cutoff: 1200,
+            steps: bass(['D2', 'Bb1', 'F2', 'C2', 'D2', 'Bb1', 'A1', 'A1'],
+              [{ d: 1, v: 0.9 }, { d: 1, v: 0.5 }], 0.7) },
+          { instr: 'square', vol: 0.22, cutoff: 3600, env: { a: 0.005, r: 0.08 },
+            steps: arp(ch, 2, [0, 2, 1, 2, 0, 2, 1, 2], 0.75) },
+          { instr: 'perc', vol: 0.8,
+            steps: perc([
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'hat', d: 0.5, v: 0.4 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'snare', d: 0.5, v: 0.75 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'hat', d: 0.5, v: 0.4 },
+              { n: 'kick', d: 0.5, v: 0.9 }, { n: 'snare', d: 0.5, v: 0.75 }
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 21) SABBATH — gentle 6/8 feel, soft. ~86 BPM. */
+    sabbath: () => {
+      const ch = chordsOf([['G3', 'maj'], ['G3', 'maj'], ['D3', 'maj'], ['C3', 'maj']]);
+      return {
+        bpm: 86,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.09, cutoff: 1200, width: 24, env: { a: 0.4, r: 0.7 },
+            steps: pad(ch, 4, 0.45) },
+          { instr: 'triangle', vol: 0.14, cutoff: 900,
+            steps: bass(['G1', 'G1', 'D1', 'C1'], [{ d: 3, v: 0.7 }, { d: 1, v: 0.4 }], 0.5) },
+          { instr: 'square', vol: 0.12, cutoff: 2200, env: { a: 0.03, r: 0.5 },
+            steps: mel([
+              ['G4', 1.5, 0.5], ['B4', 1.5, 0.5], ['D5', 1, 0.5], [null, 0.5],
+              ['D5', 1.5, 0.5], ['B4', 1.5, 0.5], ['G4', 1, 0.5], [null, 0.5],
+              ['A4', 1.5, 0.5], ['C5', 1.5, 0.5], ['G4', 1, 0.5], [null, 0.5]
+            ], 1) }
+        ]
+      };
+    },
+
+    /* NEW 22) VICTORY_REPRISE — triumphant but short, major fanfare. ~134 BPM. */
+    victory_reprise: () => {
+      const ch = chordsOf([['C4', 'maj'], ['F4', 'maj'], ['G4', 'maj'], ['C4', 'maj']]);
+      return {
+        bpm: 134,
+        lanes: [
+          { instr: 'sawtooth', vol: 0.10, cutoff: 2200, width: 12, env: { a: 0.05, r: 0.3 },
+            steps: pad(ch, 2, 0.55) },
+          { instr: 'triangle', vol: 0.26, cutoff: 1300,
+            steps: bass(['C2', 'F2', 'G2', 'C2'],
+              [{ d: 1, v: 0.9 }, { d: 1, v: 0.5 }], 0.7) },
+          { instr: 'square', vol: 0.28, cutoff: 4200, env: { a: 0.004, r: 0.1 },
+            steps: mel([
+              ['C5', 0.5, 0.9], ['E5', 0.5, 0.9], ['G5', 0.5, 0.9], ['C6', 1, 1.0],
+              ['F5', 0.5, 0.8], ['A5', 0.5, 0.8], ['G5', 0.5, 0.8], ['C6', 1, 1.0]
+            ], 1) },
+          { instr: 'perc', vol: 0.7,
+            steps: perc([
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.7 },
+              { n: 'kick', d: 1, v: 0.9 }, { n: 'snare', d: 1, v: 0.7 }
+            ], 1) }
         ]
       };
     }
