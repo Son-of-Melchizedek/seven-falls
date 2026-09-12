@@ -235,9 +235,11 @@ const Deep = (function(){
     // cost vs budget, with the fatigue flag
     const u = underBy();
     const ccol = over ? C.red : (n >= cap ? C.holy : C.green);
-    text(n + '/' + cap + (over ? ' +' + over : (n && u ? ' EFF +' + Math.round((efficiencyBonus() - 1) * 100) + '%' : '')) +
-         (fatiguePressed() ? ' FATIGUE' : ''),
+    text(n + '/' + cap + (over ? ' +' + over : (n && u ? ' EFF +' + Math.round((efficiencyBonus() - 1) * 100) + '%' : '')),
          W / 2 + 34, y + 2, ccol, 5, 'left');
+    // The fatigue flag gets its own right-aligned slot: appended to the cost line it
+    // pushed the string past its box and got clipped with an ellipsis.
+    if (fatiguePressed()) text('FATIGUE', W - 10, y + 2, C.red, 5, 'right');
     // how many usable words remain in the pool
     text('USEFUL ' + usefulCount(), W - 10, y + 2, C.cyan, 5, 'right');
   }

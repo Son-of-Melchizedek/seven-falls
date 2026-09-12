@@ -524,7 +524,11 @@ function getDemonsByTier(tier) { return DEMONS.filter(d => d.tier === tier); }
 function getDemonsByFloor(floor) {
   const tierInfo = FLOOR_TIERS.find(f => f.floor === floor);
   if (!tierInfo) return [];
-  return DEMONS.filter(d => tierInfo.tiers.includes(d.tier));
+  const own = DEMONS.filter(d => tierInfo.tiers.includes(d.tier));
+  // Floors 1-8 only held 2-4 demons, so a whole floor was the same faces. Lesser demons
+  // from earlier floors join the pool as weaker stock; getDemonForFloor scales them up.
+  const lesser = DEMONS.filter(d => !tierInfo.tiers.includes(d.tier) && d.floor < floor);
+  return own.concat(lesser);
 }
 
 // Get a random demon for a floor
@@ -534,7 +538,15 @@ function getDemonForFloor(floor, usedDemons = []) {
     // Fallback: scaled generic
     return generateGenericDemon(floor);
   }
-  return { ...RNG.choice(eligible) };
+  const pick = { ...RNG.choice(eligible) };
+  // A lesser demon drawn into a later floor is scaled toward that floor's curve — it is
+  // weaker stock, so it lands a little under a native demon rather than at its own tier.
+  const info = FLOOR_TIERS.find(f => f.floor === floor);
+  if (info && !info.tiers.includes(pick.tier) && !pick.isBoss){
+    const target = Math.round((20 + floor * 15) * 0.8);
+    if (pick.hp < target){ pick.hp = target; pick.maxHp = target; pick._scaledUp = true; }
+  }
+  return pick;
 }
 
 // Generate scaled generic demon for floors with no specific demon

@@ -919,10 +919,23 @@ function demonSpriteIndex(d){
 //   ink bottom (the feet) lands on cy+21 and the ground shadow sits at cy+24 --
 //   the same shadow offset drawWarriorSprite() uses, so a legged demon reads as
 //   standing rather than hovering. Shadow radius 15x4 * 1.5 matches the old cast.
+let demonDeathK = 0;      // 0 = alive, 1 = fully collapsed
 function drawDemonSpriteImg(cx, cy, idx, bounce, sc, glow){
   sc = sc || 1;
   const t = Date.now() / 280;
-  const by = bounce ? Math.round(Math.sin(t) * 3) : 0;
+  let by = bounce ? Math.round(Math.sin(t) * 3) : 0;
+  // DEATH: the sprite squashes into the floor, slides down and fades. Drawn around the
+  // feet, so it collapses onto its own shadow instead of shrinking into the air.
+  if (demonDeathK > 0){
+    const k = demonDeathK;
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, 1 - k * 0.92);
+    const feetY = cy + 24;
+    ctx.translate(cx, feetY);
+    ctx.scale(1 + k * 0.3, Math.max(0.12, 1 - k * 0.86));
+    ctx.translate(-cx, -feetY);
+    by += Math.round(k * 6);
+  }
   drawShadow(cx, cy + 24, 1.5 * sc);   // shadow grows with the sprite
   const w = DEMON_CELL_W * sc, h = DEMON_CELL_H * sc;
   // A rim glow is the only thing that separates a dark demon from a dark room.
@@ -931,6 +944,7 @@ function drawDemonSpriteImg(cx, cy, idx, bounce, sc, glow){
                 Math.round(cx - w / 2), Math.round(cy + 24 - h + by),
                 Math.round(w), Math.round(h));
   if (glow) ctx.restore();
+  if (demonDeathK > 0) ctx.restore();
 }
 
 // Atlas when it is loaded, procedural pixel sprite as the fallback.
@@ -940,7 +954,13 @@ function drawDemonAny(cx, cy, d, bounce, sc, glow, st){
   if (demonAtlasReady && idx >= 0 && st && typeof SpriteStates !== 'undefined'){
     SpriteStates.drawCell(idx, cx, cy, sc, st); return;
   }
-  if (demonAtlasReady && idx >= 0) drawDemonSpriteImg(cx, cy, idx, bounce, sc, glow);
+  if (demonAtlasReady && idx >= 0){
+    const af = (d && d._aspect) ? d._aspect.f : '';
+    // ctx.filter is ignored where unsupported, so this degrades to plain art.
+    if (af){ ctx.save(); try { ctx.filter = af; } catch (e) {} }
+    drawDemonSpriteImg(cx, cy, idx, bounce, sc, glow);
+    if (af){ try { ctx.filter = 'none'; } catch (e) {} ctx.restore(); }
+  }
   else drawDemonSprite32(cx, cy, demonColor(d), bounce, sc);
 }
 function drawWarriorSprite(cx, cy, breathe, sc){
@@ -1194,6 +1214,22 @@ function startCombat(node){
     }
   }
 
+  // ── ASPECT ── Each encounter gives the demon a deterministic visual character drawn
+  // from the same art: the floors only hold a handful of distinct demons, so without
+  // this a floor is the same two faces over and over. Also readable in the HUD.
+  {
+    const ASPECTS = [
+      { name: '',         f: '' },
+      { name: 'ASHEN',    f: 'saturate(0.45) brightness(1.18)' },
+      { name: 'SCORCHED', f: 'saturate(1.45) brightness(0.92) hue-rotate(-14deg)' },
+      { name: 'PALE',     f: 'saturate(0.7) brightness(1.28) contrast(1.12)' },
+      { name: 'WITHERED', f: 'saturate(0.8) brightness(0.88) hue-rotate(16deg)' }
+    ];
+    let h = 0;
+    const key = String(demon.id || demon.name) + '|' + game.floor + '|' + (game.runSeed || 0);
+    for (let i = 0; i < key.length; i++) h = (h * 31 + key.charCodeAt(i)) & 0x7fffffff;
+    demon._aspect = ASPECTS[(h + game.floor) % ASPECTS.length];
+  }
   AdaptiveDifficulty.applyToDemon(demon);
 
   // Progressive HP scaling: floors 1-2 are tutorial-easy (10-15 HP)
@@ -1292,7 +1328,7 @@ function rebuildPool(){
   // to any other verse nothing matched and submissions scattered. Re-tag them.
   combat.pool = getCombatPool(source, game.floor, combat.usedWords || new Set())
     .map(t => (t.v >= 0 ? Object.assign({}, t, { v: ti }) : t));
-  const MAX_TILES = 24;
+  const MAX_TILES = 18;                    // fewer decoys: bigger tiles, bigger letters
   if (combat.pool.length > MAX_TILES){
     const mustKeep = combat.pool.filter(t => t.v >= 0);
     const optional = combat.pool.filter(t => t.v < 0);
@@ -1329,7 +1365,7 @@ function setTargetVerse(i){
 function loadVerse(){
   // A hand of FIVE verses, dealt each turn: the player chooses which one to build.
   // (The old code dealt a pair, so a fight offered exactly two options.)
-  combat.verses = getCombatVerseHand(game.floor, 5);
+  combat.verses = getCombatVerseHand(game.floor, 3);   // 3 to choose from, not 5
   if (!combat.verses.length) combat.verses = getCombatVersePair(game.floor);
   combat.usedWords = new Set();
   combat.target = 0;
@@ -1521,6 +1557,7 @@ function resolveVerse(verse){
         return;
       }
     }
+    triggerHeroLunge();
     if (typeof Polish !== 'undefined') Polish.hit('demon', dmg, mult > 1 ? '#ffe36e' : '#ffc247', { big: mult > 1 });
     if (typeof DemonAI !== 'undefined') DemonAI.onPlayerHit(combat, game, dmg); // mirrors reflect part of the verse
   }
@@ -1669,9 +1706,12 @@ function resolveVerse(verse){
   }
 
   if (combat.demon.hp <= 0){
-    // If swarm active and boss, end swarm then win
+    // The demon dies on screen first: winCombat() used to fire on the same frame the
+    // last HP left, so a victory card replaced the kill before you saw it land.
     CombatTwists.swarmMode = false;
-    winCombat(); return;
+    if (typeof SpriteStates !== 'undefined') SpriteStates.set('demon', 'hit');
+    if (!combat.deathT) combat.deathT = 0.9;
+    return;
   }
 
   // Demon retaliates
@@ -1742,11 +1782,26 @@ function healPlayer(n){
   game.hp = Math.min(game.maxHp, game.hp + amt);
   return amt;
 }
+// ── STRIKE TIMING ─────────────────────────────────────────────────────────────
+// Both fighters already had attack/defend/hit POSES; what was missing was movement.
+// A lunge is a short eased slide toward the other fighter, so a blow reads as landing
+// instead of a number quietly changing.
+const LUNGE_DUR = 0.30;
+let heroLungeT = 0, demonLungeT = 0;
+function _lungeX(t){
+  if (t <= 0) return 0;
+  return Math.round(Math.sin(Math.PI * (1 - t / LUNGE_DUR)) * 16);   // out and back
+}
+function heroLungeX(){ return _lungeX(heroLungeT); }
+function demonLungeX(){ return -_lungeX(demonLungeT); }
+function triggerHeroLunge(){ heroLungeT = LUNGE_DUR; }
+
 function demonAttack(full){
   // Tiered AI: every tier has its own move pool, tier 5+ has a signature, Lucifer is scripted.
   if (typeof DemonAI !== 'undefined' && combat && combat.demon){ DemonAI.takeTurn(combat, game, full); return; }
   if (combat && combat.stunTurns > 0){ combat.stunTurns--; return; }
   if (typeof SpriteStates !== 'undefined') SpriteStates.set('demon', 'attack');
+  demonLungeT = LUNGE_DUR;
   if (typeof SFX !== 'undefined') SFX.play('swing');
   let atk = 4 + game.floor * 2 + (combat.demon.tier || 0) * 2;
   atk = Math.floor(atk * (0.6 + AdaptiveDifficulty.getModifier() * 0.4));
@@ -2511,7 +2566,7 @@ function relicChoices(k){
     if (out.some(c => c.id === id)) { i--; if (out.length + 1 > k) break; continue; }
     const def = ITEM_DEFS[id];
     if (!def) continue;
-    out.push({ id: id, name: def.icon + ' ' + def.name, desc: def.desc, col: C.gold,
+    out.push({ id: id, name: def.name, desc: def.desc, col: C.gold,
                apply: () => addItem(id) });
   }
   return out;
@@ -2527,7 +2582,7 @@ function verseChoices(k){
     for (const v of (pair || [])){
       if (!v || !v.id || seen.has(v.id)) continue;
       seen.add(v.id);
-      out.push({ id: v.id, name: String(v.reference || v.id).toUpperCase(),
+      out.push({ id: v.id, name: shortRef(v.reference || v.id).toUpperCase(),
                  desc: String(v.type || '').toUpperCase() + ' verse - it travels with you for the rest of the run',
                  col: verseTypeColor(v.type),
                  apply: () => { game.ownedVerses = game.ownedVerses || []; if (game.ownedVerses.indexOf(v.id) < 0) game.ownedVerses.push(v.id); } });
@@ -2569,7 +2624,7 @@ function renderChoice(){
     const cx = padX + i * (cw + gap);
     texRect(cx, y0, cw, chh, '#141328');
     strokeRect(cx, y0, cw, chh, card.col || C.gold);
-    text(String(card.name), cx + cw / 2, y0 + 12, card.col || C.gold, 7, 'center');
+    text(String(card.name), cx + cw / 2, y0 + 12, card.col || C.gold, 6, 'center');
     let ty = y0 + 34;
     for (const l of wrapTextPx(String(card.desc), cw - 16, 5)){
       if (ty > y0 + chh - 12) break;
@@ -2800,6 +2855,7 @@ function renderCombatStage(){
   // ══ TOP SECTION (y:0-56) — Enemy area ══
   // 1.5 logical scale == 3 device px per art pixel at RS=2, so the enlarged
   // boss sprite stays perfectly crisp while it fills the enemy stage.
+  demonDeathK = (combat && combat.deathT > 0) ? Math.min(1, 1 - combat.deathT / 0.9) : 0;
   const eScale = DEMON_SPRITE_SC * 1.5;
   // Put the enemy at the other end of the arena. It used to sit at x=312 of a 384-wide
   // stage, which left both fighters bunched in the middle once the logical width grew
@@ -2813,19 +2869,20 @@ function renderCombatStage(){
   glow.addColorStop(0, 'rgba(255,120,90,' + (0.16 + 0.05 * pulse) + ')');
   glow.addColorStop(1, 'rgba(255,120,90,0)');
   ctx.fillStyle = glow; ctx.fillRect(ex - 80, 0, 160, 108);
-  drawDemonAny(ex, ey, d, true, eScale, 'rgba(255,180,120,0.55)',
+  drawDemonAny(ex + demonLungeX(), ey, d, true, eScale, 'rgba(255,180,120,0.55)',
     typeof SpriteStates !== 'undefined' ? SpriteStates.get('demon') : null);
 
   // The player, drawn at the enemy's own scale (96x90) and before the HUD so
   // every label stays legible on top of him. Feet on the floor of the stage.
   // eScale * 1.1: the Child of God reads a touch larger than a common demon.
-  drawWarriorSprite(56, 104, true, eScale * 1.1);
+  drawWarriorSprite(56 + heroLungeX(), 104, true, eScale * 1.1);
 
   // #5 CAST: the telegraph the player can break by landing the weak type. Drawn
   // in the enemy's stat column (under the HP numbers), not over the player row.
   if (typeof Deep !== 'undefined') Deep.renderCastBar(hudX, 43);
 
-  text((TIER_NAMES[d.tier] || 'Demon').toUpperCase(), hudX, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
+  text((TIER_NAMES[d.tier] || 'Demon').toUpperCase() +
+       (d._aspect && d._aspect.name ? '  ·  ' + d._aspect.name : ''), hudX, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
   text(d.name, hudX, 12, C.red, 8, 'left');
   let badgeY = 23;
   if (combat.isElite) text('ELITE', hudX, badgeY, C.purple, 5, 'left');
@@ -2988,7 +3045,9 @@ function renderCombatFight(){
   if (typeof Deep !== 'undefined') Deep.renderInscription(selY + selH + 3);
   const startY = selY + selH + 15;
   // columns follow the device width so tiles keep a sane size instead of stretching
-  const cols = Math.max(4, Math.min(10, Math.round((W - 12) / 78))), gx = 2, gy = 3;
+  // The label size is bounded by tile width over the longest word, so narrow columns
+  // forced a tiny font. Widen the target per column instead.
+  const cols = Math.max(4, Math.min(7, Math.round((W - 12) / 112))), gx = 2, gy = 3;
   // Fit EVERY pool tile on screen. The grid used to hard-break at y+bh > 243,
   // so any pool longer than the last row left words invisible AND unclickable —
   // which made those verses impossible to complete. Tile height adapts to pool size.
@@ -3009,7 +3068,7 @@ function renderCombatFight(){
   const poolKey = combat.pool.length + '|' + combat.pool.map(t => t.word).join(',') + '|' + innerW;
   if (combat._tileFitKey !== poolKey){
     let best = 3.5;
-    for (let sz = 7; sz >= 3.5; sz -= 0.25){
+    for (let sz = 9; sz >= 3.5; sz -= 0.25){
       setFont(Math.round(sz * S));
       let widest = 0;
       for (const tk of combat.pool){
@@ -3576,6 +3635,12 @@ function tick(now){
   if (game.goldFlash > 0) game.goldFlash = Math.max(0, game.goldFlash - dt * 1.2);
   if (game.comboAnim > 0) game.comboAnim = Math.max(0, game.comboAnim - dt);
   if (game.shakeTimer > 0) game.shakeTimer = Math.max(0, game.shakeTimer - dt);
+  if (heroLungeT > 0) heroLungeT = Math.max(0, heroLungeT - dt);
+  if (demonLungeT > 0) demonLungeT = Math.max(0, demonLungeT - dt);
+  if (combat && combat.deathT > 0){
+    combat.deathT = Math.max(0, combat.deathT - dt);
+    if (combat.deathT === 0) winCombat();      // only now does the victory card appear
+  }
   if (typeof MECH !== 'undefined') MECH.tickFlow(dt);
   if (typeof SpriteStates !== 'undefined') SpriteStates.update(dt);
   if (typeof Achievements !== 'undefined') Achievements.update(dt);
