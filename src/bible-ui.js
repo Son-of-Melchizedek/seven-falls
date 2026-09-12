@@ -81,11 +81,11 @@ function _bibleRegions(discoveredIds, currentPage, scrollY, W, H){
   const contentH = H - contentTop - BIBLE_FOOTER_H;
 
   // Title bar (back / search affordance)
-  regions.push({ x: 4, y: 4, w: 30, h: 9, kind: 'back', label: '< BIBLE', page: 'overview', scroll: 0 });
+  regions.push({ x: 4, y: 3, w: 64, h: 11, kind: 'back', label: '< BIBLE', page: 'overview', scroll: 0 });
 
   if (page === 'overview'){
     // Search button top-right
-    regions.push({ x: W - 54, y: 2, w: 50, h: 10, kind: 'btn', label: 'SEARCH', page: 'search', scroll: 0 });
+    regions.push({ x: W - 66, y: 3, w: 62, h: 11, kind: 'btn', label: 'SEARCH', page: 'search', scroll: 0 });
     // Category summary rows (also clickable -> category page)
     let y = contentTop + 6;
     const stats = (typeof getBibleStats === 'function') ? getBibleStats(discoveredIds) : { total: 0, discovered: 0, pct: 0, byCategory: {} };
@@ -107,7 +107,7 @@ function _bibleRegions(discoveredIds, currentPage, scrollY, W, H){
   if (page === 'search'){
     // search box (clicking focuses — handled as a region that clears to type via keydown)
     regions.push({ x: 4, y: contentTop, w: W - 8, h: BIBLE_SEARCH_BOX_H, kind: 'searchbox', label: BIBLE_UI.search || 'type to filter...', page: 'search', scroll: 0 });
-    regions.push({ x: W - 40, y: 2, w: 36, h: 10, kind: 'btn', label: 'CLEAR', page: 'search', scroll: 0 });
+    regions.push({ x: W - 52, y: 3, w: 48, h: 11, kind: 'btn', label: 'CLEAR', page: 'search', scroll: 0 });
     // results
     const q = (BIBLE_UI.search || '').toLowerCase();
     const matches = (typeof BIBLE_VERSES !== 'undefined') ? BIBLE_VERSES.filter(v =>
