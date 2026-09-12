@@ -2387,6 +2387,176 @@ function setCombatScreen(scr){
   combat.selected = scr === 'FIGHT' ? combat.selected : [];
   if (typeof SFX !== 'undefined') SFX.play('select');
 }
+// ══ COMBAT BACKDROPS ══════════════════════════════════════════════════════════
+// Where the fight is. Floors are grouped into bands (two floors each) with their own
+// silhouettes, palette and floor props. Static art is prerendered once per floor at
+// DEVICE resolution — the canvas transform is RS=2, so a logical-size buffer would be
+// soft — then blitted each frame; only the moving bits are drawn live. Every layer
+// stays low-contrast: the backdrop must never out-shout the fighters.
+const BIOMES = [
+  { id: 'nave',      name: 'Nave of Ashes',    sky: ['#0b0a16', '#161028'], far: '#1d1a38', near: '#131028',
+    accent: '#e0a44a', prop: 'candles' },
+  { id: 'ossuary',   name: 'The Ossuary',      sky: ['#0c0a10', '#191320'], far: '#241d28', near: '#150f18',
+    accent: '#cbb489', prop: 'bones' },
+  { id: 'cistern',   name: 'Drowned Cistern',  sky: ['#060b13', '#0b1826'], far: '#12212f', near: '#0a1522',
+    accent: '#5fb0c9', prop: 'drips' },
+  { id: 'brimstone', name: 'Brimstone Deep',   sky: ['#150705', '#2a110a'], far: '#2e140d', near: '#1b0b07',
+    accent: '#e2683a', prop: 'lava' },
+  { id: 'throne',    name: 'The Fallen Throne',sky: ['#0a0612', '#190c2a'], far: '#2a1442', near: '#170a24',
+    accent: '#d8b45a', prop: 'embers' }
+];
+function biomeIndexForFloor(f){ return Math.min(BIOMES.length - 1, Math.floor((Math.max(1, f | 0) - 1) / 2)); }
+function biomeForFloor(f){ return BIOMES[biomeIndexForFloor(f)]; }
+function _bdRand(seed){                     // deterministic: the room must not change on re-render
+  let x = (seed | 0) * 1103515245 + 12345;
+  return function(){ x = (x * 1103515245 + 12345) & 0x7fffffff; return x / 0x7fffffff; };
+}
+let _bd = { floor: -1, w: -1, cv: null, live: [] };
+
+function buildBackdrop(floor){
+  const bio = biomeForFloor(floor);
+  const cv = document.createElement('canvas');
+  cv.width  = Math.max(1, Math.round(W * RS));
+  cv.height = Math.max(1, Math.round(H * RS));
+  const g = cv.getContext('2d');
+  g.setTransform(RS, 0, 0, RS, 0, 0);
+  g.imageSmoothingEnabled = false;
+  const rnd = _bdRand(floor * 7919 + 17);
+  const FY = 180, live = [];
+  // Props live on a shelf at the last clear row: anything at the floor line (y~170) is
+  // permanently hidden behind the command panels, whatever screen the player is on.
+  const SHELF = 124;
+
+  // back wall
+  const sky = g.createLinearGradient(0, 0, 0, FY + 40);
+  sky.addColorStop(0, bio.sky[0]); sky.addColorStop(0.72, bio.sky[1]); sky.addColorStop(1, bio.sky[0]);
+  g.fillStyle = sky; g.fillRect(0, 0, W, FY + 40);
+
+  // ── far layer: a repeating architectural rhythm ──
+  const step = bio.id === 'cistern' ? 78 : 66;
+  for (let x = -step; x < W + step; x += step){
+    const h = 104 + Math.round(rnd() * 46);
+    g.globalAlpha = 0.75; g.fillStyle = bio.far;
+    if (bio.id === 'nave' || bio.id === 'throne'){
+      const pw = 9, gw = 30 + Math.round(rnd() * 14);
+      g.fillRect(x, FY - h, pw, h);
+      g.fillRect(x + gw, FY - h, pw, h);
+      g.fillRect(x, FY - h, gw + pw, 9);
+      g.globalAlpha = 0.55; g.fillStyle = bio.accent;      // glazed light between pillars
+      g.fillRect(x + pw + 4, FY - h + 20, gw - 8, 30);
+      g.globalAlpha = 0.34;
+      g.fillRect(x + pw + 4, FY - h + 64, gw - 8, 22);
+    } else if (bio.id === 'cistern'){
+      g.fillRect(x, 92, 11, FY - 92);
+      g.globalAlpha = 0.5; g.fillRect(x + 30, 118, 7, FY - 118);
+      g.globalAlpha = 0.32; g.fillRect(x + 8, 92, 34, 5);
+    } else {
+      g.fillRect(x + 6, FY - h, 20, h);
+      g.globalAlpha = 0.4; g.fillRect(x + 34, FY - h + 40, 12, h - 40);
+    }
+  }
+  g.globalAlpha = 1;
+
+  // ── fog where the wall meets the floor ──
+  const fog = g.createLinearGradient(0, FY - 64, 0, FY + 6);
+  fog.addColorStop(0, 'rgba(0,0,0,0)'); fog.addColorStop(1, bio.sky[0]);
+  g.fillStyle = fog; g.fillRect(0, FY - 64, W, 70);
+
+  // ── near layer: heavier shapes crowding both edges (frames the arena) ──
+  const edge = Math.min(120, Math.round(W * 0.14));
+  g.globalAlpha = 0.85; g.fillStyle = bio.near;
+  for (let x2 = 0; x2 < edge; x2 += 34){ const h2 = 122 + Math.round(rnd() * 58); g.fillRect(x2, FY - h2, 26, h2); }
+  for (let x3 = W - edge; x3 < W; x3 += 36){ const h3 = 118 + Math.round(rnd() * 60); g.fillRect(x3, FY - h3, 28, h3); }
+  g.globalAlpha = 1;
+
+  // ── floor props ──
+  if (bio.prop === 'candles'){
+    for (let i = 0; i < 4; i++){
+      const cx = Math.round(20 + rnd() * (W - 60)), tall = rnd() < 0.4 ? 16 : 11;
+      g.fillStyle = '#2a2338'; g.fillRect(cx, SHELF - tall, 5, tall);
+      g.globalAlpha = 0.9; g.fillStyle = bio.accent; g.fillRect(cx + 1, SHELF - tall - 5, 3, 5); g.globalAlpha = 1;
+      live.push({ kind: 'flame', x: cx + 2.5, y: SHELF - tall - 6, ph: rnd() * 6.28, hue: bio.accent });
+    }
+  } else if (bio.prop === 'bones'){
+    for (let i = 0; i < 9; i++){
+      const bx = Math.round(14 + rnd() * (W - 46)), h3 = 5 + Math.round(rnd() * 8);
+      g.fillStyle = '#3a3128'; g.fillRect(bx, SHELF - h3, 12 + Math.round(rnd() * 16), h3);
+      g.fillStyle = '#2a231c'; g.fillRect(bx + 2, SHELF - h3 - 4, 6, 4);
+      if (rnd() < 0.55){ g.fillStyle = '#241d18'; g.fillRect(bx + 18, SHELF - 34, 4, 34); }
+      if (rnd() < 0.4){ g.fillStyle = '#2e2721'; g.fillRect(bx + 30, FY - 30, 3, 30); }
+    }
+  } else if (bio.prop === 'drips'){
+    for (let i = 0; i < 5; i++){
+      const px = Math.round(20 + rnd() * (W - 60));
+      g.globalAlpha = 0.32; g.fillStyle = bio.accent; g.fillRect(px, SHELF - 2, 22 + Math.round(rnd() * 26), 2); g.globalAlpha = 1;
+      live.push({ kind: 'drip', x: px + 8, y0: 54 + rnd() * 26, y1: SHELF - 3, t: rnd(), sp: 0.25 + rnd() * 0.3, hue: bio.accent });
+    }
+  } else if (bio.prop === 'lava'){
+    for (let i = 0; i < 6; i++){
+      const lx = Math.round(12 + rnd() * (W - 40)), lh = 26 + Math.round(rnd() * 54), ly = 40 + Math.round(rnd() * 14);
+      g.globalAlpha = 0.4; g.fillStyle = bio.accent; g.fillRect(lx, ly, 1, lh); g.globalAlpha = 1;
+      g.globalAlpha = 0.3; g.fillRect(lx + 26, FY - 3, 12 + Math.round(rnd() * 24), 3); g.globalAlpha = 1;
+      live.push({ kind: 'crack', x: lx, y: ly, h: lh, ph: rnd() * 6.28, hue: bio.accent });
+    }
+  } else {
+    for (let i = 0; i < 12; i++)
+      live.push({ kind: 'ember', x: rnd() * W, y0: SHELF - 4, t: rnd(), sp: 0.1 + rnd() * 0.16,
+                  drift: (rnd() - 0.5) * 22, hue: bio.accent });
+  }
+
+  // ── vignette: keep the centre of the arena the brightest thing on screen ──
+  const vg = g.createRadialGradient(W / 2, 92, 60, W / 2, 92, Math.max(W, 300) * 0.62);
+  vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.55)');
+  g.fillStyle = vg; g.fillRect(0, 0, W, FY + 40);
+
+  return { cv: cv, live: live };
+}
+
+function renderCombatBackdrop(){
+  if (!_bd.cv || _bd.floor !== game.floor || _bd.w !== W){
+    const b = buildBackdrop(game.floor);
+    _bd = { floor: game.floor, w: W, cv: b.cv, live: b.live };
+  }
+  ctx.drawImage(_bd.cv, 0, 0, W, H);
+
+  // ── live layer ──
+  const t = Date.now() / 1000, step = 0.016;
+  for (const L of _bd.live){
+    if (L.kind === 'flame'){
+      const f = 0.65 + 0.35 * Math.sin(t * 7 + L.ph) * Math.sin(t * 3.1 + L.ph * 2);
+      ctx.fillStyle = L.hue;
+      ctx.globalAlpha = 0.9;  ctx.fillRect(L.x - 1, L.y - 1 - f * 2, 3, 4 + f * 3);
+      ctx.globalAlpha = 0.22;                        // halo so the flame reads at phone size
+      ctx.fillRect(L.x - 3, L.y - 3 - f * 2, 7, 9 + f * 3);
+    } else if (L.kind === 'crack'){
+      ctx.globalAlpha = 0.35 + 0.45 * (0.5 + 0.5 * Math.sin(t * 1.6 + L.ph));
+      ctx.fillStyle = L.hue; ctx.fillRect(L.x, L.y, 1, L.h);
+    } else if (L.kind === 'ember'){
+      L.t += L.sp * step; if (L.t > 1) L.t -= 1;
+      const y = L.y0 - L.t * 96, x = L.x + Math.sin(L.t * 5 + L.x) * L.drift;
+      // a 1x1 ember is invisible at phone resolution: give it a halo and a core
+      const ea = 0.95 * (1 - L.t);
+      ctx.fillStyle = L.hue;
+      ctx.globalAlpha = ea * 0.28; ctx.fillRect(Math.round(x) - 2, Math.round(y) - 2, 7, 7);
+      ctx.globalAlpha = ea * 0.55; ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 5, 5);
+      ctx.globalAlpha = ea;        ctx.fillRect(Math.round(x), Math.round(y), 3, 3);
+    } else if (L.kind === 'drip'){
+      L.t += L.sp * step; if (L.t > 1) L.t -= 1;
+      ctx.globalAlpha = 0.6; ctx.fillStyle = L.hue;
+      ctx.fillRect(Math.round(L.x), Math.round(L.y0 + (L.y1 - L.y0) * L.t * L.t), 1, 2);
+    }
+    ctx.globalAlpha = 1;
+  }
+}
+
+// Small location plaque. It lives in the clear band between the two fighters, above
+// the command UI, so it survives on every combat screen.
+function renderCombatLocation(){
+  const bio = biomeForFloor(game.floor);
+  text(bio.name.toUpperCase() + '  -  FLOOR ' + game.floor, Math.round(W / 2), 122,
+       'rgba(158,148,205,0.85)', 4, 'center');
+}
+
 // Shared frame: arena, both fighters, the stat blocks and the message band.
 function renderCombatStage(){
   const d = combat.demon;
@@ -2402,6 +2572,9 @@ function renderCombatStage(){
   // ══ BACKGROUND ══
   rect(0, 0, W, H, C.bg);
   texRect(0, 0, W, H, C.bg);
+  // AFTER texRect: it fills the whole screen with the background texture, so drawing
+  // the scenery before it just painted over the scenery.
+  renderCombatBackdrop();
   // arena floor with gradient
   const floorGrad = ctx.createLinearGradient(0, 180, 0, H);
   floorGrad.addColorStop(0, '#0c0c1a');
@@ -2411,6 +2584,7 @@ function renderCombatStage(){
   // subtle floor line
   ctx.strokeStyle = 'rgba(100,100,160,0.12)'; ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(0, 180); ctx.lineTo(W, 180); ctx.stroke();
+  renderCombatLocation();
   // grid lines (subtle)
   ctx.strokeStyle = 'rgba(80,80,140,0.06)';
   for (let gx = 0; gx <= W; gx += 16){ ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke(); }
