@@ -1,0 +1,226 @@
+[
+ {
+  "i": 0,
+  "name": "deception",
+  "src": [
+   472,
+   472
+  ],
+  "dst": [
+   28,
+   28
+  ],
+  "opaque_px": 451,
+  "opaque_pct": 57.5
+ },
+ {
+  "i": 1,
+  "name": "lust",
+  "src": [
+   298,
+   502
+  ],
+  "dst": [
+   17,
+   28
+  ],
+  "opaque_px": 251,
+  "opaque_pct": 52.7
+ },
+ {
+  "i": 2,
+  "name": "wrath",
+  "src": [
+   401,
+   502
+  ],
+  "dst": [
+   22,
+   28
+  ],
+  "opaque_px": 390,
+  "opaque_pct": 63.3
+ },
+ {
+  "i": 3,
+  "name": "pride",
+  "src": [
+   492,
+   492
+  ],
+  "dst": [
+   28,
+   28
+  ],
+  "opaque_px": 476,
+  "opaque_pct": 60.7
+ },
+ {
+  "i": 4,
+  "name": "despair",
+  "src": [
+   348,
+   472
+  ],
+  "dst": [
+   21,
+   28
+  ],
+  "opaque_px": 337,
+  "opaque_pct": 57.3
+ },
+ {
+  "i": 5,
+  "name": "greed",
+  "src": [
+   472,
+   482
+  ],
+  "dst": [
+   27,
+   28
+  ],
+  "opaque_px": 494,
+  "opaque_pct": 65.3
+ },
+ {
+  "i": 6,
+  "name": "sloth",
+  "src": [
+   411,
+   451
+  ],
+  "dst": [
+   26,
+   28
+  ],
+  "opaque_px": 442,
+  "opaque_pct": 60.7
+ },
+ {
+  "i": 7,
+  "name": "depths",
+  "src": [
+   452,
+   482
+  ],
+  "dst": [
+   26,
+   28
+  ],
+  "opaque_px": 420,
+  "opaque_pct": 57.7
+ },
+ {
+  "i": 8,
+  "name": "shadows",
+  "src": [
+   472,
+   492
+  ],
+  "dst": [
+   27,
+   28
+  ],
+  "opaque_px": 348,
+  "opaque_pct": 46.0
+ },
+ {
+  "i": 9,
+  "name": "flames",
+  "src": [
+   410,
+   502
+  ],
+  "dst": [
+   23,
+   28
+  ],
+  "opaque_px": 376,
+  "opaque_pct": 58.4
+ },
+ {
+  "i": 10,
+  "name": "plagues",
+  "src": [
+   390,
+   502
+  ],
+  "dst": [
+   22,
+   28
+  ],
+  "opaque_px": 370,
+  "opaque_pct": 60.1
+ },
+ {
+  "i": 11,
+  "name": "chains",
+  "src": [
+   452,
+   502
+  ],
+  "dst": [
+   25,
+   28
+  ],
+  "opaque_px": 386,
+  "opaque_pct": 55.1
+ },
+ {
+  "i": 12,
+  "name": "desolation",
+  "src": [
+   328,
+   502
+  ],
+  "dst": [
+   18,
+   28
+  ],
+  "opaque_px": 321,
+  "opaque_pct": 63.7
+ },
+ {
+  "i": 13,
+  "name": "fallen",
+  "src": [
+   492,
+   502
+  ],
+  "dst": [
+   27,
+   28
+  ],
+  "opaque_px": 459,
+  "opaque_pct": 60.7
+ },
+ {
+  "i": 14,
+  "name": "knight",
+  "src": [
+   370,
+   502
+  ],
+  "dst": [
+   21,
+   28
+  ],
+  "opaque_px": 393,
+  "opaque_pct": 66.8
+ },
+ {
+  "i": 15,
+  "name": "worm",
+  "src": [
+   452,
+   502
+  ],
+  "dst": [
+   25,
+   28
+  ],
+  "opaque_px": 487,
+  "opaque_pct": 69.6
+ }
+]
