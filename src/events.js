@@ -61,7 +61,7 @@ const EventEngine = {
       weight: 2,
       slots: {
         discovery: ['a dead soldier clutching a scroll', 'a demon corpse with something glowing inside', 'an altar with fresh blood', 'a circle of standing stones', 'a shattered reliquary'],
-        discovery_detail: ['its hand still warm', 'the glow pulses', 'the blood is wet', 'the stones hum', 'dust falls as you near'],
+        discovery_detail: ['Its hand is still warm', 'The glow pulses', 'The blood is wet', 'The stones hum', 'Dust falls as you near'],
       },
       text: 'Among the ruins, you find {discovery}. {discovery_detail}.',
       choices: [
@@ -270,7 +270,7 @@ const EventEngine = {
       category: 'sacrifice',
       weight: 2,
       slots: {
-        sacrifice: ['your sword', 'some of your blood', 'a cherished memory', 'years of your life', 'a versed you love'],
+        sacrifice: ['your sword', 'some of your blood', 'a cherished memory', 'years of your life', 'a verse you love'],
         sacrifice_return: ['great power', 'a cleared path', 'a fallen enemy', 'hidden sight', 'a second wind'],
       },
       text: 'The altar demands a sacrifice: {sacrifice}. In return, {sacrifice_return}.',

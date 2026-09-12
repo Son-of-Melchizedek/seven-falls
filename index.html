@@ -314,6 +314,26 @@ function wrapText(t, maxChars){
     else line += w + ' ';
   }
   if (line.trim()) lines.push(line.trim());
+  const rev = (i) => lines[i].split(' ');
+  for (let i = 0; i < lines.length - 1; i++){
+    const parts = rev(i);
+    if (parts.length < 2) continue;
+    if (!HANG_WORDS.has(parts[parts.length - 1].toLowerCase())) continue;
+    const moved = parts[parts.length - 1] + ' ' + lines[i + 1];
+    if (moved.length > maxChars) continue;
+    lines[i] = parts.slice(0, -1).join(' ');
+    lines[i + 1] = moved;
+  }
+  if (lines.length > 1 && rev(lines.length - 1).length === 1){
+    const prev = rev(lines.length - 2);
+    if (prev.length > 1){
+      const moved = prev[prev.length - 1] + ' ' + lines[lines.length - 1];
+      if (moved.length <= maxChars){
+        lines[lines.length - 2] = prev.slice(0, -1).join(' ');
+        lines[lines.length - 1] = moved;
+      }
+    }
+  }
   return lines;
 }
 // ── Modern chrome primitives ──────────────────────────────
@@ -741,6 +761,7 @@ function drawWarriorSprite(cx, cy, breathe){
 // ── Hint overlay (bottom of screen) ──
 // Wrap by MEASURED pixel width. wrapText() counts characters, which overflowed
 // the box at this font size and made every line render ellipsised ("The glow..").
+const HANG_WORDS = new Set(['a','an','the','of','to','and','or','with','in','on','at','for','from','by','as','is','was','its','his','her','my','our','your','no','not']);
 function wrapTextPx(t, maxW, size){
   setFont(Math.round((size || 6) * S));
   const words = String(t).split(/\s+/).filter(Boolean);
@@ -752,16 +773,47 @@ function wrapTextPx(t, maxW, size){
     else { out.push(line); line = w; }
   }
   if (line) out.push(line);
+  const fits = (s2) => ctx.measureText(s2).width <= maxW;
+  // Pull a trailing article/preposition down — "you find a / demon corpse"
+  // reads as a typo, not a wrap.
+  for (let i = 0; i < out.length - 1; i++){
+    const parts = out[i].split(' ');
+    if (parts.length < 2) continue;
+    const tail = parts[parts.length - 1];
+    if (!HANG_WORDS.has(tail.toLowerCase())) continue;
+    const moved = tail + ' ' + out[i + 1];
+    if (!fits(moved)) continue;
+    out[i] = parts.slice(0, -1).join(' ');
+    out[i + 1] = moved;
+  }
+  // A one-word last line is an orphan. Rebalance it upward.
+  if (out.length > 1){
+    const last = out[out.length - 1].split(' ');
+    if (last.length === 1){
+      const prev = out[out.length - 2].split(' ');
+      if (prev.length > 1){
+        const moved = prev[prev.length - 1] + ' ' + out[out.length - 1];
+        if (fits(moved)){
+          out[out.length - 2] = prev.slice(0, -1).join(' ');
+          out[out.length - 1] = moved;
+        }
+      }
+    }
+  }
   return out;
 }
 function renderHint(){
   if (!game.activeHint) return;
-  const x = 6, y = H - 32, w = W - 12, h = 30;
+  const x = 6, w = W - 12;
+  // Anchor above the footer control (button sits at H-16..H-2). A fixed 30px
+  // panel at H-32 used to overlap it — LEAVE was unreadable behind the toast.
+  const lines = wrapTextPx(game.activeHint.text, w - 16, 6).slice(0, 3);
+  const h = lines.length * 9 + 8;
+  const y = H - 20 - h;
   panel(x, y, w, h, 4, 'rgba(20,17,28,0.96)');
   rect(x, y, 3, h, C.gold);
-  const lines = wrapTextPx(game.activeHint.text, w - 16, 6);
   let ly = y + 5;
-  for (const l of lines.slice(0, 3)){ text(l, x + 9, ly, C.holy, 6, 'left'); ly += 9; }
+  for (const l of lines){ text(l, x + 9, ly, C.holy, 6, 'left'); ly += 9; }
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1655,14 +1707,14 @@ function renderTitle(){ MusicEngine.playTrack('title');
   }
   ctx.restore();
   // Title
-  text('SEVEN', cx, 26, C.gold, 22, 'center');
-  text('FALLS', cx, 52, C.holy, 22, 'center');
+  text('SEVEN', cx, 24, C.gold, 22, 'center');
+  text('FALLS', cx, 48, C.holy, 22, 'center');
   // Animated cross with glow
   ctx.save();
   ctx.shadowColor = C.gold;
-  ctx.shadowBlur = 8 + Math.sin(t * 2) * 3;
-  rect(cx-2, 76, 4, 24, C.holy);
-  rect(cx-9, 82, 18, 4, C.holy);
+  ctx.shadowBlur = 4 + Math.sin(t * 2) * 1.5;
+  rect(cx-2, 64, 4, 20, C.holy);
+  rect(cx-9, 69, 18, 4, C.holy);
   ctx.restore();
   text('A Bible Roguelike', cx, 108, C.holy, 7, 'center');
 
@@ -1895,11 +1947,11 @@ function renderMap(){
   const cellW = Math.floor((W - 8) / 4);
   legendItems.forEach((item, i) => {
     const row = Math.floor(i / 4), cl = i % 4;
-    const gx = 10 + cl * cellW + 7, gy = 262 + row * 13;
+    const gx = 10 + cl * cellW + 7, gy = 260 + row * 17;
     ctx.fillStyle = NODE_DISC;
-    ctx.beginPath(); ctx.arc(gx, gy, 6, 0, Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(gx, gy, 5.5, 0, Math.PI*2); ctx.fill();
     ctx.strokeStyle = item[2]; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.arc(gx, gy, 6, 0, Math.PI*2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(gx, gy, 5.5, 0, Math.PI*2); ctx.stroke();
     drawNodeGlyph(item[0], gx, gy, item[2]);
     text(item[1], gx + 9, gy + 3, C.dim, 4, 'left');
   });
@@ -2272,8 +2324,10 @@ function renderEvent(){
   strokeRect(14, 14, W-28, H-36, C.cyan);
   text(ev.title, W/2, 22, C.cyan, 8, 'center');
   const lines = wrapTextPx(ev.text, 340, 7);
-  let y = 40; for (const l of lines){ text(l, 22, y, C.holy, 7, 'left'); y += 12; }
-  y = Math.max(y, 84);
+  const blockH = lines.length * 12 + 10 + ev.choices.length * 20;
+  let y = Math.max(38, Math.round((H - blockH) / 2) + 6);
+  for (const l of lines){ text(l, 22, y, C.holy, 7, 'left'); y += 12; }
+  y += 10;
   ev.choices.forEach((ch, i) => {
     button(24, y, W-48, 16, (i+1) + '. ' + ch.text, () => {
       const effect = ch.effect; // already-resolved effect object from EventEngine
@@ -2295,17 +2349,22 @@ function renderShop(){
   rect(0,0,W,H,C.stoneDark);
   text('SHOP', 8, 4, C.gold, 10, 'left');
   text('G ' + game.gold, W-8, 6, C.gold, 7, 'right');
-  let y = 22;
+  // Centre the stock in the space between the header and the footer toast so the
+  // list doesn't cluster at the top with a dead zone above LEAVE.
+  const ROW_H = 26, listH = shopItems.length * ROW_H - 4;
+  let y = Math.max(22, Math.round((22 + 232) / 2 - listH / 2));
   shopItems.forEach((it, i) => {
     const bought = shopBought[i];
     const afford = game.gold >= it.cost && !bought;
     const col = bought ? C.dim : (afford ? C.gold : C.red);
     const name = it.type === 'verse' ? it.name : it.name;
-    const lines = wrapTextPx(name + '  (' + it.cost + 'g)', 356, 6);
+    const PRICE_W = 42;
+    const lines = wrapTextPx(name, 356 - PRICE_W, 6);
     rect(6, y, W-12, 22, C.stone);
     strokeRect(6, y, W-12, 22, col);
     text(lines[0] || '', 10, y+3, col, 6, 'left');
     if (lines[1]) text(lines[1], 10, y+11, col, 6, 'left');
+    text(it.cost + 'g', W-12, y+3, col, 6, 'right');
     if (!bought){
       clickables.push({ x:6, y, w:W-12, h:22, onClick: () => {
         if (game.gold >= it.cost){

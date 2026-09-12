@@ -283,20 +283,28 @@ function getBossForFloor(floor) {
 
 function generateShopItems(floor) {
   const items = [];
+  const seen = new Set();
   const count = 4 + Math.floor(RNG.random() * 3);
   for (let i = 0; i < count; i++) {
-    const item = { ...RNG.choice(SHOP_ITEMS) };
-    // Scale prices with floor
-    item.cost = Math.floor(item.cost * (1 + floor * 0.1));
-    if (item.type === 'verse') {
-      // Pick a specific verse of this type
-      const available = VERSES.filter(v => v.type === item.verseType && v.difficulty <= 2);
-      if (available.length > 0) {
-        const verse = RNG.choice(available);
-        item.verseId = verse.id;
-        item.name = `${item.name}: "${verse.text}"`;
+    // A shop that stocks the same scroll twice reads as a bug, not a gamble.
+    let item, key, tries = 0;
+    do {
+      item = { ...RNG.choice(SHOP_ITEMS) };
+      // Scale prices with floor
+      item.cost = Math.floor(item.cost * (1 + floor * 0.1));
+      if (item.type === 'verse') {
+        // Pick a specific verse of this type
+        const available = VERSES.filter(v => v.type === item.verseType && v.difficulty <= 2);
+        if (available.length > 0) {
+          const verse = RNG.choice(available);
+          item.verseId = verse.id;
+          item.name = `${item.name}: "${verse.text}"`;
+        }
       }
-    }
+      key = item.verseId || item.name;
+    } while (seen.has(key) && ++tries < 8);
+    if (seen.has(key)) continue;
+    seen.add(key);
     items.push(item);
   }
   return items;
