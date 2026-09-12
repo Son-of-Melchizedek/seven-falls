@@ -11,7 +11,10 @@ const SpriteStates = (function(){
   const CACHE = {};                 // "idx|color|alpha" -> tinted 64x60 canvas
   const states = {};                // "hero" | "demon" -> {state, t, dur}
   const DUR = { idle: 0, attack: 0.42, defend: 0.6, hit: 0.34, cast: 0.7 };
-  let heroImg = null;               // 32x30 hero cell, cut from the atlas at boot
+  let heroImg = null;               // hero cell, cut from the atlas at boot
+  // Cell geometry comes from index.html so art and renderer can never drift apart.
+  const CW = (typeof HERO_CELL_W !== 'undefined') ? HERO_CELL_W : 64;
+  const CH = (typeof HERO_CELL_H !== 'undefined') ? HERO_CELL_H : 60;
   let lastDraw = null;              // last applied pose (read by the QA harness)
 
   function set(who, state, dur){
@@ -150,13 +153,13 @@ const SpriteStates = (function(){
     const m = (typeof HERO_STATE_IDX !== 'undefined') ? HERO_STATE_IDX : null;
     return m && (state in m) ? m[state] : 0;
   }
-  // The hero: the atlas cell picked for the player, cut to 32x30 at boot.
+  // The hero: the atlas cell picked for the player, cut at native cell size at boot.
   function initHero(cellIdx){
     const c = document.createElement('canvas');
-    c.width = 32; c.height = 30;
+    c.width = CW; c.height = CH;
     const g = c.getContext('2d');
     g.imageSmoothingEnabled = true;               // one-time resample, then crisp
-    g.drawImage(demonAtlas, cellIdx * DEMON_CELL_W, 0, DEMON_CELL_W, DEMON_CELL_H, 0, 0, 32, 30);
+    g.drawImage(demonAtlas, cellIdx * DEMON_CELL_W, 0, DEMON_CELL_W, DEMON_CELL_H, 0, 0, CW, CH);
     heroImg = c;
   }
   function drawHero(cx, cy, st, scale){
@@ -165,17 +168,17 @@ const SpriteStates = (function(){
     const sc = (scale || 1) * 1.0;
     const p = pose(st, sc);
     const w = 32 * sc * p.sx, h = 30 * sc * p.sy;
-    const sx = sheet ? heroCellIndex(st.state) * 32 : 0;
+    const sx = sheet ? heroCellIndex(st.state) * CW : 0;
     const flashing = p.tint > 0;
     const img = flashing ? tintedSmall(p.tint, sheet, sx) : (sheet || heroImg);
-    const srcX = flashing ? 0 : sx;              // a tinted cell is already 32 wide
+    const srcX = flashing ? 0 : sx;              // a tinted cell is already one cell wide
     ctx.save();
     if (p.rot){
       ctx.translate(cx + p.dx, cy - h / 2 + p.dy);
       ctx.rotate(p.rot);
-      ctx.drawImage(img, srcX, 0, 32, 30, -w / 2, -h / 2, w, h);
+      ctx.drawImage(img, srcX, 0, CW, CH, -w / 2, -h / 2, w, h);
     } else {
-      ctx.drawImage(img, srcX, 0, 32, 30,
+      ctx.drawImage(img, srcX, 0, CW, CH,
         Math.round(cx - w / 2 + p.dx), Math.round(cy - h + p.dy), Math.round(w), Math.round(h));
     }
     ctx.restore();
@@ -196,14 +199,14 @@ const SpriteStates = (function(){
     const key = 'hero|' + Math.round(alpha * 4) + '|' + cellX;
     if (SMALL[key]) return SMALL[key];
     const c = document.createElement('canvas');
-    c.width = 32; c.height = 30;
+    c.width = CW; c.height = CH;
     const g = c.getContext('2d');
     const base = src || heroImg;
     if (!base) return null;
-    g.drawImage(base, cellX, 0, 32, 30, 0, 0, 32, 30);
+    g.drawImage(base, cellX, 0, CW, CH, 0, 0, CW, CH);
     g.globalCompositeOperation = 'source-atop';
     g.globalAlpha = Math.min(1, alpha * 1.4); g.fillStyle = '#ffffff';
-    g.fillRect(0, 0, 32, 30);
+    g.fillRect(0, 0, CW, CH);
     SMALL[key] = c;
     return c;
   }

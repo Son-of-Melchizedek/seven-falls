@@ -50,6 +50,7 @@ const DemonAI = (function(){
         d -= absorbed;
         g.hp -= d;
         if (d > 0 && typeof SpriteStates !== 'undefined') SpriteStates.set('hero', 'hit');
+        if (d > 0 && typeof Polish !== 'undefined') Polish.hit('hero', d, '#ff7a6b', { label: '-' + d });
         if (typeof SFX !== 'undefined') SFX.play(d > 0 ? 'hurt' : 'block');
         if (absorbed > 0) say(c, 'BLOCK ' + absorbed);
         return d;
