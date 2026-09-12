@@ -766,10 +766,11 @@ function demonSpriteIndex(d){
 //   the same shadow offset drawWarriorSprite() uses, so a legged demon reads as
 //   standing rather than hovering. Shadow radius 15x4 * 1.5 matches the old cast.
 function drawDemonSpriteImg(cx, cy, idx, bounce, sc){
+  sc = sc || 1;
   const t = Date.now() / 280;
   const by = bounce ? Math.round(Math.sin(t) * 3) : 0;
   drawShadow(cx, cy + 24, 1.5);
-  const w = DEMON_CELL_W * DEMON_SPRITE_SC, h = DEMON_CELL_H * DEMON_SPRITE_SC;
+  const w = DEMON_CELL_W * sc, h = DEMON_CELL_H * sc;
   ctx.drawImage(demonAtlas, idx * DEMON_CELL_W, 0, DEMON_CELL_W, DEMON_CELL_H,
                 Math.round(cx - w / 2), Math.round(cy + 24 - h + by),
                 Math.round(w), Math.round(h));
