@@ -1630,6 +1630,7 @@ function generateFloorMap(floor) {
     nodes,
     currentNodeId: 0,
     totalRows: rows,
+    totalCols: cols,
     visited: new Set([0]),
   };
 }
@@ -30861,7 +30862,7 @@ const VendettaSystem = (function(){
     text('VENDETTA', W2 / 2, 14, C.red, 10, 'center');
     const list = active();
     text(list.length + ' IN THE FIELD   ' + dormant().length + ' DORMANT   ' + dead().length + ' DEAD',
-         W2 / 2, 27, C.dim, 4, 'center');
+         W2 / 2, 31, C.dim, 4, 'center');   // was 27: inside the title's glyphs
     if (!list.length){
       text('None have survived you yet.', W2 / 2, H2 / 2, C.dim, 7, 'center');
       text('Tap anywhere to close.', W2 / 2, H2 / 2 + 14, C.dim, 5, 'center');
@@ -31168,6 +31169,16 @@ function text(t, x, y, color, size, align){
     const q = window.__SF_QA_TEXT || (window.__SF_QA_TEXT = []);
     q.push({ t, x, y, size, align: a, mw: Math.round(mw), w: Math.round(ctx.measureText(t).width),
              stack: (new Error().stack || '').split('\n').slice(2, 4).map(function(l){ return l.trim().replace(/^at /, '').slice(0, 70); }).join(' <- ') });
+  }
+  if (window.__SF_QA){
+    // Baseline is 'top', so a string's box is (x, y, measured width, glyph height).
+    // Recording them lets the harness detect text drawn ON TOP of other text — the
+    // thing the eye reports as "the words are clashing".
+    const bw = ctx.measureText(t).width, bh = Math.round((size || 8) * S);
+    let bx = x;
+    if (a === 'center') bx = x - bw / 2; else if (a === 'right') bx = x - bw;
+    (window.__SF_BOX = window.__SF_BOX || []).push({ t: t, x: Math.round(bx), y: Math.round(y),
+      w: Math.round(bw), h: bh, where: (new Error().stack || '').split('\n')[2] });
   }
   ctx.fillText(t, x, y);
 }
@@ -32056,6 +32067,8 @@ function startCombat(node){
     isRival: !!demon.isRival, rivalId: demon.rivalId || null,
     screen: 'MENU',                       // MENU | FIGHT | BIBLE | ITEMS
     biblePageNum: 0,                      // in-battle Bible paging (game.biblePage is the full UI's)
+    zeal: 0,                              // consecutive flawless verses
+    badPicks: 0,                          // wasted taps in the current verse
     bibleUses: 1 + ((game && game.bibleUsesBonus) || 0),   // one use per battle by default
     key: demonTypeKey(demon),
     verses: [], pool: [], selected: [],
@@ -32192,6 +32205,8 @@ function selectWord(idx){
     return;
   }
   combat.selected.push(idx);
+  // ZEAL counts wasted taps: a tile that is not part of the verse you are aiming at.
+  if (combat.pool[idx] && combat.pool[idx].v !== combat.target) combat.badPicks = (combat.badPicks || 0) + 1;
   // auto-submit when the selection already forms a full verse
   if (checkVerse(combat.selected.map(i => combat.pool[i]), combat.verses)) submitVerse();
 }
@@ -32231,6 +32246,17 @@ function resolveVerse(verse){
     loadVerse();
     return;
   }
+  // ── ZEAL ── Consecutive verses spelled with NO wasted taps. The word mechanic only
+  // ever asked "can you spell it?"; this pays for spelling it cleanly, and the streak
+  // is wiped the moment you fumble a tile.
+  if ((combat.badPicks || 0) === 0){
+    combat.zeal = (combat.zeal || 0) + 1;
+    if (combat.zeal >= 2 && typeof SFX !== 'undefined') SFX.play('select');
+  } else {
+    if ((combat.zeal || 0) >= 2 && typeof SFX !== 'undefined') SFX.play('error');
+    combat.zeal = 0;
+  }
+  combat.badPicks = 0;
   let dmg = verse.damage;
   // Dev mode: one-shot kills
   if (game.devMode) dmg = 9999;
@@ -32273,6 +32299,9 @@ function resolveVerse(verse){
   // #24 CRITICAL HIT: 15% → 2x
   const crit = MECH.rollCrit(dmg);
   dmg = crit.dmg;
+  // ZEAL damage: +12% per streak step beyond the first, capped at +60%
+  const zealStep = Math.min(Math.max((combat.zeal || 1) - 1, 0), 5);
+  if (zealStep > 0) dmg = Math.floor(dmg * (1 + 0.12 * zealStep));
   // #21 ENEMY SHIELD PHASES: non-DEFENSE verses are blocked by an active shield.
   // Must be checked BEFORE applying damage so the shield actually absorbs the hit.
   let shieldBlocked = false;
@@ -32817,7 +32846,13 @@ function nodePos(node, rows){
   const top = 46, bot = 224;
   // Row 0 (START) renders at the BOTTOM, boss (max row) at the TOP (Slay the Spire style)
   const y = rows <= 1 ? (top+bot)/2 : bot - (bot - top) * node.row / (rows - 1);
-  let x = 34 + node.col * 60;
+  // Columns span the ACTUAL panel width. They used to advance a fixed 60px from the
+  // original 384-wide stage, which left every node piled into the left half of a
+  // modern phone screen with the right half empty.
+  const cols = Math.max(1, (mapState.map && mapState.map.totalCols) || 5);
+  const padX = 32;
+  const usable = Math.max(1, W - padX * 2);
+  let x = cols <= 1 ? W / 2 : padX + usable * (node.col / (cols - 1));
   x = Math.max(14, Math.min(W - 14, x));
   return { x, y };
 }
@@ -33032,10 +33067,10 @@ function introAdvance(){ if (introStep < INTRO_LINES.length - 1) introStep++; }
 function renderScholar(){
   const note = game.pendingNote;
   // Panel hugs its text: a fixed full-height box left a void under short notes.
-  const body = wrapTextPx(note.text, 320, 7);
-  const hintLines = note.hint ? wrapTextPx('> ' + note.hint, 320, 6) : [];
-  const blockH = body.length * 12 + (hintLines.length ? 10 + hintLines.length * 11 : 0);
-  const h = blockH + 76;
+  const body = wrapTextPx(note.text, W - 60, 7);
+  const hintLines = note.hint ? wrapTextPx('> ' + note.hint, W - 60, 6) : [];
+  const bodyH = body.length * 12 + (hintLines.length ? 8 + hintLines.length * 11 : 0);
+  const h = 50 + bodyH + 22 + 26;                 // header + text + witness row + button
   const y0 = Math.max(14, Math.round((H - h) / 2) - 4);
   cardFrame(y0, h, C.purple);
   emblem('book', W / 2, y0 + 22, C.purple);
@@ -33046,8 +33081,9 @@ function renderScholar(){
     y += 8;
     for (const ln of hintLines){ text(ln, 26, y, C.cyan, 6, 'left'); y += 11; }
   }
-  // #7 WITNESS: the knowledge this run starts with, before you descend.
-  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(26, y0 + h - 40, 8);
+  // #7 WITNESS: strictly below the last line of the note, wherever that landed. A
+  // fixed offset sat on top of the final line on longer notes.
+  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(26, y + 4, 8);
   button(W/2-50, y0 + h - 26, 100, 16, 'CONTINUE', () => {
     const after = game.afterNote;
     game.pendingNote = null;
@@ -33061,22 +33097,24 @@ function renderMap(){
   const rows = m.totalRows;
 
   // Header band + hairline: three columns of raw text used to share one row.
-  const hb = ctx.createLinearGradient(0, 0, 0, 33);
+  const hb = ctx.createLinearGradient(0, 0, 0, 42);
   hb.addColorStop(0, 'rgba(48,40,84,0.85)'); hb.addColorStop(1, 'rgba(12,12,26,0)');
-  ctx.fillStyle = hb; ctx.fillRect(0, 0, W, 33);
-  rect(0, 33, W, 1, 'rgba(150,135,215,0.22)');
-  text('FLOOR ' + game.floor, 8, 4, C.gold, 8, 'left');
-  text(FLOOR_TIERS[game.floor-1] ? FLOOR_TIERS[game.floor-1].label : '', 8, 14, C.holy, 6, 'left');
+  ctx.fillStyle = hb; ctx.fillRect(0, 0, W, 42);
+  rect(0, 42, W, 1, 'rgba(150,135,215,0.22)');
+  // Four rows on the left (floor, tier, witness, rivals) — they used to overlap each
+  // other because each was placed by eye.
+  text('FLOOR ' + game.floor, 8, 3, C.gold, 7, 'left');
+  text(FLOOR_TIERS[game.floor-1] ? FLOOR_TIERS[game.floor-1].label : '', 8, 14, C.holy, 5, 'left');
   text('HP ' + game.hp + '/' + game.maxHp, W-8, 4, C.green, 6, 'right');
   text('GOLD ' + game.gold, W-8, 14, C.gold, 6, 'right');
   text('ITEMS ' + (game.items ? game.items.length : 0) + '/5', W-8, 24, C.cyan, 6, 'right');
   // #7 WITNESS: what previous descents taught you about this floor.
-  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(8, 21, 6);
+  if (typeof Deep !== 'undefined') Deep.renderWitnessStrip(8, 23, 6);
   // VENDETTA: evidence that a rival is working toward you. Foreshadowing only
   // appears when there is something real to show. Tapping it opens the roster.
   if (typeof VendettaSystem !== 'undefined'){
-    VendettaSystem.renderStrip(8, 27);
-    clickables.push({ x: 6, y: 25, w: W - 12, h: 8, onClick: () => { game.vendettaOpen = true; } });
+    VendettaSystem.renderStrip(8, 32);
+    clickables.push({ x: 6, y: 31, w: W - 12, h: 9, onClick: () => { game.vendettaOpen = true; } });
   }
 
   // Direction cues: boss at TOP, entrance at BOTTOM (Slay the Spire style)
@@ -33084,8 +33122,8 @@ function renderMap(){
   text('↓ ENTRANCE', W/2, 242, C.holy, 6, 'center');
 
   // ── Dark background panel behind the map ──
-  texRect(4, 34, W-8, 208, '#0c0c1a');
-  strokeRect(4, 34, W-8, 208, C.stone2);
+  texRect(4, 43, W-8, 199, '#0c0c1a');
+  strokeRect(4, 43, W-8, 199, C.stone2);
 
   const pos = id => { const n = m.nodes.find(x => x.id === id); return nodePos(n, rows); };
 
@@ -33244,6 +33282,28 @@ function setCombatScreen(scr){
   combat.selected = scr === 'FIGHT' ? combat.selected : [];
   if (typeof SFX !== 'undefined') SFX.play('select');
 }
+// Chip-sized Bible references. Truncating by measurement mangled them into things
+// like "Hebrews 4:" — abbreviating the book keeps every chip meaningful.
+const BOOK_ABBR = {
+  Genesis:'Gen', Exodus:'Ex', Leviticus:'Lev', Numbers:'Num', Deuteronomy:'Deut', Joshua:'Josh',
+  Judges:'Judg', Ruth:'Ruth', Samuel:'Sam', Kings:'Kgs', Chronicles:'Chr', Ezra:'Ezra',
+  Nehemiah:'Neh', Esther:'Esth', Job:'Job', Psalm:'Ps', Psalms:'Ps', Proverbs:'Prov',
+  Ecclesiastes:'Eccl', Song:'Song', Isaiah:'Isa', Jeremiah:'Jer', Lamentations:'Lam',
+  Ezekiel:'Ezek', Daniel:'Dan', Hosea:'Hos', Joel:'Joel', Amos:'Amos', Obadiah:'Obad',
+  Jonah:'Jonah', Micah:'Mic', Nahum:'Nah', Habakkuk:'Hab', Zephaniah:'Zeph', Haggai:'Hag',
+  Zechariah:'Zech', Malachi:'Mal', Matthew:'Matt', Mark:'Mk', Luke:'Lk', John:'Jn',
+  Acts:'Acts', Romans:'Rom', Corinthians:'Cor', Galatians:'Gal', Ephesians:'Eph',
+  Philippians:'Phil', Colossians:'Col', Thessalonians:'Thess', Timothy:'Tim', Titus:'Tit',
+  Philemon:'Phlm', Hebrews:'Heb', James:'Jas', Peter:'Pet', Jude:'Jude', Revelation:'Rev'
+};
+function shortRef(ref){
+  const str = String(ref || '');
+  const sp = str.indexOf(' ');
+  if (sp < 0) return str;
+  const book = str.slice(0, sp);
+  return (BOOK_ABBR[book] || book) + str.slice(sp);
+}
+
 // ══ COMBAT BACKDROPS ══════════════════════════════════════════════════════════
 // Where the fight is. Floors are grouped into bands (two floors each) with their own
 // silhouettes, palette and floor props. Static art is prerendered once per floor at
@@ -33547,6 +33607,12 @@ function renderCombatStage(){
   // whole run hangs on, so it is spelled out in full. It sits in the middle
   // column now that the hero himself owns the left of the stage.
   text('CHILD OF GOD', 116, 84, C.holy, 7, 'left');
+  if ((combat.zeal || 0) >= 2){
+    // Fixed slot right-aligned to the player's column: measuring the name gave a width
+    // the bounds guard then clipped into "ZEAL x2 …".
+    const z = Math.min(combat.zeal, 6);
+    text('ZEAL x' + z + ' +' + (12 * (z - 1)) + '%', 244, 51, C.gold, 5, 'right');
+  }
   bar(116, 94, 130, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('player', Math.max(0, game.hp) / game.maxHp) : Math.max(0, game.hp) / game.maxHp), C.green);
   text(Math.max(0, game.hp) + '/' + game.maxHp, 181, 103, C.white, 5, 'center');
   let px = 226;
@@ -33585,15 +33651,15 @@ function renderCombatFight(){
       ctx.fillStyle = '#2b2554'; ctx.fill();
     }
     strokeRect(cx, chipY, chipW, chipH, isTarget ? C.gold : col);
-    // marker + reference, truncated by MEASUREMENT so nothing spills out of its chip
-    let label = String(vc.reference || '');
-    const inner = chipW - 14;
-    while (label.length > 3 && ctx.measureText(label).width > inner) label = label.slice(0, -2);
+    // marker + short reference. Truncating the full name produced useless fragments,
+    // and the old "TAP TO BUILD" hint was drawn straight across these chips.
+    let label = shortRef(vc.reference);
+    const inner = chipW - 16;
+    while (label.length > 4 && ctx.measureText(label).width > inner) label = label.slice(0, -1);
     ctx.fillStyle = col; ctx.fillRect(cx + 4, chipY + Math.floor(chipH / 2) - 2, 4, 4);
     text(label, cx + 11, chipY + 3, isTarget ? C.white : col, 6, 'left');
     clickables.push({ x: cx, y: chipY, w: chipW, h: chipH, onClick: () => setTargetVerse(vi) });
   });
-  text('TAP TO BUILD', 10, refY + 14, C.dim, 4, 'left');
 
   // ══ SELECTED WORDS AREA — auto-sizes to fit the verse ══
   const selWords = combat.selected.map(i => combat.pool[i].word);
@@ -33796,9 +33862,9 @@ function biblePageRows(){
 function renderCombatBible(){
   renderCombatStage();
   const uses = Math.max(0, combat.bibleUses || 0);
-  text('BIBLE', 10, 118, C.purple, 9, 'left');
+  text('BIBLE', 10, 116, C.purple, 9, 'left');
   text(uses > 0 ? ('One verse, free of charge - ' + uses + ' use' + (uses === 1 ? '' : 's') + ' left') : 'No uses left this battle',
-       10, 130, uses > 0 ? C.cyan : C.red, 5, 'left');
+       10, 133, uses > 0 ? C.cyan : C.red, 5, 'left');   // clear of the 14px title glyphs
   const ids = biblePageRows();
   const y0 = 142, rowH = 21, maxRows = Math.max(1, Math.floor((242 - y0) / rowH));
   // A DEDICATED page counter: game.biblePage belongs to the full Bible UI and holds
@@ -33876,8 +33942,8 @@ function bibleUse(id){
 function renderCombatItems(){
   renderCombatStage();
   const items = game.items || [];
-  text('ITEMS', 10, 118, C.blue, 9, 'left');
-  text(items.length + '/5 carried   ·   using one takes your turn', 10, 130, C.dim, 5, 'left');
+  text('ITEMS', 10, 116, C.blue, 9, 'left');
+  text(items.length + '/5 carried   ·   using one takes your turn', 10, 133, C.dim, 5, 'left');
   const y0 = 142, rowH = 25;
   if (!items.length){
     text('Nothing left in your hands.', 10, y0 + 10, C.dim, 6, 'left');

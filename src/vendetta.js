@@ -1155,7 +1155,7 @@ const VendettaSystem = (function(){
     text('VENDETTA', W2 / 2, 14, C.red, 10, 'center');
     const list = active();
     text(list.length + ' IN THE FIELD   ' + dormant().length + ' DORMANT   ' + dead().length + ' DEAD',
-         W2 / 2, 27, C.dim, 4, 'center');
+         W2 / 2, 31, C.dim, 4, 'center');   // was 27: inside the title's glyphs
     if (!list.length){
       text('None have survived you yet.', W2 / 2, H2 / 2, C.dim, 7, 'center');
       text('Tap anywhere to close.', W2 / 2, H2 / 2 + 14, C.dim, 5, 'center');

@@ -270,6 +270,7 @@ function generateFloorMap(floor) {
     nodes,
     currentNodeId: 0,
     totalRows: rows,
+    totalCols: cols,
     visited: new Set([0]),
   };
 }
