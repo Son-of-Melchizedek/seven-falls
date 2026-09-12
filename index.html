@@ -868,16 +868,18 @@ function drawDemonAny(cx, cy, d, bounce, sc, glow, st){
   if (demonAtlasReady && idx >= 0) drawDemonSpriteImg(cx, cy, idx, bounce, sc, glow);
   else drawDemonSprite32(cx, cy, demonColor(d), bounce, sc);
 }
-function drawWarriorSprite(cx, cy, breathe){
-  if (typeof Polish !== 'undefined') Polish.notePos('hero', cx, cy);
+function drawWarriorSprite(cx, cy, breathe, sc){
+  if (typeof Polish !== 'undefined') Polish.notePos('hero', cx, cy - 8 * (sc || 1));
   // Was 20x22 of raw rects — the "speck" in the crawl and combat screens.
-  // Now the atlas cell chosen for the player (armoured figure with a great sword),
-  // posed by SpriteStates so attack / defend / hit are all visible states.
-  drawShadow(cx, cy + 12, 1.4);
+  // Now the keyed atlas cell for the player, posed by SpriteStates so attack /
+  // defend / hit all read. `sc` matches the enemy scale: the Child of God is a
+  // protagonist, not a token standing next to one.
+  sc = sc || 1;
+  drawShadow(cx, cy, 1.4 * sc);                  // shadow sits under the feet
   if (typeof SpriteStates === 'undefined' || !SpriteStates.get('hero') || !demonAtlasReady) return;
   const st = SpriteStates.get('hero');
   const pose = (!breathe && st.state === 'idle') ? { state: 'idle', t: st.t, u: 1 } : st;
-  SpriteStates.drawHero(cx, cy - 12, pose, 1);
+  SpriteStates.drawHero(cx, cy, pose, sc);       // bottom edge lands on cy
 }
 
 // ── Hint overlay (bottom of screen) ──
@@ -2200,21 +2202,26 @@ function renderCombat(){
   drawDemonAny(ex, ey, d, true, eScale, 'rgba(255,180,120,0.55)',
     typeof SpriteStates !== 'undefined' ? SpriteStates.get('demon') : null);
 
-  text((TIER_NAMES[d.tier] || 'Demon').toUpperCase(), 6, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
-  text(d.name, 6, 12, C.red, 8, 'left');
+  // The player, drawn at the enemy's own scale (96x90) and before the HUD so
+  // every label stays legible on top of him. Feet on the floor of the stage.
+  // eScale * 1.1: the Child of God reads a touch larger than a common demon.
+  drawWarriorSprite(56, 104, true, eScale * 1.1);
+
+  text((TIER_NAMES[d.tier] || 'Demon').toUpperCase(), 116, 4, TIER_COLORS[d.tier] || C.white, 6, 'left');
+  text(d.name, 116, 12, C.red, 8, 'left');
   let badgeY = 23;
-  if (combat.isElite) text('ELITE', 6, badgeY, C.purple, 5, 'left');
-  else if (combat.isNemesis) text('NEMESIS', 6, badgeY, C.red, 5, 'left');
-  else if (combat.isBoss) text('BOSS', 6, badgeY, C.red, 5, 'left');
-  bar(6, 30, 150, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('demon', Math.max(0, d.hp) / d.maxHp) : Math.max(0, d.hp) / d.maxHp), C.red);
-  text(Math.max(0, Math.ceil(d.hp)) + '/' + d.maxHp, 81, 40, C.white, 5, 'center');
+  if (combat.isElite) text('ELITE', 116, badgeY, C.purple, 5, 'left');
+  else if (combat.isNemesis) text('NEMESIS', 116, badgeY, C.red, 5, 'left');
+  else if (combat.isBoss) text('BOSS', 116, badgeY, C.red, 5, 'left');
+  bar(116, 30, 150, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('demon', Math.max(0, d.hp) / d.maxHp) : Math.max(0, d.hp) / d.maxHp), C.red);
+  text(Math.max(0, Math.ceil(d.hp)) + '/' + d.maxHp, 191, 40, C.white, 5, 'center');
 
   const hint = combat.revealedWeak || KnowledgeSystem.getWeaknessHint(tkey);
   if (hint){
-    if (hint.indexOf('Unknown') === 0) text(hint, 6, 51, C.dim, 5, 'left');
-    else text('Weak: ' + hint + ' verses', 6, 51, C.cyan, 5, 'left');
+    if (hint.indexOf('Unknown') === 0) text(hint, 116, 51, C.dim, 5, 'left');
+    else text('Weak: ' + hint + ' verses', 116, 51, C.cyan, 5, 'left');
   } else {
-    text('Weakness: ?', 6, 51, C.dim, 5, 'left');
+    text('Weakness: ?', 116, 51, C.dim, 5, 'left');
   }
 
   // twist / state badges (right of enemy, below weakness)
@@ -2233,13 +2240,13 @@ function renderCombat(){
 
   // ══ MESSAGE AREA (y:58-80) ══
   if (combat.msgTimer > 0){
-    const ml = wrapTextPx(combat.message, 356, 6);
-    let my = 60; for (const l of ml.slice(0,2)){ text(l, W/2, my, C.holy, 6, 'center'); my += 9; }
+    const ml = wrapTextPx(combat.message, 246, 6);
+    let my = 60; for (const l of ml.slice(0,2)){ text(l, 206, my, C.holy, 6, 'center'); my += 9; }
     if (combat.comboResult){
-      const ql = wrapTextPx(combat.comboResult.quote, 356, 5);
-      for (const l of ql.slice(0,1)){ text(l, W/2, my, C.gold, 5, 'center'); my += 8; }
+      const ql = wrapTextPx(combat.comboResult.quote, 246, 5);
+      for (const l of ql.slice(0,1)){ text(l, 206, my, C.gold, 5, 'center'); my += 8; }
     }
-    for (const tm of combat.twistTriggered.slice(-1)){ text(tm, W/2, my, C.red, 5, 'center'); my += 8; }
+    for (const tm of combat.twistTriggered.slice(-1)){ text(tm, 206, my, C.red, 5, 'center'); my += 8; }
     combat.twistTriggered = [];
   }
   if (game.comboAnim > 0){
@@ -2254,12 +2261,12 @@ function renderCombat(){
   }
 
   // ══ PLAYER STATS (y:82-104) ══
-  drawWarriorSprite(40, 96, true);          // warrior, left side (original safe position)
   // The player is a Child of God, not a warrior — the label is the identity the
-  // whole run hangs on, so it is spelled out in full.
-  text('CHILD OF GOD', 70, 84, C.holy, 7, 'left');
-  bar(70, 94, 150, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('player', Math.max(0, game.hp) / game.maxHp) : Math.max(0, game.hp) / game.maxHp), C.green);
-  text(Math.max(0, game.hp) + '/' + game.maxHp, 145, 103, C.white, 5, 'center');
+  // whole run hangs on, so it is spelled out in full. It sits in the middle
+  // column now that the hero himself owns the left of the stage.
+  text('CHILD OF GOD', 116, 84, C.holy, 7, 'left');
+  bar(116, 94, 130, 8, (typeof Polish !== 'undefined' ? Polish.hpFrac('player', Math.max(0, game.hp) / game.maxHp) : Math.max(0, game.hp) / game.maxHp), C.green);
+  text(Math.max(0, game.hp) + '/' + game.maxHp, 181, 103, C.white, 5, 'center');
   let px = 226;
   if (game.shield > 0){ text('🛡 ' + game.shield, px, 84, C.cyan, 5, 'left'); }
   if (combat.buffNext > 0){ text('⚔ BUF', px, 94, C.gold, 5, 'left'); px += 40; }

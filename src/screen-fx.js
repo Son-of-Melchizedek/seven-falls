@@ -149,7 +149,9 @@ const ScreenFX = {
     ctx.save();
     ctx.translate(wx, wy + bob);
     ctx.scale(2, 2);
-    drawWarriorSprite(0, 0, Math.sin(this.crawl.t * 6) * 0.5 + 0.5);
+    // 0.5 because this block runs inside a 2x transform: keeps the crawl hero the
+    // same on-screen size it has always been.
+    drawWarriorSprite(0, 0, Math.sin(this.crawl.t * 6) * 0.5 + 0.5, 0.5);
     ctx.restore();
     drawShadow(wx, wy + 18 + bob, 2.1);
 

@@ -167,7 +167,9 @@ const SpriteStates = (function(){
     if (!heroImg && !sheet) return;
     const sc = (scale || 1) * 1.0;
     const p = pose(st, sc);
-    const w = 32 * sc * p.sx, h = 30 * sc * p.sy;
+    // Drawn at the cell's own size: the hero must not be squeezed into the
+    // old 32x30 box now that the art is a 64x60 cell.
+    const w = CW * sc * p.sx, h = CH * sc * p.sy;
     const sx = sheet ? heroCellIndex(st.state) * CW : 0;
     const flashing = p.tint > 0;
     const img = flashing ? tintedSmall(p.tint, sheet, sx) : (sheet || heroImg);
