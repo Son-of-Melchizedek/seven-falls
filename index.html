@@ -2323,14 +2323,41 @@ function renderCombat(){
 
   // ══ WORD POOL — starts below the auto-sized selection area ══
   const startY = selY + selH + 4;
-  const cols = 4, bw = 91, gx = 3, gy = 3;
+  const cols = 4, gx = 2, gy = 3;
   // Fit EVERY pool tile on screen. The grid used to hard-break at y+bh > 243,
   // so any pool longer than the last row left words invisible AND unclickable —
-  // which made those verses impossible to complete. Tile height now adapts to
-  // the pool size so capacity can never be exceeded.
+  // which made those verses impossible to complete. Tile height adapts to pool size.
   const _rows = Math.max(1, Math.ceil(combat.pool.length / cols));
   const _avail = Math.max(24, 243 - startY);
-  const bh = Math.max(6, Math.min(20, Math.floor(_avail / _rows) - gy));
+  const bh = Math.max(9, Math.min(20, Math.floor(_avail / _rows) - gy));
+  const bw = Math.floor((W - 8 - (cols - 1) * gx) / cols);
+  // ── ONE uniform label size for the whole grid ──
+  // Chosen so the longest word in the pool fits its tile with padding on both
+  // sides. Shrinking each label independently made long words sit flush against
+  // the border and short words look lost; a single size reads as designed.
+  const PAD_L = 12, PAD_R = 8;
+  const innerW = bw - PAD_L - PAD_R;
+  // Measure at the font we will ACTUALLY draw with — measureText returns widths
+  // in the same logical units as the tile geometry, so scaling it by hand gets
+  // the answer wrong (that bug drew long words ~33px past their border).
+  // Cached per pool: the fit is a property of the words, not of the frame.
+  const poolKey = combat.pool.length + '|' + combat.pool.map(t => t.word).join(',') + '|' + innerW;
+  if (combat._tileFitKey !== poolKey){
+    let best = 3.5;
+    for (let sz = 7; sz >= 3.5; sz -= 0.25){
+      setFont(Math.round(sz * S));
+      let widest = 0;
+      for (const tk of combat.pool){
+        const w = ctx.measureText(String(tk.word)).width;
+        if (w > widest) widest = w;
+        if (widest > innerW) break;
+      }
+      if (widest <= innerW){ best = sz; break; }
+    }
+    combat._tileFit = best;
+    combat._tileFitKey = poolKey;
+  }
+  const lsize = combat._tileFit || 5;
   for (let i = 0; i < combat.pool.length; i++){
     const c = i % cols, row = Math.floor(i / cols);
     const x = 6 + c * (bw + gx);
@@ -2339,40 +2366,28 @@ function renderCombat(){
     const used = combat.selected.includes(i);
     const tok = combat.pool[i];
     const vcol = tok.v >= 0 ? verseTypeColor(combat.verses[tok.v].type) : (tok.v === -2 ? C.purple : C.dim);
-    const hovered = pointIn(pointer.x, pointer.y, x, y, bw, bh);
-    if (used){
-      rect(x, y, bw, bh, C.gold);
-    } else {
-      ctx.save();
-      if (hovered){ ctx.shadowColor = vcol; ctx.shadowBlur = 6; }
-      rect(x, y, bw, bh, '#11122a');
-      ctx.restore();
-    }
-    strokeRect(x, y, bw, bh, used ? C.white : vcol);
-    ctx.fillStyle = vcol; ctx.fillRect(x+3, y+3, 5, 5);
-    let label = tok.word;
-    // Fit the label to the tile: shrink the size that is ACTUALLY drawn until it
-    // measures inside the tile's inner width. The previous version computed a
-    // shrink factor in `fs` and then drew at a different size (`tsize`), so any
-    // word wider than the tile — e.g. "Wherefore" — ran past the right edge and
-    // the bounds guard clipped it to "Wherefo…". The word you are choosing from
-    // is the one string on screen that must never be truncated.
     const isNextWord = (game.verseHighlight >= 0 && tok.word.toLowerCase() === getExpectedWord() && !used);
-    const innerW = bw - 12, textX = x + 6;
-    let tsize = Math.max(4, Math.min(7, bh * 0.55));
-    let guard = 0;
-    while (tsize > 4 && guard++ < 24){
-      setFont(Math.round(tsize * S));
-      if (ctx.measureText(label).width <= innerW) break;
-      tsize -= 0.25;
-    }
-    const ty = y + Math.max(1, (bh - tsize * S) / 2);
-    if (isNextWord) {
+    const hovered = pointIn(pointer.x, pointer.y, x, y, bw, bh) && !used;
+    const ty = y + (hovered ? -1 : 0);
+    // body: dark plate with a lit top edge — reads as a key you press
+    rect(x, ty, bw, bh, used ? '#d9b25a' : (hovered ? '#1b1e40' : '#11122a'));
+    rect(x + 1, ty + 1, bw - 2, 1, used ? '#f2d98f' : '#242a52');
+    // 1px notch out of each corner: the pixel-art cue for "this is a button"
+    rect(x, ty, 1, 1, C.bg); rect(x + bw - 1, ty, 1, 1, C.bg);
+    rect(x, ty + bh - 1, 1, 1, C.bg); rect(x + bw - 1, ty + bh - 1, 1, 1, C.bg);
+    strokeRect(x, ty, bw, bh, used ? C.white : vcol);
+    // left accent in the verse-type colour, inset so it never touches the border
+    ctx.fillStyle = used ? '#1a1526' : vcol;
+    ctx.fillRect(x + 2, ty + 2, 3, bh - 4);
+    const label = tok.word;
+    const glyphH = lsize * (S / RS);            // logical px the glyphs actually occupy
+    const ly = ty + Math.max(1, Math.round((bh - glyphH) / 2));
+    if (isNextWord){
       ctx.save(); ctx.shadowColor = '#ffd700'; ctx.shadowBlur = 10;
-      text(label, textX, ty, C.gold, tsize, 'left');
+      text(label, x + PAD_L, ly, C.gold, lsize, 'left');
       ctx.restore();
     } else {
-      text(label, textX, ty, used ? C.bg : C.white, tsize, 'left');
+      text(label, x + PAD_L, ly, used ? '#1a1526' : C.white, lsize, 'left');
     }
     clickables.push({ x, y, w: bw, h: bh, onClick: () => selectWord(i) });
   }
