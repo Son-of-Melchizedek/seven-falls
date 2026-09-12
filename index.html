@@ -1113,9 +1113,6 @@ function startCombat(node){
     const _rival = (typeof VendettaSystem !== 'undefined') ? VendettaSystem.collision(game.floor) : null;
     if (_rival){
       demon = VendettaSystem.adapter(_rival, getDemonForFloor(game.floor));
-      _rival.encounters++;
-      _rival.lastSeen = game.floor;
-      _rival.due = 0;
       isNemesis = true;
       if (!game.hintsShown['vendetta'])
         showHint('vendetta', 'This one survived you before. Its adaptations are its history — and every one has a counter.', true);
