@@ -134,7 +134,7 @@ const ScreenFX = {
       rect(dx + t * 6, dy, 1, 1, '#cbb98d', 0.10 + 0.22 * Math.sin(t * Math.PI));
     }
 
-    // Warrior: 1.5x keeps every art pixel on a 3-device-px grid at RS=2.
+    // The hero walks at 2x so every art pixel lands on a 4-device-px grid at RS=2.
     const wx = 30 + (W - 60) * p;
     const wy = H / 2 + 22;
     const bob = Math.sin(this.crawl.t * 7) * 1.5;

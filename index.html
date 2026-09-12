@@ -2215,7 +2215,9 @@ function renderCombat(){
 
   // ══ PLAYER STATS (y:82-104) ══
   drawWarriorSprite(40, 96, true);          // warrior, left side (original safe position)
-  text('WARRIOR', 70, 84, C.holy, 7, 'left');
+  // The player is a Child of God, not a warrior — the label is the identity the
+  // whole run hangs on, so it is spelled out in full.
+  text('CHILD OF GOD', 70, 84, C.holy, 7, 'left');
   bar(70, 94, 150, 8, Math.max(0, game.hp) / game.maxHp, C.green);
   text(Math.max(0, game.hp) + '/' + game.maxHp, 145, 103, C.white, 5, 'center');
   let px = 226;
