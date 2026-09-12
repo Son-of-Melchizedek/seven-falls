@@ -143,6 +143,13 @@ const SpriteStates = (function(){
     }
   }
 
+  // The hero sheet (six drawn poses) — preferred over the single-cell fallback.
+  let heroSheet = null;
+  function useHeroSheet(img){ heroSheet = img; }
+  function heroCellIndex(state){
+    const m = (typeof HERO_STATE_IDX !== 'undefined') ? HERO_STATE_IDX : null;
+    return m && (state in m) ? m[state] : 0;
+  }
   // The hero: the atlas cell picked for the player, cut to 32x30 at boot.
   function initHero(cellIdx){
     const c = document.createElement('canvas');
@@ -153,20 +160,31 @@ const SpriteStates = (function(){
     heroImg = c;
   }
   function drawHero(cx, cy, st, scale){
-    if (!heroImg) return;
+    const sheet = heroSheet;
+    if (!heroImg && !sheet) return;
     const sc = (scale || 1) * 1.0;
     const p = pose(st, sc);
     const w = 32 * sc * p.sx, h = 30 * sc * p.sy;
-    const img = p.tint > 0 ? tintedSmall(p.tint) : heroImg;
+    const img = p.tint > 0 ? tintedSmall(p.tint) : (sheet || heroImg);
+    const sx = sheet ? heroCellIndex(st.state) * 32 : 0;
     ctx.save();
     if (p.rot){
       ctx.translate(cx + p.dx, cy - h / 2 + p.dy);
       ctx.rotate(p.rot);
-      ctx.drawImage(img, -w / 2, -h / 2, w, h);
+      ctx.drawImage(img, sx, 0, 32, 30, -w / 2, -h / 2, w, h);
     } else {
-      ctx.drawImage(img, Math.round(cx - w / 2 + p.dx), Math.round(cy - h + p.dy), Math.round(w), Math.round(h));
+      ctx.drawImage(img, sx, 0, 32, 30,
+        Math.round(cx - w / 2 + p.dx), Math.round(cy - h + p.dy), Math.round(w), Math.round(h));
     }
     ctx.restore();
+    if (st.state === 'defend'){                   // faith dome, so guard reads at hero size
+      const a = 0.35 + 0.18 * Math.sin(Date.now() / 150);
+      const g2 = ctx.createRadialGradient(cx, cy - 14, 8, cx, cy - 14, 30);
+      g2.addColorStop(0, 'rgba(120,220,255,0)');
+      g2.addColorStop(1, 'rgba(120,220,255,' + a + ')');
+      ctx.fillStyle = g2;
+      ctx.beginPath(); ctx.arc(cx, cy - 14, 30, 0, Math.PI * 2); ctx.fill();
+    }
   }
   const SMALL = {};
   function tintedSmall(alpha){
@@ -183,7 +201,7 @@ const SpriteStates = (function(){
     return c;
   }
 
-  return { set, get, update, drawCell, drawHero, initHero, _states: states,
+  return { set, get, update, drawCell, drawHero, initHero, useHeroSheet, _states: states,
            get lastDraw(){ return lastDraw; } };
 })();
 
