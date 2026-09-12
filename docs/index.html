@@ -31938,6 +31938,8 @@ function startNewRun(){
   game.gold = 0; game.shield = 0;
   game.attackBuff = 0; game.defenseBuff = 0;
   game.items = [];
+  game.ownedVerses = [];
+  game._rewardDone = false; game._doorsDone = false;
   game.bibleUsesBonus = 0;
   game.nemesisDone = {};
   // Reset per-run hints, but re-seed permanently-shown ones from localStorage
@@ -32068,6 +32070,7 @@ function startCombat(node){
     screen: 'MENU',                       // MENU | FIGHT | BIBLE | ITEMS
     biblePageNum: 0,                      // in-battle Bible paging (game.biblePage is the full UI's)
     zeal: 0,                              // consecutive flawless verses
+    ownedVerses: game.ownedVerses || [],  // verses drafted from boss spoils
     badPicks: 0,                          // wasted taps in the current verse
     bibleUses: 1 + ((game && game.bibleUsesBonus) || 0),   // one use per battle by default
     key: demonTypeKey(demon),
@@ -32109,6 +32112,12 @@ function startCombat(node){
 function getCombatVerseHand(floor, want){
   want = want || 5;
   const out = [], seen = new Set();
+  // verses drafted from a boss's spoils ride along for the rest of the run
+  for (const id of (game.ownedVerses || [])){
+    if (out.length >= want) break;
+    const v = (typeof getVerseById === 'function') ? getVerseById(id) : null;
+    if (v && v.id && !seen.has(v.id)){ seen.add(v.id); out.push(v); }
+  }
   for (let guard = 0; guard < want * 6 && out.length < want; guard++){
     let pair = null;
     try {
@@ -32342,6 +32351,30 @@ function resolveVerse(verse){
         combat = null;
         game.state = 'MAP';
         if (typeof showHint === 'function') showHint('rival_escape', who + ' broke away alive. It will carry this.', true);
+        if (typeof SFX !== 'undefined') SFX.play('flee');
+        return;
+      }
+    }
+    // ── CORNERED ── Every demon below 18% may break off and run. There is no sparing
+    // and no resurrection: it dies here, or it gets away and remembers. An escapee
+    // enters the vendetta as a candidate rival, so the roster fills from what you
+    // actually failed to finish.
+    if (!_rv && !combat._demonEscaped && !combat.isBoss &&
+        combat.demon.hp > 0 && combat.demon.hp <= combat.demon.maxHp * 0.18){
+      const tier = combat.demon.tier || 0;
+      let chance = tier <= 1 ? 0.30 : (tier <= 3 ? 0.22 : (tier <= 5 ? 0.16 : 0.12));
+      if (combat.isElite) chance *= 0.6;
+      if (combat.demon.hp <= combat.demon.maxHp * 0.08) chance += 0.12;   // desperate
+      if (RNG.random() < chance){
+        combat._demonEscaped = true;
+        try {
+          VendettaSystem.considerPromotion(String(combat.demon.id || combat.demon.name),
+            { floor: game.floor, escaped: true, temperament: combat.demon.temperament || '' });
+        } catch (e) {}
+        const who = combat.demon.name;
+        combat = null;
+        game.state = 'MAP';
+        if (typeof showHint === 'function') showHint('demon_escape', who + ' broke away into the dark. It will carry this.', true);
         if (typeof SFX !== 'undefined') SFX.play('flee');
         return;
       }
@@ -32898,6 +32931,7 @@ function render(){
     case 'TREASURE': renderTreasure(); break;
     case 'DEATH':    renderDeath(); break;
     case 'FLOOR_TRANS': renderFloorTrans(); break;
+    case 'CHOICE': renderChoice(); break;
     case 'VICTORY':  renderVictory(); break;
   }
 
@@ -33304,6 +33338,118 @@ function shortRef(ref){
   return (BOOK_ABBR[book] || book) + str.slice(sp);
 }
 
+// What the demon is about to do, read from state it already exposes (charged move,
+// stun, adaptation, active twist). Nothing here rolls dice or consumes AI state.
+function demonIntent(){
+  const c = combat;
+  if (!c || !c.demon) return null;
+  const d = c.demon;
+  if (c.stunTurns > 0) return { t: 'IT IS STUNNED - it cannot answer', col: C.gold };
+  if (c.cast && c.cast.mv)
+    return { t: 'IT UNLEASHES ' + String(c.cast.mv.n || 'a heavy blow').toUpperCase() + ' - break it or wear it', col: C.red };
+  const frac = d.maxHp ? d.hp / d.maxHp : 1;
+  if (frac <= 0.2 && !c.isBoss) return { t: 'CORNERED - it may break off and run', col: C.gold };
+  if (c.resistance) return { t: 'IT LEANS ON ' + String(c.resistance).toUpperCase() + ' - hit its weak type', col: C.cyan };
+  if (typeof CombatTwists !== 'undefined' && CombatTwists.getActiveTwistInfo){
+    const ati = CombatTwists.getActiveTwistInfo();
+    if (ati.length) return { t: 'IT PLAYS ' + String(ati[0].name || 'a twist').toUpperCase(), col: C.purple };
+  }
+  return { t: 'IT CIRCLES - no tell yet', col: C.dim };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CHOICE — one screen, used for every "take one" moment (the spoils after a boss,
+// and how you descend to the next floor).
+// ─────────────────────────────────────────────────────────────────────────────
+function relicChoices(k){
+  const rare = ['psalter', 'iron_cross', 'prayer_beads', 'holy_water'];
+  const out = [];
+  for (let i = 0; i < k; i++){
+    const id = rare[Math.floor(RNG.random() * rare.length)];
+    if (out.some(c => c.id === id)) { i--; if (out.length + 1 > k) break; continue; }
+    const def = ITEM_DEFS[id];
+    if (!def) continue;
+    out.push({ id: id, name: def.icon + ' ' + def.name, desc: def.desc, col: C.gold,
+               apply: () => addItem(id) });
+  }
+  return out;
+}
+function verseChoices(k){
+  const out = [], seen = new Set();
+  for (let guard = 0; guard < k * 8 && out.length < k; guard++){
+    let pair = null;
+    try {
+      pair = (typeof VerseDifficulty !== 'undefined')
+        ? VerseDifficulty.getScaledVersePair(game.floor + 1, getCombatVersePair) : getCombatVersePair(game.floor + 1);
+    } catch (e){ pair = null; }
+    for (const v of (pair || [])){
+      if (!v || !v.id || seen.has(v.id)) continue;
+      seen.add(v.id);
+      out.push({ id: v.id, name: String(v.reference || v.id).toUpperCase(),
+                 desc: String(v.type || '').toUpperCase() + ' verse - it travels with you for the rest of the run',
+                 col: verseTypeColor(v.type),
+                 apply: () => { game.ownedVerses = game.ownedVerses || []; if (game.ownedVerses.indexOf(v.id) < 0) game.ownedVerses.push(v.id); } });
+      if (out.length >= k) break;
+    }
+  }
+  return out;
+}
+function openChoice(cfg){ game.choice = cfg; game.state = 'CHOICE'; }
+function openReward(){
+  const cards = relicChoices(1).concat(verseChoices(2));
+  if (!cards.length){ openDoors(); return; }
+  openChoice({ title: 'THE SPOILS', sub: 'Take one. The rest stay buried with it.', cards: cards, after: 'DOORS' });
+}
+function openDoors(){
+  openChoice({ title: 'TWO WAYS DOWN', sub: 'Choose how you descend.', after: 'FLOOR', cards: [
+    { id: 'narrow', name: 'THE NARROW WAY',
+      desc: 'A relic and 60 gold now, and no rest on the way. The hard road.',
+      col: C.gold,
+      apply: () => { const r = relicChoices(1)[0]; if (r && r.apply) r.apply(); game.gold += 60; } },
+    { id: 'broad', name: 'THE BROAD WAY',
+      desc: 'Heal 40% of your wounds and take 40 gold. Nothing new in your hands.',
+      col: C.green,
+      apply: () => { game.hp = Math.min(game.maxHp, Math.ceil(game.hp + game.maxHp * 0.4)); game.gold += 40; } }
+  ]});
+}
+function renderChoice(){
+  const ch = game.choice;
+  if (!ch){ game.state = 'MAP'; return; }
+  texRect(0, 0, W, H, '#0b0b16');
+  const cards = ch.cards || [];
+  const n2 = cards.length;
+  text(ch.title, Math.round(W / 2), 26, C.gold, 10, 'center');
+  text(ch.sub, Math.round(W / 2), 46, C.dim, 5, 'center');
+  const gap = 10, padX = 20;
+  const cw = Math.floor((W - padX * 2 - gap * (n2 - 1)) / Math.max(1, n2));
+  const chh = 132, y0 = Math.round((H - chh) / 2) + 16;
+  cards.forEach((card, i) => {
+    const cx = padX + i * (cw + gap);
+    texRect(cx, y0, cw, chh, '#141328');
+    strokeRect(cx, y0, cw, chh, card.col || C.gold);
+    text(String(card.name), cx + cw / 2, y0 + 12, card.col || C.gold, 7, 'center');
+    let ty = y0 + 34;
+    for (const l of wrapTextPx(String(card.desc), cw - 16, 5)){
+      if (ty > y0 + chh - 12) break;
+      text(l, cx + cw / 2, ty, C.holy, 5, 'center'); ty += 10;
+    }
+    // the hint sits on the card's floor so a long description can never cover it
+    text('TAP TO TAKE', cx + cw / 2, y0 + chh - 12, C.dim, 4, 'center');
+    clickables.push({ x: cx, y: y0, w: cw, h: chh, onClick: () => {
+      if (typeof SFX !== 'undefined') SFX.play('select');
+      try { if (card.apply) card.apply(); } catch (e) {}
+      game.choice = null;
+      if (ch.after === 'DOORS'){ openDoors(); return; }
+      if (ch.after === 'FLOOR'){
+        if (game.combatNext === 'FLOOR'){ game.combatNext = 'MAP'; game.state = 'FLOOR_TRANS'; }
+        else game.state = 'MAP';
+        return;
+      }
+      game.state = 'MAP';
+    }});
+  });
+}
+
 // ══ COMBAT BACKDROPS ══════════════════════════════════════════════════════════
 // Where the fight is. Floors are grouped into bands (two floors each) with their own
 // silhouettes, palette and floor props. Static art is prerendered once per floor at
@@ -33470,7 +33616,7 @@ function renderCombatBackdrop(){
 // the command UI, so it survives on every combat screen.
 function renderCombatLocation(){
   const bio = biomeForFloor(game.floor);
-  text(bio.name.toUpperCase() + '  -  FLOOR ' + game.floor, Math.round(W / 2), 122,
+  text(bio.name.toUpperCase() + '  -  FLOOR ' + game.floor, Math.round(W / 2), 121,
        'rgba(158,148,205,0.85)', 4, 'center');
 }
 
@@ -33819,7 +33965,10 @@ function menuCopy(id){
 }
 function renderCombatMenu(){
   renderCombatStage();
-  text('What will you do?', 10, 120, C.dim, 5, 'left');
+  // What it is about to do, said BEFORE you choose. Single line, centred in the band
+  // above the command tiles: a second line ran into the location plaque.
+  const _int = demonIntent();
+  if (_int) text(_int.t, Math.round(W / 2), 112, _int.col, 5, 'center');
   const tiles = combatMenuTiles();
   for (const t of tiles){
     const hovered = pointIn(pointer.x, pointer.y, t.x, t.y, t.w, t.h);
@@ -33986,6 +34135,11 @@ function renderCombatWin(){
   if (game.rewardText) for (const l of wrapText(game.rewardText, 36).slice(0,2)) body.push({ t: l, c: C.cyan, s: 6 });
   if (combat && combat.isBoss) body.push({ t: 'The floor is cleared!', c: C.cyan, s: 7 });
   const go = () => {
+    // A slain boss pays out first: draft a spoil, then choose your road down.
+    if (combat && combat.isBoss){
+      if (!game._rewardDone){ game._rewardDone = true; openReward(); return; }
+      if (!game._doorsDone){ game._doorsDone = true; openDoors(); return; }
+    }
     if (game.combatNext === 'FLOOR'){ game.combatNext = 'MAP'; game.state = 'FLOOR_TRANS'; }
     else game.state = 'MAP';
   };
