@@ -1162,29 +1162,53 @@ const VendettaSystem = (function(){
       return;
     }
     const INNER = W2 - 38;
+    const LINE = 6;
+    const LIMIT = H2 - 26;               // reserve the close prompt at H2-15
     let y = 36;
+    let shownCount = 0;
+    const room = () => y < LIMIT;
+    const linesFor = (txt, size) => wrapTextPx(txt, INNER, size || 4);
+    // all-or-nothing: a sentence is emitted whole or not at all, so nothing is ever
+    // cut mid-line at the panel edge.
+    const emit = (txt, colour, size) => {
+      const ls = linesFor(txt, size);
+      if ((y + ls.length * LINE) > LIMIT) return false;
+      for (const l of ls){ text(l, 16, y, colour, size || 4, 'left'); y += LINE; }
+      return true;
+    };
     for (const r of list.slice(0, 3)){
+      if (!room()) break;
+      shownCount++;
+      if ((y + 11) > LIMIT) break;
       text(epithet(r), 16, y, C.holy, 7, 'left'); y += 10;
-      const f = factsFor(r.enemy_id);
       const hist = [r.stage, 'met x' + r.encounters_survived];
       if (r.wound_ids.length) hist.push(r.wound_ids.length + ' wounds');
-      for (const l of wrapTextPx(hist.join(' · '), INNER, 4)){ text(l, 16, y, C.cyan, 4, 'left'); y += 6; }
-      for (const l of wrapTextPx(MOTIVES[r.core_motive] || '', INNER, 4)){ text(l, 16, y, C.white, 4, 'left'); y += 6; }
+      if (!emit(hist.join(' · '), C.cyan)) break;
+      if (!emit(MOTIVES[r.core_motive] || '', C.white)) break;
       const mem = (r.dominant_memory_ids || []).map(id => state.facts.find(x => x.encounter_id === id)).filter(Boolean)[0];
       if (mem){
         const canTell = r.dossier.known_crimes.length > 0 || r.dossier.known_motive;
-        for (const l of wrapTextPx(canTell ? ('it remembers: ' + mem.outcome.replace(/_/g, ' ') + ' at ' + mem.location_id) : 'it remembers something you cannot name yet', INNER, 4)){
-          text(l, 16, y, C.dim, 4, 'left'); y += 6;
-        }
+        if (!emit(canTell ? ('it remembers: ' + mem.outcome.replace(/_/g, ' ') + ' at ' + mem.location_id)
+                          : 'it remembers something you cannot name yet', C.dim)) break;
       }
+      let truncated = false;
       for (const a of (r.adaptations || [])){
-        for (const l of wrapTextPx('> ' + a.name + ' - ' + a.behaviour_change, INNER, 4)){ text(l, 16, y, C.gold, 4, 'left'); y += 6; }
-        for (const l of wrapTextPx('  tell: ' + a.telegraph, INNER, 4)){ text(l, 16, y, C.cyan, 4, 'left'); y += 6; }
-        for (const l of wrapTextPx('  counter: ' + a.counterplay, INNER, 4)){ text(l, 16, y, C.green, 4, 'left'); y += 6; }
+        // measure the whole adaptation first: behaviour + tell + counter travel together
+        const trio = [
+          ['> ' + a.name + ' - ' + a.behaviour_change, C.gold],
+          ['  tell: ' + a.telegraph, C.cyan],
+          ['  counter: ' + a.counterplay, C.green],
+        ];
+        const need = trio.reduce((n, t) => n + linesFor(t[0], 4).length, 0) * LINE + 2;
+        if ((y + need) > LIMIT){ truncated = true; break; }
+        for (const t of trio) emit(t[0], t[1]);
         y += 1;
       }
-      y += 4;
+      if (truncated){ text('  ...', 16, y, C.dim, 4, 'left'); break; }
+      y += 5;
     }
+    if (list.length > shownCount)
+      text('+' + (list.length - shownCount) + ' more in the field', 16, Math.min(y, LIMIT), C.dim, 4, 'left');
     text('Tap anywhere to close.', W2 / 2, H2 - 15, C.dim, 5, 'center');
   }
 
