@@ -97,6 +97,86 @@ const EVENTS = [
       { text: 'Leave quickly', effect: 'nothing', weight: 1 },
     ],
   },
+  {
+    id: 'withered_fig',
+    title: 'The Withered Fig Tree',
+    text: 'A fig tree stands in the road with blackened bark and not one leaf. A single fruit hangs from it, overripe, weeping juice onto the dust.',
+    choices: [
+      { text: 'Eat the fruit', effect: 'random_buff_or_debuff', weight: 1 },
+      { text: 'Pray over the tree', effect: 'buff_defense', weight: 1 },
+      { text: 'Pass it by', effect: 'nothing', weight: 1 },
+    ],
+  },
+  {
+    id: 'dry_bones',
+    title: 'Valley of Dry Bones',
+    text: 'The valley floor is white with bones. As you watch, they begin to gather themselves into shapes that still remember being men.',
+    choices: [
+      { text: 'Speak to the bones', effect: 'reveal_weakness', weight: 1 },
+      { text: 'Search the dust', effect: 'gold_30_curse', weight: 1 },
+      { text: 'Walk on in silence', effect: 'nothing', weight: 1 },
+    ],
+  },
+  {
+    id: 'torn_veil',
+    title: 'The Torn Veil',
+    text: 'A veil hangs across the passage, rent from top to bottom. Behind it the air is very still and very dark.',
+    choices: [
+      { text: 'Step through the tear', effect: 'reveal_self', weight: 1 },
+      { text: 'Tear it wider', effect: 'random_buff_or_debuff', weight: 1 },
+      { text: 'Mend it and leave', effect: 'buff_defense', weight: 1 },
+    ],
+  },
+  {
+    id: 'still_waters',
+    title: 'Still Waters',
+    text: 'A lake lies without a single ripple. It shows no reflection of the sky above — only of you.',
+    choices: [
+      { text: 'Wade into the water', effect: 'heal_20', weight: 1 },
+      { text: 'Study your reflection', effect: 'reveal_weakness', weight: 1 },
+      { text: 'Drink deeply', effect: 'hp_cost_verse', cost: 10, weight: 1 },
+    ],
+  },
+  {
+    id: 'fiery_furnace',
+    title: 'The Fourth in the Fire',
+    text: 'A furnace burns in the road without fuel. Four figures walk inside it, and only three of them are bound.',
+    choices: [
+      { text: 'Walk into the furnace', effect: 'buff_defense', weight: 1 },
+      { text: 'Call out to the fourth', effect: 'learn_verse', weight: 1 },
+      { text: 'Draw near the flames', effect: 'elite_fight', weight: 1 },
+    ],
+  },
+  {
+    id: 'salt_pillar',
+    title: 'Pillar of Salt',
+    text: 'A woman of salt stands at the roadside, her face turned back toward a burning plain that is no longer there.',
+    choices: [
+      { text: 'Look back with her', effect: 'hp_cost_verse', cost: 8, weight: 1 },
+      { text: 'Scrape salt from her hands', effect: 'gold_30_curse', weight: 1 },
+      { text: 'Keep your eyes ahead', effect: 'nothing', weight: 1 },
+    ],
+  },
+  {
+    id: 'angel_wrestler',
+    title: 'The Wrestler at the Ford',
+    text: 'A man waits at the ford, and his face is not a man\'s face. He does not step aside, and the water does not hide him.',
+    choices: [
+      { text: 'Wrestle him until daybreak', effect: 'elite_fight', weight: 1 },
+      { text: 'Ask his name', effect: 'learn_verse', weight: 1 },
+      { text: 'Cross downstream', effect: 'nothing', weight: 1 },
+    ],
+  },
+  {
+    id: 'still_small_voice',
+    title: 'The Still Small Voice',
+    text: 'A wind tears at the rocks, then fire, then nothing at all. In the silence after, something small and quiet speaks your name.',
+    choices: [
+      { text: 'Listen to the voice', effect: 'reveal_floor_map', weight: 1 },
+      { text: 'Answer it aloud', effect: 'learn_verse', weight: 1 },
+      { text: 'Stand still and be strengthened', effect: 'buff_attack', weight: 1 },
+    ],
+  },
 ];
 
 // ── SHOP ITEMS ──────────────────────────────────────────────

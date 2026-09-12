@@ -1621,14 +1621,29 @@ function enterNode(node){
         startCombat(node);
       }
       break;
-    case NODE_TYPE.EVENT:
-      activeEvent = EventEngine.generate(game.floor, {
-        floor: game.floor,
-        hp: game.hp, maxHp: game.maxHp, gold: game.gold,
-        nemesisEncounters: game.nemesisEncounters,
-        knownVerses: KnowledgeSystem.getAvailableVerses(),
-      });
+    case NODE_TYPE.EVENT: {
+      // Hand-authored scenarios first — they are specific, written places. This
+      // array used to be unreachable: getNodeEvent() read it and nothing called
+      // getNodeEvent(), so these 16 events never fired in a run.
+      const authored = (typeof EVENTS !== 'undefined' && EVENTS.length && RNG.random() < 0.3)
+        ? RNG.choice(EVENTS) : null;
+      if (authored){
+        activeEvent = {
+          title: authored.title,
+          text: authored.text,
+          choices: authored.choices.map(c => ({ text: c.text, effect: c.effect, cost: c.cost })),
+          authored: true,
+        };
+      } else {
+        activeEvent = EventEngine.generate(game.floor, {
+          floor: game.floor,
+          hp: game.hp, maxHp: game.maxHp, gold: game.gold,
+          nemesisEncounters: game.nemesisEncounters,
+          knownVerses: KnowledgeSystem.getAvailableVerses(),
+        });
+      }
       game.state = 'EVENT'; MusicEngine.playTrack(MusicEngine.pickTrack('event', (typeof game !== 'undefined' && game.floor) || 1)); break;
+    }
     case NODE_TYPE.SHOP:
       shopItems = generateShopItems(game.floor);
       shopBought = {};
@@ -2524,8 +2539,18 @@ function renderEvent(){
   y += 10;
   ev.choices.forEach((ch, i) => {
     button(24, y, W-48, 16, (i+1) + '. ' + ch.text, () => {
-      const effect = ch.effect; // already-resolved effect object from EventEngine
-      if (effect.gold !== undefined && effect.gold < 0 && game.gold < -effect.gold){
+      const effect = ch.effect;
+      // Authored map events carry an effect NAME that applyEventEffect resolves
+      // and applies; EventEngine events arrive already resolved as an object.
+      if (typeof effect === 'string'){
+        const msg1 = applyEventEffect(effect, ch.cost);
+        if (game.state === 'COMBAT') return;          // elite fight redirect
+        activeEvent = null;
+        game.rewardText = msg1 || '';
+        game.state = 'TREASURE';
+        return;
+      }
+      if (effect && effect.gold !== undefined && effect.gold < 0 && game.gold < -effect.gold){
         game.rewardText = 'Not enough gold.';
         return;
       }
