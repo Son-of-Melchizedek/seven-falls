@@ -88,6 +88,43 @@ const SFX = (() => {
       [262, 330, 392, 523].forEach((f, i) => tone(f, i * 0.02, 0.45, 'sawtooth', 0.2));
       tone(784, 0.02, 0.45, 'triangle', 0.18);
     },
+    swing() {
+      noise(0, 0.09, 0.22);
+      tone(1200, 0, 0.05, 'sawtooth', 0.10);
+      tone(700, 0.03, 0.06, 'square', 0.12);
+    },
+    impact() {
+      noise(0, 0.09, 0.30);
+      tone(220, 0, 0.10, 'square', 0.24);
+      tone(90, 0.01, 0.16, 'triangle', 0.26);
+    },
+    block() {
+      tone(1046, 0, 0.06, 'square', 0.20);
+      tone(1568, 0.04, 0.10, 'square', 0.16);
+      noise(0.02, 0.07, 0.16);
+    },
+    hurt() {
+      noise(0, 0.13, 0.26);
+      tone(392, 0, 0.10, 'sawtooth', 0.22);
+      tone(196, 0.06, 0.16, 'square', 0.20);
+    },
+    bless() {
+      [659, 784, 988].forEach(function(f, i){ tone(f, i * 0.06, 0.18, 'triangle', 0.18); });
+    },
+    fear() {
+      // tritone sting: the sound of dread, 16-bit style
+      tone(147, 0, 0.5, 'sawtooth', 0.20);
+      tone(208, 0.02, 0.5, 'square', 0.14);
+      tone(1397, 0.01, 0.35, 'triangle', 0.10);
+    },
+    phase() {
+      for (let i = 0; i < 7; i++) tone(180 + i * 90, i * 0.05, 0.16, 'square', 0.18);
+      noise(0, 0.25, 0.14);
+    },
+    summon() {
+      tone(73, 0, 0.5, 'sawtooth', 0.22);
+      [330, 415, 523].forEach(function(f, i){ tone(f, 0.1 + i * 0.07, 0.2, 'square', 0.14); });
+    },
     boss() {
       tone(110, 0, 0.4, 'sawtooth', 0.28);
       tone(116, 0.02, 0.4, 'square', 0.15);
