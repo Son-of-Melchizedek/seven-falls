@@ -62,21 +62,9 @@
 
 
 <script>
-// Scale canvas to fit viewport while maintaining correct click coords
-(function(){
-  const canvas = document.getElementById('game');
-  function resize() {
-    const vw = window.innerWidth, vh = window.innerHeight;
-    const aspect = 384/288;
-    let w, h;
-    if (vw/vh > aspect) { h = vh; w = h * aspect; }
-    else { w = vw; h = w / aspect; }
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-  }
-  resize();
-  window.addEventListener('resize', resize);
-})();
+// Canvas sizing now lives with the render constants (see fitToScreen below), which
+// resizes the BACKING STORE to the device aspect as well as the CSS box. The old
+// code here locked the page to 4:3 and letterboxed the game into a centred box.
 </script>
 
 <script src='src/verses.js'></script>
@@ -194,13 +182,35 @@ let RNG = new RandomGenerator((Date.now() ^ 0x9e3779b9) >>> 0);
 // ═══════════════════════════════════════════════════════════════
 // GAME STATE
 // ═══════════════════════════════════════════════════════════════
-const W = 384, H = 288;   // logical game space
+const H = 288;             // logical height is fixed: every vertical layout stays valid
+let W = 384;               // logical width FOLLOWS THE DEVICE, so the game uses the
+                           // whole screen instead of sitting in a centred 4:3 box
 const RS = 2;              // render scale: canvas backing = W*RS x H*RS.
                       // render() applies it, so every draw call stays logical.
 const S = 1.5; // Scale factor for larger canvas
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
+
+// Fit the logical space to the device aspect and fill the viewport. Width only ever
+// grows from the original 384, so the existing layouts keep working while a phone in
+// landscape (typically 2.0-2.2 wide) gets the full screen. Callable on rotate.
+function fitToScreen(){
+  const vw = Math.max(1, window.innerWidth || 1), vh = Math.max(1, window.innerHeight || 1);
+  const aspect = Math.max(1.15, Math.min(2.45, vw / vh));
+  W = Math.round(H * aspect / 2) * 2;              // keep it even
+  canvas.width = W * RS;
+  canvas.height = H * RS;
+  canvas.style.width = vw + 'px';
+  canvas.style.height = vh + 'px';
+  // The background pattern cache is declared further down this file and created
+  // during boot, so re-creating it here must be safe when we run before that point
+  // (a `let` in its temporal dead zone throws even on `typeof`).
+  try { initPatterns(); } catch (e){ /* cache not built yet — boot will build it */ }
+}
+fitToScreen();
+window.addEventListener('resize', fitToScreen);
+window.addEventListener('orientationchange', () => setTimeout(fitToScreen, 150));
 
 // ── Subtle background texture (cached pattern) ──
 let PATTERN_BG = null;
@@ -422,6 +432,53 @@ function sceneCard(title, sub, body, buttons, accent, icon){
     button(bx, cy, bw, 18, b.label, b.onClick, b.color || accent);
   });
 }
+// ── BIBLE FOOTER (drawn by the game over the bible panel) ──────
+// In combat it offers the five verses of the current hand, each of which becomes the
+// verse you build; plus the way back. Outside combat it is just the way back.
+function bibleUseChips(){
+  const out = [];
+  if (!combat || game.state !== 'COMBAT' || !combat.verses || !combat.verses.length) return out;
+  const backW = 116;
+  const avail = W - 16 - backW - 10;
+  const nch = Math.min(combat.verses.length, 5);
+  const cw = Math.max(34, Math.floor((avail - (nch - 1) * 4) / nch));
+  let x = 8;
+  for (let i = 0; i < nch; i++){
+    out.push({ i, x, y: H - 40, w: cw, h: 15 });
+    x += cw + 4;
+  }
+  return out;
+}
+function renderBibleFooter(){
+  const inFight = !!(combat && game.state === 'COMBAT');
+  rect(4, H - 52, W - 8, 50, '#0b0917');
+  strokeRect(4, H - 52, W - 8, 50, C.gold);
+  const chips = bibleUseChips();
+  if (inFight && chips.length){
+    text('USE IN THIS FIGHT  (tap a verse to build it):', 8, H - 49, C.dim, 5, 'left');
+    for (const c of chips){
+      const v = combat.verses[c.i];
+      const isT = ((combat.target || 0) === c.i);
+      roundRectPath(c.x, c.y, c.w, c.h, 3);
+      ctx.fillStyle = isT ? '#33296a' : '#171834'; ctx.fill();
+      strokeRect(c.x, c.y, c.w, c.h, isT ? C.gold : verseTypeColor(v.type));
+      text(String(v.reference || '').slice(0, 13), c.x + c.w / 2, c.y + 4, isT ? C.white : verseTypeColor(v.type), 5, 'center');
+    }
+  } else {
+    text(inFight ? 'No verse hand this turn.' : 'Reading the Bible. The run waits for you.', 8, H - 37, C.dim, 5, 'left');
+  }
+  const bx = W - 116, by = H - 46, bw = 112, bh = 26;
+  button(bx, by, bw, bh, 'BACK TO FIGHT', () => { game.bibleOpen = false; }, C.red, C.white, C.stone);
+  clickables.push({ x: bx, y: by, w: bw, h: bh, onClick: () => { game.bibleOpen = false; } });
+}
+function useVerseInFight(i){
+  if (!combat || !combat.verses || !combat.verses[i]) return;
+  setTargetVerse(i);
+  game.bibleOpen = false;
+  if (typeof showHint === 'function')
+    showHint('bible_use', 'Building ' + String(combat.verses[i].reference || 'that verse') + ' this turn.', true);
+}
+
 function button(x, y, w, h, label, onClick, color, txtColor, fill){
   const hovered = pointIn(pointer.x, pointer.y, x, y, w, h);
   const accent = color || C.gold;
@@ -648,6 +705,7 @@ const ITEM_DEFS = {
   exorcism_salt:{ name:'Exorcism Salt', icon:'🧂', desc:'Stun 1 turn',   rarity:'uncommon' },
   golden_censer:{ name:'Golden Censer', icon:'🔔', desc:'Reveal weakness',rarity:'rare' },
   iron_cross:   { name:'Iron Cross',    icon:'✟',  desc:'+5 def (perm)', rarity:'veryrare' },
+  psalter:      { name:'Marked Psalter', icon:'📖', desc:'+1 Bible use per battle (perm)', rarity:'rare' },
 };
 const ITEM_KEYS = Object.keys(ITEM_DEFS);
 
@@ -681,6 +739,7 @@ function useItem(idx){
     case 'exorcism_salt': causedStun = true; break;
     case 'golden_censer': combat.revealedWeak = combat.demon.weakTo || 'scripture'; break;
     case 'iron_cross':    game.defenseBuff += 5; break;
+    case 'psalter':       game.bibleUsesBonus = (game.bibleUsesBonus || 0) + 1; break;
   }
   game.items.splice(idx, 1);
   combat.selected = [];
@@ -1011,6 +1070,7 @@ function startNewRun(){
   game.gold = 0; game.shield = 0;
   game.attackBuff = 0; game.defenseBuff = 0;
   game.items = [];
+  game.bibleUsesBonus = 0;
   game.nemesisDone = {};
   // Reset per-run hints, but re-seed permanently-shown ones from localStorage
   game.hintsShown = {};
@@ -1047,6 +1107,7 @@ function startDailyRun(){
   game.gold = 0; game.shield = 0;
   game.attackBuff = 0; game.defenseBuff = 0;
   game.items = [];
+  game.bibleUsesBonus = 0;
   game.nemesisDone = {};
   game._isDaily = true;
   game.hintsShown = {};
@@ -1136,6 +1197,9 @@ function startCombat(node){
     demon,
     isBoss, isElite, isNemesis,
     isRival: !!demon.isRival, rivalId: demon.rivalId || null,
+    screen: 'MENU',                       // MENU | FIGHT | BIBLE | ITEMS
+    biblePageNum: 0,                      // in-battle Bible paging (game.biblePage is the full UI's)
+    bibleUses: 1 + ((game && game.bibleUsesBonus) || 0),   // one use per battle by default
     key: demonTypeKey(demon),
     verses: [], pool: [], selected: [],
     usedWords: new Set(),
@@ -1169,53 +1233,86 @@ function startCombat(node){
   game.state = 'COMBAT'; MusicEngine.playTrack(MusicEngine.pickTrack('combat', (typeof game !== 'undefined' && game.floor) || 1));
 }
 
-function loadVerse(){
-  // Apply easy-verse difficulty scaling if VerseDifficulty module is present
-  if (typeof VerseDifficulty !== 'undefined') {
-    combat.verses = VerseDifficulty.getScaledVersePair(game.floor, getCombatVersePair);
-    combat.usedWords = new Set();
-  } else {
-    combat.verses = getCombatVersePair(game.floor);
-    combat.usedWords = new Set();
+// ── THE VERSE HAND ──────────────────────────────────────────────
+// The player is offered FIVE verses and chooses which one to build. The old code
+// dealt a pair, which gave exactly two options per fight.
+function getCombatVerseHand(floor, want){
+  want = want || 5;
+  const out = [], seen = new Set();
+  for (let guard = 0; guard < want * 6 && out.length < want; guard++){
+    let pair = null;
+    try {
+      pair = (typeof VerseDifficulty !== 'undefined')
+        ? VerseDifficulty.getScaledVersePair(floor, getCombatVersePair)
+        : getCombatVersePair(floor);
+    } catch (e){ pair = null; }
+    for (const v of (pair || [])){
+      if (v && v.id && !seen.has(v.id)){ seen.add(v.id); out.push(v); }
+      if (out.length >= want) break;
+    }
   }
-  // If every offered verse's PLAYABLE words are fully solved, draw a fresh pair.
-  // (Uses verseWords so easy-mode shortened verses count correctly, not the full .words)
-  const allDone = combat.verses.every(v => verseWords(v).every(w => combat.usedWords.has(w)));
-  if (allDone){
-    combat.verses = getCombatVersePair(game.floor);
-    combat.usedWords = new Set();
-  }
-  combat.pool = getCombatPool(combat.verses, game.floor, combat.usedWords);
-  // ponytail: the tile grid stops rendering at y+bh > 243, so a pool longer than
-  // the grid makes some words invisible AND unclickable — the verse then cannot
-  // be completed and the demon cannot be damaged. Cap the pool, and never drop a
-  // correct word (v >= 0): only Bible extras and decoys are expendable.
+  return out;
+}
+function targetVerse(){
+  if (!combat || !combat.verses || !combat.verses.length) return null;
+  const i = Math.max(0, Math.min(combat.target || 0, combat.verses.length - 1));
+  return combat.verses[i] || null;
+}
+// Rebuild the word pool from the TARGET verse only (plus Bible extras and decoys),
+// so the grid stays solvable and on screen no matter how many verses are offered.
+function rebuildPool(){
+  if (!combat) return;
+  const tv = targetVerse();
+  const source = tv ? [tv] : (combat.verses || []);
+  const ti = Math.max(0, Math.min(combat.target || 0, (combat.verses || []).length - 1));
+  // getCombatPool numbers each correct tile by its index in the SOURCE array, but the
+  // rest of the game compares a tile's `v` against combat.target. Building from the
+  // single target verse therefore tagged every correct word as v=0, so after switching
+  // to any other verse nothing matched and submissions scattered. Re-tag them.
+  combat.pool = getCombatPool(source, game.floor, combat.usedWords || new Set())
+    .map(t => (t.v >= 0 ? Object.assign({}, t, { v: ti }) : t));
   const MAX_TILES = 24;
-  if (combat.pool.length > MAX_TILES) {
+  if (combat.pool.length > MAX_TILES){
     const mustKeep = combat.pool.filter(t => t.v >= 0);
     const optional = combat.pool.filter(t => t.v < 0);
     combat.pool = mustKeep.concat(optional.slice(0, Math.max(0, MAX_TILES - mustKeep.length)));
   }
-  // Solvability invariant: every offered verse must be spellable from the pool.
-  // This is the assert that would have caught both blocking combat bugs on day
-  // one — if it ever fails, combat is unwinnable, so say so loudly.
-  (function assertSolvable(){
+  combat._tileFitKey = null;               // the fit is per pool
+  (function assertPlayable(){
+    const tv2 = targetVerse();
+    if (!tv2) return;
     const words = combat.pool.map(p => p.word);
-    for (const v of combat.verses){
-      const need = verseWords(v);
-      const used = new Set();
-      let ok = true;
-      for (const w of need){
-        let found = -1;
-        for (let i = 0; i < words.length; i++){
-          if (!used.has(i) && words[i] === w){ found = i; break; }
-        }
-        if (found < 0){ ok = false; break; }
-        used.add(found);
+    const used = new Set();
+    for (const w of verseWords(tv2)){
+      let found = -1;
+      for (let i = 0; i < words.length; i++) if (!used.has(i) && words[i] === w){ found = i; break; }
+      if (found < 0){
+        console.error('SEVEN FALLS UNPLAYABLE: target verse not spellable from pool:',
+                      tv2.reference, verseWords(tv2));
+        return;
       }
-      if (!ok) console.error('SEVEN FALLS UNPLAYABLE: verse not spellable from pool:', (v.reference || v.id), need);
+      used.add(found);
     }
   })();
+}
+// Switch which verse the player is building: costs nothing, clears the in-progress
+// selection, and rebuilds the pool so the chosen verse is always spellable.
+function setTargetVerse(i){
+  if (!combat || !combat.verses || !combat.verses[i]) return;
+  if (typeof SFX !== 'undefined') SFX.play('select');
+  combat.target = i;
+  combat.selected = [];
+  if (!combat.usedWords) combat.usedWords = new Set();
+  rebuildPool();
+}
+function loadVerse(){
+  // A hand of FIVE verses, dealt each turn: the player chooses which one to build.
+  // (The old code dealt a pair, so a fight offered exactly two options.)
+  combat.verses = getCombatVerseHand(game.floor, 5);
+  if (!combat.verses.length) combat.verses = getCombatVersePair(game.floor);
+  combat.usedWords = new Set();
+  combat.target = 0;
+  rebuildPool();
   combat.selected = [];
   for (const v of combat.verses) KnowledgeSystem.discoverVerse(v.id);
   game.discoveredCount = KnowledgeSystem.store.discoveredVerses.length;
@@ -1223,9 +1320,11 @@ function loadVerse(){
   combat.maxTimer = 120;
   if (MECH.flowActive) combat.maxTimer = 999; // frozen while flow active
   combat.timer = combat.maxTimer;
-  if (!game.hintsShown['combat']) showHint('combat', 'Tap words to form Bible verses. The glowing word is next!', true);
+  if (!game.hintsShown['combat']) showHint('combat', 'Tap words to build a verse. Tap a verse name above to choose which one you build.', true);
   game.verseHighlight = 0;
   game.verseHighlightTimer = 0;
+  // every turn opens on the menu: the fight screen is a choice, not the default
+  if (combat) combat.screen = 'MENU';
 }
 
 function selectWord(idx){
@@ -2056,10 +2155,13 @@ function renderIntro(){
   text('SEVEN FALLS', W/2, 16, C.gold, 12, 'center');
   let y = 44;
   const shown = INTRO_LINES.slice(0, Math.min(INTRO_LINES.length, introStep + 1));
+  // Fill the device: the opening text used to wrap to a fixed 352px, which on a wide
+  // phone left a narrow column with dead space beside it.
+  const introWrap = Math.max(300, W - 32);
   for (const ln of shown){
     // Measured wrapping: INTRO_LINES are authored by hand, but the pixel font at
     // S=1.5 makes a long line wider than the panel — wrap instead of clipping.
-    for (const seg of (ln ? wrapTextPx(ln, 352, 7) : [''])){ text(seg, 16, y, C.holy, 7, 'left'); y += 12; }
+    for (const seg of (ln ? wrapTextPx(ln, introWrap, 7) : [''])){ text(seg, 16, y, C.holy, 7, 'left'); y += 12; }
   }
   if (introStep >= INTRO_LINES.length - 1){
     button(W/2-50, 196, 100, 16, 'DESCEND', () => {
@@ -2251,17 +2353,42 @@ function renderExplore(){
 
 // Get the next expected word for highlighting
 function getExpectedWord() {
-  if (!combat || !combat.verses || game.verseHighlight < 0) return '';
-  let idx = game.verseHighlight;
-  for (const v of combat.verses) {
-    const w = verseWords(v);
-    if (w && idx < w.length) return w[idx].toLowerCase();
-    if (w) idx -= w.length;
+  if (!combat || !combat.verses || !combat.verses.length) return '';
+  if (game.verseHighlight < 0) return '';
+  const tv = (typeof targetVerse === 'function') ? targetVerse() : combat.verses[0];
+  if (!tv) return '';
+  const need = verseWords(tv);
+  // count the correctly-ordered prefix already selected, then point at the next word
+  // of the CHOSEN verse. The old version indexed across every offered verse at once,
+  // which stops meaning anything once the player can switch which verse they build.
+  let done = 0;
+  for (let i = 0; i < combat.selected.length && done < need.length; i++){
+    const tok = combat.pool[combat.selected[i]];
+    if (tok && tok.word === need[done]) done++;
   }
-  return '';
+  return (need[done] || '').toLowerCase();
 }
 
+// ── COMBAT SCREENS ──────────────────────────────────────────────
+// Turn-based and menu-led, the way a monster-battle screen works: the fight opens on
+// a MENU (FIGHT / BIBLE / ITEMS / RUN), and only FIGHT shows the word grid. The old
+// build crammed every control into one bottom row, which on a phone was cramped and
+// never said what RUN or the item buttons would actually do.
 function renderCombat(){
+  const scr = (combat && combat.screen) || 'MENU';
+  if (scr === 'FIGHT') return renderCombatFight();
+  if (scr === 'BIBLE') return renderCombatBible();
+  if (scr === 'ITEMS') return renderCombatItems();
+  return renderCombatMenu();
+}
+function setCombatScreen(scr){
+  if (!combat) return;
+  combat.screen = scr;
+  combat.selected = scr === 'FIGHT' ? combat.selected : [];
+  if (typeof SFX !== 'undefined') SFX.play('select');
+}
+// Shared frame: arena, both fighters, the stat blocks and the message band.
+function renderCombatStage(){
   const d = combat.demon;
   const tkey = demonTypeKey(d);
 
@@ -2347,13 +2474,22 @@ function renderCombat(){
 
   // ══ MESSAGE AREA (y:58-80) ══
   if (combat.msgTimer > 0){
-    const ml = wrapTextPx(combat.message, 246, 6);
-    let my = 60; for (const l of ml.slice(0,2)){ text(l, 206, my, C.holy, 6, 'center'); my += 9; }
+    // The message band was centred at x=206 and wrapped at 246px — both hard numbers
+    // from the original 384-wide layout. On a wider phone that squeezed the text into
+    // a narrow column with the right half of the band empty.
+    const msgCX = Math.round(W / 2);
+    const msgW = Math.max(240, W - 44);
+    const ml = wrapTextPx(combat.message, msgW, 6);
+    let my = 60; for (const l of ml.slice(0,2)){ text(l, msgCX, my, C.holy, 6, 'center'); my += 9; }
     if (combat.comboResult){
-      const ql = wrapTextPx(combat.comboResult.quote, 246, 5);
-      for (const l of ql.slice(0,1)){ text(l, 206, my, C.gold, 5, 'center'); my += 8; }
+      const ql = wrapTextPx(combat.comboResult.quote, msgW, 5);
+      for (const l of ql.slice(0,2)){ text(l, msgCX, my, C.gold, 5, 'center'); my += 8; }
     }
-    for (const tm of combat.twistTriggered.slice(-1)){ text(tm, 206, my, C.red, 5, 'center'); my += 8; }
+    // wrap instead of letting the guard clip a long twist line into a single
+    // ellipsised fragment — these strings name what the demon just did
+    for (const tm of combat.twistTriggered.slice(-1)){
+      for (const l of wrapTextPx(tm, msgW, 5).slice(0, 2)){ text(l, msgCX, my, C.red, 5, 'center'); my += 8; }
+    }
     combat.twistTriggered = [];
   }
   if (game.comboAnim > 0){
@@ -2379,22 +2515,46 @@ function renderCombat(){
   if (combat.buffNext > 0){ text('⚔ BUF', px, 94, C.gold, 5, 'left'); px += 40; }
   if (game.defenseBuff > 0){ text('✦DEF ' + game.defenseBuff, px, 84, C.green, 5, 'left'); }
 
-  // ══ VERSE REFERENCE BOX (y:108-124) — prominent, above the pool ══
-  const refY = 108, refH = 16;
+  if (game.shakeTimer > 0) ctx.restore();
+}
+
+// ── FIGHT: assemble a verse from the pool ──
+function renderCombatFight(){
+  const d = combat.demon;
+  const tkey = demonTypeKey(d);
+  renderCombatStage();
+  // ══ VERSE REFERENCE BOX (y:104-126) — the hand you can build from ══
+  const refY = 104, refH = 22;
   rect(6, refY, W-12, refH, '#14152e');
   strokeRect(6, refY, W-12, refH, C.gold);
-  text('VERSE', 12, refY+5, C.gold, 6, 'left');
-  let rxp = 58;
-  combat.verses.forEach((vc) => {
+  text('VERSE', 10, refY+8, C.gold, 6, 'left');
+  // Equal-width chips sized to the device, so ALL of the hand is visible and tappable.
+  // The old code let the label and the first ref share the same pixels, and skipped any
+  // ref that ran past the right edge.
+  const tgt = (typeof combat.target === 'number') ? combat.target : 0;
+  const labelW = 40, gap = 4;
+  const nCh = combat.verses.length;
+  const rowX = 10 + labelW;
+  const chipW = Math.max(30, Math.floor((W - 8 - rowX - (nCh - 1) * gap) / Math.max(1, nCh)));
+  const chipY = refY + 3, chipH = refH - 6;
+  combat.verses.forEach((vc, vi) => {
     const col = verseTypeColor(vc.type);
-    const isActive = selTypes.includes(vc.type);
-    const refText = vc.reference;
-    const refW = ctx.measureText(refText).width;
-    if (rxp + 9 + refW > W - 6){ return; } // skip if it would overflow
-    ctx.fillStyle = col; ctx.fillRect(rxp, refY+6, 5, 5);
-    text(refText, rxp + 9, refY+5, isActive ? C.white : col, 6, 'left');
-    rxp += 9 + refW + 16;
+    const isTarget = (vi === tgt);
+    const cx = rowX + vi * (chipW + gap);
+    if (isTarget){
+      roundRectPath(cx, chipY, chipW, chipH, 3);
+      ctx.fillStyle = '#2b2554'; ctx.fill();
+    }
+    strokeRect(cx, chipY, chipW, chipH, isTarget ? C.gold : col);
+    // marker + reference, truncated by MEASUREMENT so nothing spills out of its chip
+    let label = String(vc.reference || '');
+    const inner = chipW - 14;
+    while (label.length > 3 && ctx.measureText(label).width > inner) label = label.slice(0, -2);
+    ctx.fillStyle = col; ctx.fillRect(cx + 4, chipY + Math.floor(chipH / 2) - 2, 4, 4);
+    text(label, cx + 11, chipY + 3, isTarget ? C.white : col, 6, 'left');
+    clickables.push({ x: cx, y: chipY, w: chipW, h: chipH, onClick: () => setTargetVerse(vi) });
   });
+  text('TAP TO BUILD', 10, refY + 14, C.dim, 4, 'left');
 
   // ══ SELECTED WORDS AREA — auto-sizes to fit the verse ══
   const selWords = combat.selected.map(i => combat.pool[i].word);
@@ -2414,7 +2574,7 @@ function renderCombat(){
   let fontSize = numLines <= 2 ? 7 : (numLines <= 3 ? 6 : 5);
   const lineH = fontSize + 4;
   const selH = Math.max(20, numLines * lineH + 8);
-  const selY = 126;
+  const selY = 128;
   rect(6, selY, W-12, selH, C.stoneDark);
   strokeRect(6, selY, W-12, selH, C.holy);
   if (selWords.length === 0) {
@@ -2434,13 +2594,14 @@ function renderCombat(){
   // many useful words remain.
   if (typeof Deep !== 'undefined') Deep.renderInscription(selY + selH + 3);
   const startY = selY + selH + 15;
-  const cols = 4, gx = 2, gy = 3;
+  // columns follow the device width so tiles keep a sane size instead of stretching
+  const cols = Math.max(4, Math.min(10, Math.round((W - 12) / 78))), gx = 2, gy = 3;
   // Fit EVERY pool tile on screen. The grid used to hard-break at y+bh > 243,
   // so any pool longer than the last row left words invisible AND unclickable —
   // which made those verses impossible to complete. Tile height adapts to pool size.
   const _rows = Math.max(1, Math.ceil(combat.pool.length / cols));
   const _avail = Math.max(24, 243 - startY);
-  const bh = Math.max(9, Math.min(20, Math.floor(_avail / _rows) - gy));
+  const bh = Math.max(9, Math.min(30, Math.floor(_avail / _rows) - gy));
   const bw = Math.floor((W - 8 - (cols - 1) * gx) / cols);
   // ── ONE uniform label size for the whole grid ──
   // Chosen so the longest word in the pool fits its tile with padding on both
@@ -2514,42 +2675,201 @@ function renderCombat(){
   rect(6, 245, W-12, 2, C.stone);
   rect(6, 245, (W-12) * tFrac, 2, tCol);
 
-  // Submit / Clear / Undo (left cluster) — no overlap with items
+  // Submit / Clear / Undo, then the way back to the menu.
+  rect(0, 243, W, 1, 'rgba(150,135,215,0.20)');
   button(6, 247, 44, 14, 'HIT', () => submitVerse(), C.gold, C.bg, C.gold);
   button(54, 247, 38, 14, 'CLR', () => clearSelection(), C.blue, C.white, C.stone);
   button(96, 247, 38, 14, 'UNDO', () => { if (combat && combat.selected.length > 0) combat.selected.pop(); }, C.dim, C.white, C.stone);
+  text('Spell the verse, then HIT', 140, 250, C.dim, 5, 'left');
+  button(W-72, 247, 66, 14, 'BACK', () => setCombatScreen('MENU'), C.dim, C.white, C.stone);
+  drawCombatFX();
+}
 
-  // Items (middle, capped to avoid colliding with RUN/BIBLE)
+// ── BATTLE MENU: the four choices, each explaining itself ──
+function combatMenuTiles(){
+  const gap = 6;
+  const cw = Math.floor((W - 16 - gap) / 2);
+  const ch = 52;
+  const y0 = 132;
+  return [
+    { id: 'FIGHT', x: 8, y: y0, w: cw, h: ch },
+    { id: 'BIBLE', x: 8 + cw + gap, y: y0, w: cw, h: ch },
+    { id: 'ITEMS', x: 8, y: y0 + ch + gap, w: cw, h: ch },
+    { id: 'RUN',   x: 8 + cw + gap, y: y0 + ch + gap, w: cw, h: ch },
+  ];
+}
+function menuCopy(id){
   const items = game.items || [];
-  let ix = 138;
-  for (let i = 0; i < items.length && ix < 268; i++){
-    const def = ITEM_DEFS[items[i]];
-    button(ix, 247, 36, 14, def.icon + def.name.split(' ')[0], () => useItem(i), C.blue, C.white, C.stone);
-    ix += 38;
+  const uses = Math.max(0, (combat && combat.bibleUses) || 0);
+  const pct = (typeof calcEscapeChance === 'function') ? calcEscapeChance() : 0;
+  if (id === 'FIGHT') return { title: 'FIGHT', sub: 'Build a verse',
+                               detail: 'Tap words to spell it, then HIT.' };
+  if (id === 'BIBLE') return { title: 'BIBLE', sub: uses > 0 ? ('Use a verse - ' + uses + ' left') : 'No uses left',
+                               detail: uses > 0 ? 'Fire a verse instantly.' : 'Spent for this battle.' };
+  if (id === 'ITEMS') return { title: 'ITEMS', sub: items.length + '/5 carried',
+                               detail: items.length ? 'Using one takes your turn.' : 'You carry nothing.' };
+  if (id === 'RUN') return { title: 'RUN', sub: pct + '% to escape',
+                             detail: 'Fail and it strikes you.' };
+  return { title: id, sub: '', detail: '' };
+}
+function renderCombatMenu(){
+  renderCombatStage();
+  text('What will you do?', 10, 120, C.dim, 5, 'left');
+  const tiles = combatMenuTiles();
+  for (const t of tiles){
+    const hovered = pointIn(pointer.x, pointer.y, t.x, t.y, t.w, t.h);
+    const c = menuCopy(t.id);
+    roundRectPath(t.x, t.y, t.w, t.h, 5);
+    const g = ctx.createLinearGradient(0, t.y, 0, t.y + t.h);
+    const base = t.id === 'FIGHT' ? '#3a3220' : (t.id === 'BIBLE' ? '#2b2350' : (t.id === 'ITEMS' ? '#1d2c40' : '#3a1d24'));
+    g.addColorStop(0, shadeColor(base, hovered ? 34 : 16));
+    g.addColorStop(1, shadeColor(base, hovered ? 10 : -6));
+    ctx.fillStyle = g; ctx.fill();
+    strokeRect(t.x, t.y, t.w, t.h, t.id === 'FIGHT' ? C.gold : (t.id === 'BIBLE' ? C.purple : (t.id === 'ITEMS' ? C.blue : C.red)));
+    const cx = t.x + t.w / 2;
+    // Every wrapped line needs its own y: drawing them all at the same baseline
+    // overprinted the words on top of each other inside the tile.
+    let ty = t.y + 7;
+    text(c.title, cx, ty, C.white, 9, 'center'); ty += 17;   // clear of the title's glyphs
+    for (const l of wrapTextPx(c.sub, t.w - 14, 5)){
+      if (ty > t.y + t.h - 14) break;
+      text(l, cx, ty, C.cyan, 5, 'center'); ty += 7;
+    }
+    for (const l of wrapTextPx(c.detail, t.w - 12, 4)){
+      if (ty > t.y + t.h - 6) break;
+      text(l, cx, ty, C.dim, 4, 'center'); ty += 6;
+    }
+    clickables.push({ x: t.x, y: t.y, w: t.w, h: t.h, onClick: () => {
+      if (t.id === 'FIGHT') setCombatScreen('FIGHT');
+      else if (t.id === 'BIBLE') setCombatScreen('BIBLE');
+      else if (t.id === 'ITEMS') setCombatScreen('ITEMS');
+      else if (t.id === 'RUN') tryFlee();
+    }});
   }
-  if (items.length === 0) text('No items', 138, 250, C.dim, 5, 'left');
+  drawCombatFX();
+}
 
-  // Control strip: hairline above the footer so the bottom row reads as a bar
-  // instead of buttons floating over the word grid.
-  rect(0, 243, W, 1, 'rgba(150,135,215,0.20)');
-  // RUN + BIBLE (right cluster) — 8px gutter so the two never kiss
-  if (!(combat.isLust && !combat.lustBroken)){
-    const pct = calcEscapeChance();
-    button(W-118, 247, 58, 14, 'RUN ' + pct + '%', () => tryFlee(), C.red, C.white, C.stone);
+// ── BIBLE: your verses, usable ──
+function biblePageRows(){
+  return KnowledgeSystem.store.discoveredVerses || [];
+}
+function renderCombatBible(){
+  renderCombatStage();
+  const uses = Math.max(0, combat.bibleUses || 0);
+  text('BIBLE', 10, 118, C.purple, 9, 'left');
+  text(uses > 0 ? ('One verse, free of charge - ' + uses + ' use' + (uses === 1 ? '' : 's') + ' left') : 'No uses left this battle',
+       10, 130, uses > 0 ? C.cyan : C.red, 5, 'left');
+  const ids = biblePageRows();
+  const y0 = 142, rowH = 21, maxRows = Math.max(1, Math.floor((242 - y0) / rowH));
+  // A DEDICATED page counter: game.biblePage belongs to the full Bible UI and holds
+  // page NAMES ('overview'), so doing arithmetic on it produced NaN and sliced an
+  // empty list — the list looked blank with paging that "worked".
+  const pageNum = Math.max(0, Math.min(combat.biblePageNum || 0, Math.max(0, Math.ceil(ids.length / maxRows) - 1)));
+  const start = pageNum * maxRows;
+  const slice = ids.slice(start, start + maxRows);
+  if (!ids.length){
+    text('You have not discovered any verses yet.', 10, y0 + 8, C.dim, 6, 'left');
   }
-  button(W-56, 247, 50, 14, 'BIBLE', () => { game.bibleOpen = !game.bibleOpen; }, C.purple, C.white, C.stone);
+  slice.forEach((id, i) => {
+    const v = (typeof getVerseById === 'function') ? getVerseById(id) : null;
+    if (!v) return;
+    const y = y0 + i * rowH;
+    rect(8, y, W - 16, rowH - 4, i % 2 ? '#12132a' : '#161735');
+    strokeRect(8, y, W - 16, rowH - 4, verseTypeColor(v.type));
+    text(String(v.reference || ''), 14, y + 4, C.white, 6, 'left');
+    const bw2 = 62, bx2 = W - 12 - bw2, by2 = y + 2, bh2 = rowH - 8;
+    // type sits in a column just left of USE: a fixed offset collided with longer
+    // references ("Ephesians 6:11WISDOM")
+    text(String(v.type || '').toUpperCase(), bx2 - 8, y + 5, verseTypeColor(v.type), 5, 'right');
+    const bw = bw2, bx = bx2, by = by2, bh = bh2;
+    const enabled = uses > 0;
+    button(bx, by, bw, bh, enabled ? 'USE' : 'SPENT', () => { if (enabled) bibleUse(id); }, enabled ? C.purple : C.dim, C.white, C.stone);
+    clickables.push({ x: bx, y: by, w: bw, h: bh, onClick: () => { if (enabled) bibleUse(id); } });
+  });
+  // paging + back
+  const maxPage = Math.max(0, Math.ceil(ids.length / maxRows) - 1);
+  if (maxPage > 0){
+    button(8, 247, 54, 14, 'PREV', () => { combat.biblePageNum = Math.max(0, pageNum - 1); }, C.dim, C.white, C.stone);
+    button(68, 247, 54, 14, 'NEXT', () => { combat.biblePageNum = Math.min(maxPage, pageNum + 1); }, C.dim, C.white, C.stone);
+    text('page ' + (pageNum + 1) + '/' + (maxPage + 1), 128, 250, C.dim, 5, 'left');
+  }
+  button(W-72, 247, 66, 14, 'BACK', () => setCombatScreen('MENU'), C.dim, C.white, C.stone);
+  drawCombatFX();
+}
+// Fire a verse straight from the Bible: it becomes the verse being built, its words
+// are spelled out of the pool, and the normal damage pipeline resolves the turn.
+function bibleUse(id){
+  if (!combat || game.state !== 'COMBAT') return;
+  if ((combat.bibleUses || 0) <= 0){
+    combat.message = 'The Bible is spent for this battle.';
+    combat.msgTimer = 2.0; return;
+  }
+  const v = (typeof getVerseById === 'function') ? getVerseById(id) : null;
+  if (!v) return;
+  let idx = (combat.verses || []).findIndex(x => x && x.id === id);
+  if (idx < 0){
+    combat.verses = combat.verses || [];
+    const slot = Math.max(0, Math.min(combat.target || 0, combat.verses.length - 1));
+    combat.verses[slot] = v;
+    idx = slot;
+  }
+  combat.target = idx;
+  if (!combat.usedWords) combat.usedWords = new Set();
+  rebuildPool();
+  const need = verseWords(combat.verses[idx]);
+  const used = new Set(); const picks = [];
+  for (const w of need){
+    let found = -1;
+    for (let i = 0; i < combat.pool.length; i++)
+      if (!used.has(i) && combat.pool[i].word === w){ found = i; break; }
+    if (found < 0){ combat.message = 'That verse cannot be formed here.'; combat.msgTimer = 2.0; return; }
+    used.add(found); picks.push(found);
+  }
+  combat.bibleUses--;
+  combat.selected = picks;
+  combat.screen = 'FIGHT';
+  if (typeof SFX !== 'undefined') SFX.play('buff');
+  submitVerse();
+}
 
-  // sparkle particles + flashes
+// ── ITEMS: what you carry, with the effect written out ──
+function renderCombatItems(){
+  renderCombatStage();
+  const items = game.items || [];
+  text('ITEMS', 10, 118, C.blue, 9, 'left');
+  text(items.length + '/5 carried   ·   using one takes your turn', 10, 130, C.dim, 5, 'left');
+  const y0 = 142, rowH = 25;
+  if (!items.length){
+    text('Nothing left in your hands.', 10, y0 + 10, C.dim, 6, 'left');
+  }
+  items.forEach((type, i) => {
+    const def = ITEM_DEFS[type];
+    if (!def) return;
+    const y = y0 + i * rowH;
+    rect(8, y, W - 16, rowH - 4, i % 2 ? '#12132a' : '#161735');
+    strokeRect(8, y, W - 16, rowH - 4, C.blue);
+    text(def.icon + ' ' + def.name, 14, y + 3, C.white, 6, 'left');
+    text(def.desc, 14, y + 12, C.cyan, 5, 'left');
+    const bw = 62, bx = W - 12 - bw, by = y + 3, bh = rowH - 10;
+    button(bx, by, bw, bh, 'USE', () => { useItem(i); }, C.blue, C.white, C.stone);
+    clickables.push({ x: bx, y: by, w: bw, h: bh, onClick: () => useItem(i) });
+  });
+  text('Relics: ' + ((game.bibleUsesBonus || 0) ? ('+' + game.bibleUsesBonus + ' Bible use per battle') : 'none yet'), 10, 236, C.dim, 4, 'left');
+  button(W-72, 247, 66, 14, 'BACK', () => setCombatScreen('MENU'), C.dim, C.white, C.stone);
+  drawCombatFX();
+}
+
+// shared battle effects + the full Bible overlay when the player opened it
+function drawCombatFX(){
   drawParticles();
   drawFloatingText();
   if (game.goldFlash > 0){ rect(0,0,W,H,'rgba(255,215,0,'+(game.goldFlash*0.35)+')'); }
   if (game.flash > 0){ rect(0,0,W,H,'rgba(204,51,51,'+(game.flash)+')'); }
-
   if (game.bibleOpen) {
     const discIds = KnowledgeSystem.store.discoveredVerses || [];
     renderBible(ctx, W, H, discIds, game.biblePage, game.bibleScroll);
+    renderBibleFooter();
   }
-  if (game.shakeTimer > 0) ctx.restore();
 }
 
 function renderCombatWin(){
@@ -2801,7 +3121,12 @@ function tick(now){
         CombatTwists.swarmMode = false;
       }
     }
-    if (game.timerEnabled){
+    // Reading the Bible must not cost you the fight: the clock simply HOLDS while it
+    // is open. It must be its own branch — falling through to the else below would run
+    // the "timer disabled" path and count the clock UP instead of pausing it.
+    if (game.timerEnabled && (game.bibleOpen || (combat && combat.screen && combat.screen !== 'FIGHT'))){
+      /* paused: no drain, no count-up */
+    } else if (game.timerEnabled){
       const prevTimer = combat.timer;
       combat.timer -= dt;
       // Easter egg: floor 7, timer crosses 7.77
@@ -2878,10 +3203,38 @@ canvas.addEventListener('pointerdown', e => {
   // ponytail: a phone has no keyboard — the old keydown-only intro was a dead end on mobile.
   if (game.state === 'INTRO' && introStep < INTRO_LINES.length - 1){ introAdvance(); return; }
   const p = toCanvas(e);
+  // The bible's controls are modal and share the bottom band with the transient hint
+  // strip. The hint check below runs first and was swallowing these taps entirely, so
+  // BACK TO FIGHT could not be pressed while a hint was up. Test the bible first.
+  if (game.bibleOpen){
+    if (p.y >= H - 56){
+      const chips = (typeof bibleUseChips === 'function') ? bibleUseChips() : [];
+      for (const c of chips){
+        if (p.x >= c.x && p.x <= c.x + c.w && p.y >= c.y && p.y <= c.y + c.h){ useVerseInFight(c.i); return; }
+      }
+      const bx = W - 116;
+      if (p.x >= bx && p.y >= H - 46){ game.bibleOpen = false; return; }
+      return;
+    }
+  }
   // Click on the hint overlay dismisses it
   if (game.activeHint && pointIn(p.x, p.y, 6, H-32, W-12, 30)){ dismissHint(); return; }
   // Bible UI intercepts clicks when open (but only within its bounds)
   if (game.bibleOpen) {
+    // The footer controls are drawn over the bible by the game, so they must be
+    // tested BEFORE the panel's own hit regions or they can never be reached.
+    if (p.y >= H - 40){
+      const chips = (typeof bibleUseChips === 'function') ? bibleUseChips() : [];
+      for (const c of chips){
+        if (p.x >= c.x && p.x <= c.x + c.w && p.y >= c.y && p.y <= c.y + c.h){
+          useVerseInFight(c.i);
+          return;
+        }
+      }
+      const bx = W - 116;
+      if (p.x >= bx && p.y >= H - 36){ game.bibleOpen = false; return; }
+      return;                                   // swallow the rest of the footer
+    }
     // Bible panel bounds (matches renderBible drawing area)
     const bx = 10, by = 10, bw = W-20, bh = H-20;
     if (p.x >= bx && p.x <= bx+bw && p.y >= by && p.y <= by+bh) {
@@ -2918,7 +3271,7 @@ window.addEventListener('keydown', e => {
       if (idx < combat.pool.length) selectWord(idx);
     } else if (e.key === 'Enter'){
       submitVerse();
-    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; if (game.bibleOpen && !game.hintsShown['bible']) showHint('bible', 'Press B to open your Bible. Click outside to close.', true); } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
+    } else if (e.key === 'b' || e.key === 'B') { game.bibleOpen = !game.bibleOpen; if (game.bibleOpen && !game.hintsShown['bible']) showHint('bible', 'Your Bible. Tap BACK TO FIGHT to return, or tap a verse to build it.', true); } else if (e.key === 'Escape' && game.bibleOpen) { game.bibleOpen = false; } else if (e.key === 'Backspace'){
       e.preventDefault();
       combat.selected.pop();
     } else if (e.key === ' '){
