@@ -1,0 +1,4 @@
+build/
+dist/
+android/wrapper/.gradle/
+android/wrapper/app/build/
